@@ -1,0 +1,26 @@
+{"1.1.0",
+[{<<"certifi">>,{pkg,<<"certifi">>,<<"2.5.1">>},1},
+ {<<"hackney">>,{pkg,<<"hackney">>,<<"1.15.1">>},0},
+ {<<"idna">>,{pkg,<<"idna">>,<<"6.0.0">>},1},
+ {<<"jsone">>,{pkg,<<"jsone">>,<<"1.5.0">>},0},
+ {<<"metrics">>,{pkg,<<"metrics">>,<<"1.0.1">>},1},
+ {<<"mimerl">>,{pkg,<<"mimerl">>,<<"1.2.0">>},1},
+ {<<"parse_trans">>,{pkg,<<"parse_trans">>,<<"3.3.0">>},2},
+ {<<"quickrand">>,{pkg,<<"quickrand">>,<<"1.7.5">>},1},
+ {<<"ssl_verify_fun">>,{pkg,<<"ssl_verify_fun">>,<<"1.1.4">>},1},
+ {<<"unicode_util_compat">>,{pkg,<<"unicode_util_compat">>,<<"0.4.1">>},2},
+ {<<"uuid">>,{pkg,<<"uuid_erl">>,<<"1.7.5">>},0}]}.
+[
+{pkg_hash,[
+ {<<"certifi">>, <<"867CE347F7C7D78563450A18A6A28A8090331E77FA02380B4A21962A65D36EE5">>},
+ {<<"hackney">>, <<"9F8F471C844B8CE395F7B6D8398139E26DDCA9EBC171A8B91342EE15A19963F4">>},
+ {<<"idna">>, <<"689C46CBCDF3524C44D5F3DDE8001F364CD7608A99556D8FBD8239A5798D4C10">>},
+ {<<"jsone">>, <<"410F5208BCAE541BF941B3F2756E5BB5A4C8694D7FFD6B34B909AE88262629C0">>},
+ {<<"metrics">>, <<"25F094DEA2CDA98213CECC3AEFF09E940299D950904393B2A29D191C346A8486">>},
+ {<<"mimerl">>, <<"67E2D3F571088D5CFD3E550C383094B47159F3EEE8FFA08E64106CDF5E981BE3">>},
+ {<<"parse_trans">>, <<"09765507A3C7590A784615CFD421D101AEC25098D50B89D7AA1D66646BC571C1">>},
+ {<<"quickrand">>, <<"E3086A153EB13A057FC19192D05E2D4C6BB2BDBB55746A699BEAE9847AC17CA8">>},
+ {<<"ssl_verify_fun">>, <<"F0EAFFF810D2041E93F915EF59899C923F4568F4585904D010387ED74988E77B">>},
+ {<<"unicode_util_compat">>, <<"D869E4C68901DD9531385BB0C8C40444EBF624E60B6962D95952775CAC5E90CD">>},
+ {<<"uuid">>, <<"3862FF9A21C42566DFD0376B97512FA202922897129E09A05E2AFA0D9CAFD97A">>}]}
+].
