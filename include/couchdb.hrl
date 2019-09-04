@@ -153,7 +153,21 @@
     db,
     options}).
 
--define(USER_AGENT, "couchdb/0.9.0").
+-type mp_attachments() :: {Name :: binary(), Bin :: binary()}
+    | {Name :: binary(), Bin :: binary(), Encoding :: binary()}
+    | { Name :: binary(), Bin :: binary(), Type :: binary(), Encoding :: binary()}
+    | { Name :: binary(), {file, Path ::  string()}}
+    | { Name :: binary(), {file, Path ::  string()}, Encoding :: binary()}
+    | { Name :: binary(), Fun :: fun(), Length :: integer()}
+    | { Name :: binary(), Fun :: fun(), Length :: integer(), Encoding :: binary()}
+    | { Name :: binary(), Fun :: fun(), Length :: integer(), Type :: binary(), Encoding :: binary()}
+    | { Name :: binary(), {Fun :: fun(), Acc :: any()}, Length :: integer()}
+    | { Name :: binary(), {Fun :: fun(), Acc :: any()}, Length :: integer(), Encoding :: binary()}
+    | { Name :: binary(), {Fun :: fun(), Acc :: any()}, Length :: integer(), Type :: binary(), Encoding :: binary()}.
+
+
+-define(USER_AGENT, "couchdb/1.5.0").
 
 -define(DEPRECATED(Old, New, When),
     couchdb_util:deprecated(Old, New, When)).
+
