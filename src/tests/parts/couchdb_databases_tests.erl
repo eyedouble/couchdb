@@ -12,7 +12,7 @@
 
 clean_dbs() ->
     Server = couchdb:server_connection(),
-    [ catch couchdb:delete_db(Server, MockDb) || MockDb <- ?MOCK_DBS ],
+    [ catch couchdb_databases:delete(Server, MockDb) || MockDb <- ?MOCK_DBS ],
     % timer:sleep(300),
     ok.
 
@@ -40,3 +40,9 @@ create_test() ->
     ?assertMatch({ok, _}, couchdb_databases:create(Server, ?MOCK_DBS(1))),
     ?assertEqual({error, db_exists}, couchdb_databases:create(Server, ?MOCK_DBS(1))),
     ?assertMatch({ok, _}, couchdb_databases:create(Server, ?MOCK_DBS(2))).
+
+delete_test() ->
+    Server = init(),
+    {ok, Db} = couchdb_databases:create(Server, ?MOCK_DBS(1)),    
+    Res = couchdb_databases:delete(Server, Db),
+    ?assertMatch({ok,#{<<"ok">> := true}}, Res).

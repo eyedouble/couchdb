@@ -10,7 +10,7 @@
 
 -export([dbname/1]).
 -export([encode_docid/1, encode_att_name/1]).
--export([parse_options/1, parse_options/2]).
+% -export([parse_options/1, parse_options/2]).
 -export([to_list/1, to_binary/1, to_integer/1, to_atom/1]).
 -export([encode_query/1, encode_query_value/2]).
 -export([oauth_header/3]).
@@ -158,21 +158,21 @@ get_value(Key, Prop, Default) ->
     end.
 
 %% @doc make view options a list
-parse_options(Options) ->
-    parse_options(Options, []).
+% parse_options(Options) ->
+%     parse_options(Options, []).
 
-parse_options([], Acc) ->
-    Acc;
-parse_options([V|Rest], Acc) when is_atom(V) ->
-    parse_options(Rest, [{atom_to_list(V), true}|Acc]);
-parse_options([{K,V}|Rest], Acc) when is_list(K) ->
-    parse_options(Rest, [{K,V}|Acc]);
-parse_options([{K,V}|Rest], Acc) when is_binary(K) ->
-    parse_options(Rest, [{binary_to_list(K),V}|Acc]);
-parse_options([{K,V}|Rest], Acc) when is_atom(K) ->
-    parse_options(Rest, [{atom_to_list(K),V}|Acc]);
-parse_options(_,_) ->
-    fail.
+% parse_options([], Acc) ->
+%     Acc;
+% parse_options([V|Rest], Acc) when is_atom(V) ->
+%     parse_options(Rest, [{atom_to_list(V), true}|Acc]);
+% parse_options([{K,V}|Rest], Acc) when is_list(K) ->
+%     parse_options(Rest, [{K,V}|Acc]);
+% parse_options([{K,V}|Rest], Acc) when is_binary(K) ->
+%     parse_options(Rest, [{binary_to_list(K),V}|Acc]);
+% parse_options([{K,V}|Rest], Acc) when is_atom(K) ->
+%     parse_options(Rest, [{atom_to_list(K),V}|Acc]);
+% parse_options(_,_) ->
+%     fail.
 
 to_binary(V) when is_binary(V) ->
     V;

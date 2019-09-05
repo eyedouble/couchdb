@@ -12,7 +12,7 @@
 
 clean_dbs() ->
     Server = couchdb:server_connection(),
-    [ catch couchdb:delete_db(Server, MockDb) || MockDb <- ?MOCK_DBS ],
+    [ catch couchdb_databases:delete(Server, MockDb) || MockDb <- ?MOCK_DBS ],
     % timer:sleep(300),
     ok.
 
@@ -48,38 +48,62 @@ all_dbs_test() ->
     ?assertMatch({ok, []}, Res).
 
 
-% replicate_test() ->
-%     Server = init(),
-
+replicate_test() ->
+    Server = init(),
    
-%     {ok, Db} = couchdb_databases:create(Server, ?MOCK_DBS(1)),
-%     {ok, Db2} = couchdb_databases:create(Server, ?MOCK_DBS(2)),
+    {ok, DbA} = couchdb_databases:create(Server, ?MOCK_DBS(1)),
+    {ok, DbB} = couchdb_databases:create(Server, ?MOCK_DBS(2)),
 
+    {ok, #{
+        <<"_id">> := <<DocA1Id/binary>>,
+        <<"_rev">> := <<DocA1Rev/binary>>
+    }=DocA1} = couchdb_documents:save(DbA, ?MOCK_DOCS(1)),
+
+
+    {ok, #{
+        <<"_id">> := <<DocA2Id/binary>>,
+        <<"_rev">> := <<DocA2Rev/binary>>
+    }=DocA2} = couchdb_documents:save(DbA, ?MOCK_DOCS(2)),
     
+    ?assertMatch({ok, _}, couchdb_server:replicate(Server, DbA, DbB)),
 
-%     {ok, #{
-%         <<"_id">> := <<Doc1Id/binary>>,
-%         <<"_rev">> := <<Doc1Rev/binary>>
-%     }=Doc11} = couchdb_documents:save(Db, ?MOCK_DOCS(1)),
 
-%     % DocId11 = couchdb_doc:get_id(Doc11),
-%     % DocRev11 = couchdb_doc:get_rev(Doc11),
+    {ok, DocB1} = couchdb_documents:get(DbB, DocA1Id),
+    DocB1Rev = couchdb_custom:get_document_rev(DocB1),
+    ?assertEqual(DocA1Rev, DocB1Rev),
 
-%     ?assertMatch({ok, _}, couchdb_server:replicate(Server, Db, Db2)),
+    {ok, DocA1_0} = couchdb_documents:save(DbA, DocA1),
+    {ok, DocA1_1} = couchdb_documents:save(DbA, DocA1_0),
 
-%     {ok, Doc11_2} = couchdb:open_doc(Db2, Doc1Id),
-%     DocRev11_2 = couchdb_custom:get_document_rev(Doc11_2),
-%     ?assertEqual(DocRev11_2, Doc1Rev),
+    DocA1_0Rev = couchdb_custom:get_document_rev(DocA1_0),
+    DocA1_1Rev = couchdb_custom:get_document_rev(DocA1_1),
 
-%     {ok, Doc12} = couchdb:save_doc(Db, Doc11 ),
-%     {ok, Doc13} = couchdb:save_doc(Db, Doc12),
+    % Test 
+    {ok, DocA2_0} = couchdb_documents:save(DbA, DocA2),
+    {ok, DocA2_1} = couchdb_documents:save(DbA, DocA2_0),
 
-%     DocRev12 = couchdb_doc:get_rev(Doc12),
-%     DocRev13 = couchdb_doc:get_rev(Doc13),
-%     {ok, Missing} = couchdb:get_missing_revs(Db2, [{Doc1Id, [DocRev12,
-%                                                                 DocRev13]}]),
-%     ?assertEqual([{Doc1Id, [DocRev12, DocRev13], [Doc1Rev]}], Missing),
+    DocA2_0Rev = couchdb_custom:get_document_rev(DocA2_0),
+    _DocA2_1Rev = couchdb_custom:get_document_rev(DocA2_1),
 
-%     {ok, InstanceStartTime} = couchdb:ensure_full_commit(Db),
-%     ?assert(is_binary(InstanceStartTime)),
-%     ok.
+    {ok, MissingObj} = couchdb_databases:get_missing_revs(
+        DbB, 
+        [
+            {DocA1Id, [DocA1_0Rev, DocA1_1Rev]}, 
+            {DocA2Id, [DocA2_0Rev, DocA2Rev]}
+        ]
+    ),
+
+    ?assertMatch(#{
+            <<"missing">> := [DocA1_0Rev, DocA1_1Rev],
+            <<"possible_ancestors">> := [DocA1Rev]
+    }, maps:get(DocA1Id, MissingObj, nil)),
+
+    ?assertMatch(#{
+            <<"missing">> := [DocA2_0Rev],
+            <<"possible_ancestors">> := [DocA2Rev]
+    }, maps:get(DocA2Id, MissingObj, nil)),
+
+
+    {ok, InstanceStartTime} = couchdb_databases:ensure_full_commit(DbA),
+    ?assert(is_binary(InstanceStartTime)),
+    ok.

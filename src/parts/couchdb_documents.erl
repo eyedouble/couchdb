@@ -67,8 +67,8 @@ get(#db{server=Server, options=Opts}=Db, DocId, Params) ->
                             end},
                     {ok, {multipart, InitialState}};
                 _ ->
-                    {ok, codelete(Db, Documents, [])uchdb_httpc:json_body(Ref)}
-            end;
+                    {ok, couchdb_httpc:json_body(Ref)}
+            end;        
         Error ->
             Error
     end.
@@ -198,56 +198,6 @@ save(#db{server=Server, options=Opts}=Db, #{}=Doc, Atts, Options) ->
 
 
 
-
-%
-%   BULK SAVE
-%
-
-save(#db{}=Db, [_Car | _Cdr]=Documents, [_|_]=Options) ->
-    
-    Documents1 = [maps:put(<<"_id">>, couchdb_custom:generate_unique_id(), Doc) || Doc <- Documents, maps:is_key(<<"_id">>) =:= false],
-
-    % Docs1 = [maybe_docid(Server, Doc) || Doc <- Docs],
-
-    Options1 = couchdb_util:parse_options(Options),
-
-    DocOptions = [
-        {list_to_binary(K), V} || {K, V} <- Options1,
-        (K =:= "all_or_nothing" orelse K =:= "new_edits") andalso is_boolean(V)
-    ],
-
-    Options2 = [
-        {K, V} || {K, V} <- Options1,
-        K =/= "all_or_nothing" andalso K =/= "new_edits"
-    ],
-
-    Body = couchdb_ejson:encode({[{<<"docs">>, Docs1}|DocOptions]}),
-
-    Url = hackney_url:make_url(couchdb_httpc:server_url(Server),
-                               [couchdb_httpc:db_url(Db), <<"_bulk_docs">>],
-                               Options2),
-
-    Headers = [{<<"Content-Type">>, <<"application/json">>}],
-
-    case couchdb_httpc:db_request(post, Url, Headers, Body, Opts, [201]) of
-        {ok, _, _, Ref} ->
-            {ok, couchdb_httpc:json_body(Ref)};
-        Error ->
-            Error
-        end.
-.
-%% @doc save a list of documents
-%% @equiv save_docs(Db, Docs, [])
-save_docs(Db, Docs) ->
-    save_docs(Db, Docs, []).
-
-%% @doc save a list of documents
-%% @spec save_docs(Db::db(), Docs::list(),Options::list()) -> {ok, Result}|{error, Error}
-save_docs(#db{server=Server, options=Opts}=Db, Docs, Options) ->
-    
-
-
-
 %
 %   DELETE
 %
@@ -256,6 +206,7 @@ save_docs(#db{server=Server, options=Opts}=Db, Docs, Options) ->
 %% {empty_on_delete,  true} or pass a doc with just _id and _rev
 %% members.
 delete(#db{}=Db, #{<<"_id">> := <<_Id/binary>>, <<"_rev">> := <<_Rev/binary>>}=Document) ->
+    ?PRINT(Document),
     delete(Db, [Document], []);
 delete(#db{}=Db, [#{<<"_id">> := <<_Id/binary>>, <<"_rev">> := <<_Rev/binary>>}=_Car | _Cdr]=Documents) ->
     delete(Db, Documents, []).
@@ -265,9 +216,9 @@ delete(#db{}=Db, [#{<<"_id">> := <<_Id/binary>>, <<"_rev">> := <<_Rev/binary>>}=
 %% {empty_on_delete,  true} or pass a doc with just _id and _rev
 %% members.
 -spec(delete(Db::db(), map() | list(), Options::list()) -> {ok, _Result}|{error, _Error}).
-delete(#db{}=Db, #{<<"_id">> := <<_Id/binary>>, <<"_rev">> := <<_Rev/binary>>}=Document, [_|_]=Options) ->
+delete(#db{}=Db, #{<<"_id">> := <<_Id/binary>>, <<"_rev">> := <<_Rev/binary>>}=Document, Options) when is_list(Options) ->
     delete(Db, [Document], Options);
-delete(#db{}=Db, [#{<<"_id">> := <<_Id/binary>>, <<"_rev">> := <<_Rev/binary>>}=_Car | _Cdr]=Documents, [_|_]=Options) ->
+delete(#db{}=Db, [#{<<"_id">> := <<_Id/binary>>, <<"_rev">> := <<_Rev/binary>>}=_Car | _Cdr]=Documents, Options) when is_list(Options) ->
     Empty =[true || {empty_on_delete, true} <- Options] =:= [true],
 
     FinalDocs = case Empty of
@@ -277,9 +228,9 @@ delete(#db{}=Db, [#{<<"_id">> := <<_Id/binary>>, <<"_rev">> := <<_Rev/binary>>}=
                 <<"_rev">> => Rev,
                 <<"_deleted">> => true             
             } || #{<<"_id">> := <<Id/binary>>, <<"_rev">> := <<Rev/binary>>}=_Doc <- Documents];
-        false -> [ maps:put(<<"deleted">>, true, Doc) || #{<<"_id">> := <<_Id/binary>>, <<"_rev">> := <<_Rev/binary>>}=Doc <- Documents]
+        false -> [ maps:put(<<"_deleted">>, true, Doc) || #{<<"_id">> := <<_Id/binary>>, <<"_rev">> := <<_Rev/binary>>}=Doc <- Documents]
     end,
-    save_docs(Db, FinalDocs, Options).
+    couchdb_databases:bulk_docs_save(Db, FinalDocs, []).
     
 
 

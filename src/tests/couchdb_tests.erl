@@ -8,17 +8,17 @@
 %   HELPERS
 %
 
-clean_dbs() ->
-    Server = couchdb:server_connection(),
-    catch couchdb:delete_db(Server, "couchdb_testdb"),
-    catch couchdb:delete_db(Server, "couchdb_testdb2"),
-    catch couchdb:delete_db(Server, "couchdb_testdb3"),
-    % timer:sleep(300),
-    ok.
+% clean_dbs() ->
+%     Server = couchdb:server_connection(),
+%     catch couchdb:delete_db(Server, "couchdb_testdb"),
+%     catch couchdb:delete_db(Server, "couchdb_testdb2"),
+%     catch couchdb:delete_db(Server, "couchdb_testdb3"),
+%     % timer:sleep(300),
+%     ok.
 
-start_couchdb_tests() ->
-    {ok, _} = application:ensure_all_started(couchdb),
-    clean_dbs().
+% start_couchdb_tests() ->
+%     {ok, _} = application:ensure_all_started(couchdb),
+%     clean_dbs().
 
 
 %

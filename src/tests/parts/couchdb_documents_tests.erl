@@ -12,7 +12,7 @@
 
 clean_dbs() ->
     Server = couchdb:server_connection(),
-    [ catch couchdb:delete_db(Server, MockDb) || MockDb <- ?MOCK_DBS ],
+    [ catch couchdb_databases:delete(Server, MockDb) || MockDb <- ?MOCK_DBS ],
     % timer:sleep(50),
     ok.
 
@@ -92,5 +92,9 @@ save_without_id_test() ->
 delete_test() -> 
     Server = init(),
     {ok, Db} = couchdb_databases:create(Server, ?MOCK_DBS(1)),
-    Doc = couchdb_documents:save(Db, ?MOCK_DOCS(1)),
-    ?assertMatch({ok, _}, couchdb_documents:delete(Db, Doc)).
+    {ok, Doc} = couchdb_documents:save(Db, ?MOCK_DOCS(1)),
+    ?assertMatch({ok, [#{
+        <<"id">> := <<_/binary>>,
+        <<"ok">> := true,
+        <<"rev">> := <<"2-", _/binary>>
+    }]}, couchdb_documents:delete(Db, Doc)).

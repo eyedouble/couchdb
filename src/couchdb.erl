@@ -16,20 +16,15 @@
          get_uuid/1, get_uuids/2,        
          open_db/2, open_db/3,
          open_or_create_db/2, open_or_create_db/3, open_or_create_db/4,
-         delete_db/1, delete_db/2,
          design_info/2, view_cleanup/1,
          stream_doc/1, end_doc_stream/1,
-         delete_doc/2, delete_doc/3,
-         save_docs/2, save_docs/3,
-         delete_docs/2, delete_docs/3,
          copy_doc/2, copy_doc/3,
          lookup_doc_rev/2, lookup_doc_rev/3,
          fetch_attachment/3, fetch_attachment/4, stream_attachment/1,
          delete_attachment/3, delete_attachment/4,
          put_attachment/4, put_attachment/5, send_attachment/2,
-         ensure_full_commit/1, ensure_full_commit/2,
-         compact/1, compact/2,
-         get_missing_revs/2]).
+         compact/1, compact/2
+         ]).
 
 -opaque doc_stream() :: {atom(), any()}.
 -export_type([doc_stream/0]).
@@ -37,7 +32,7 @@
 
 
 %% --------------------------------------------------------------------
-%% API functins.
+%% API functions.
 %% --------------------------------------------------------------------
 
 %% @doc Create a server for connectiong to a CouchDB node
@@ -207,22 +202,7 @@ open_or_create_db(#server{url=ServerUrl, options=Opts}=Server, DbName0,
             Error
     end.
 
-%% @doc delete database
-%% @equiv delete_db(Server, DbName)
-delete_db(#db{server=Server, name=DbName}) ->
-    delete_db(Server, DbName).
 
-%% @doc delete database
-%% @spec delete_db(server(), DbName) -> {ok, iolist()|{error, Error}}
-delete_db(#server{url=ServerUrl, options=Opts}, DbName) ->
-    Url = hackney_url:make_url(ServerUrl, couchdb_util:dbname(DbName), []),
-    Resp = couchdb_httpc:request(delete, Url, [], <<>>, Opts),
-    case couchdb_httpc:db_resp(Resp, [200]) of
-        {ok, _, _, Ref} ->
-            {ok, couchdb_httpc:json_body(Ref)};
-        Error ->
-            Error
-    end.
 
 
 
@@ -524,27 +504,7 @@ delete_attachment(#db{server=Server, options=Opts}=Db, DocOrDocId, Name,
             end
     end.
 
-%% @doc commit all docs in memory
-%% @equiv ensure_full_commit(Db, [])
-ensure_full_commit(Db) ->
-    ensure_full_commit(Db, []).
 
-%% @doc commit all docs in memory
--spec ensure_full_commit(Db::db(), Options::list())
-    -> {ok, InstancestartTime :: binary()}
-    | {error, term()}.
-ensure_full_commit(#db{server=Server, options=Opts}=Db, Options) ->
-    Url = hackney_url:make_url(couchdb_httpc:server_url(Server), [couchdb_httpc:db_url(Db),
-                                                    <<"_ensure_full_commit">>],
-                               Options),
-    Headers = [{<<"Content-Type">>, <<"application/json">>}],
-    case couchdb_httpc:db_request(post, Url, Headers, <<>>, Opts, [201]) of
-        {ok, _, _, Ref} ->
-            {Props} = couchdb_httpc:json_body(Ref),
-            {ok, proplists:get_value(<<"instance_start_time">>, Props)};
-        Error ->
-            Error
-    end.
 
 %% @doc Compaction compresses the database file by removing unused
 %% sections created during updates.
@@ -580,35 +540,7 @@ compact(#db{server=Server, options=Opts}=Db, DesignName) ->
     end.
 
 
-%% @doc get missing revisions
--spec get_missing_revs(#db{}, [{binary(), [binary()]}]) ->
-    {ok, [{DocId :: binary(), [MissingRev :: binary()], [
-                    PossibleAncestor :: binary()]}]}
-    | {error, term()}.
-get_missing_revs(#db{server=Server, options=Opts}=Db, IdRevs) ->
-    Json = couchdb_ejson:encode({IdRevs}),
-    Url = hackney_url:make_url(couchdb_httpc:server_url(Server), [couchdb_httpc:db_url(Db),
-                                                   <<"_revs_diff">>],
-                              []),
 
-    Headers = [{<<"Content-Type">>, <<"application/json">>}],
-    case couchdb_httpc:db_request(post, Url, Headers, Json, Opts,
-                                    [200]) of
-        {ok, _, _, Ref} ->
-            {Props} = couchdb_httpc:json_body(Ref),
-            Res = lists:map(fun({Id, {Result}}) ->
-                            MissingRevs = proplists:get_value(
-                                    <<"missing">>, Result
-                            ),
-                            PossibleAncestors = proplists:get_value(
-                                <<"possible_ancestors">>, Result, []
-                            ),
-                            {Id, MissingRevs, PossibleAncestors}
-                    end, Props),
-            {ok, Res};
-        Error ->
-            Error
-    end.
 
 %% --------------------------------------------------------------------
 %% private functions.
