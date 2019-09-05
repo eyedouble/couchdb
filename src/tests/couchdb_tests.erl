@@ -13,7 +13,7 @@ clean_dbs() ->
     catch couchdb:delete_db(Server, "couchdb_testdb"),
     catch couchdb:delete_db(Server, "couchdb_testdb2"),
     catch couchdb:delete_db(Server, "couchdb_testdb3"),
-    timer:sleep(300),
+    % timer:sleep(300),
     ok.
 
 start_couchdb_tests() ->

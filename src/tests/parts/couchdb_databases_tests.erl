@@ -13,7 +13,7 @@
 clean_dbs() ->
     Server = couchdb:server_connection(),
     [ catch couchdb:delete_db(Server, MockDb) || MockDb <- ?MOCK_DBS ],
-    timer:sleep(300),
+    % timer:sleep(300),
     ok.
 
 start_couchdb_tests() ->

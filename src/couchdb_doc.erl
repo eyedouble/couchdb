@@ -32,6 +32,9 @@ get_idrev(Doc) ->
 %% @spec is_saved(Doc::json_obj()) -> boolean()
 %% @doc If document have been saved (revision is defined) return true,
 %% else, return false.
+
+%% ISAN: DROP THIS!
+
 is_saved(Doc) ->
     case get_value(<<"_rev">>, Doc) of
         undefined -> false;

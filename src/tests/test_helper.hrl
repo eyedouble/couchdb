@@ -22,15 +22,15 @@
 -define(MOCK_DOCS(N), lists:nth(N, ?MOCK_DOCS)).
 
 
--define(TEST_INIT(),
-    % Start Deps
-    {ok, _} = application:ensure_all_started(couchdb),
+% -define(TEST_INIT(),
+%     % Start Deps
+%     {ok, _} = application:ensure_all_started(couchdb),
 
-    % clean_dbs() ->
-    Server = couchdb:server_connection(),
-    [ catch couchdb:delete_db(Server, MockDb) || MockDb <- ?MOCK_DBS ],
-    timer:sleep(300),
+%     % clean_dbs() ->
+%     Server = couchdb:server_connection(),
+%     [ catch couchdb:delete_db(Server, MockDb) || MockDb <- ?MOCK_DBS ],
+%     timer:sleep(300),
 
-    % init() ->
-    couchdb:server_connection(<<"http://localhost:5984">>)
-).
+%     % init() ->
+%     couchdb:server_connection(<<"http://localhost:5984">>)
+% ).

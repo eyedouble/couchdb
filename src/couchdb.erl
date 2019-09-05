@@ -18,8 +18,6 @@
          open_or_create_db/2, open_or_create_db/3, open_or_create_db/4,
          delete_db/1, delete_db/2,
          design_info/2, view_cleanup/1,
-         doc_exists/2,
-         open_doc/2, open_doc/3,
          stream_doc/1, end_doc_stream/1,
          delete_doc/2, delete_doc/3,
          save_docs/2, save_docs/3,
@@ -227,63 +225,7 @@ delete_db(#server{url=ServerUrl, options=Opts}, DbName) ->
     end.
 
 
-%% @doc test if doc with uuid exists in the given db
-%% @spec doc_exists(db(), string()) -> boolean()
-doc_exists(#db{server=Server, options=Opts}=Db, DocId) ->
-    DocId1 = couchdb_util:encode_docid(DocId),
-    Url = hackney_url:make_url(couchdb_httpc:server_url(Server), couchdb_httpc:doc_url(Db, DocId1), []),
-    case couchdb_httpc:db_request(head, Url, [], <<>>, Opts, [200]) of
-        {ok, _, _} -> true;
-        _Error -> false
-    end.
 
-%% @doc open a document
-%% @equiv open_doc(Db, DocId, [])
-open_doc(Db, DocId) ->
-    open_doc(Db, DocId, []).
-
-%% @doc open a document
-%% Params is a list of query argument. Have a look in CouchDb API
-%% @spec open_doc(Db::db(), DocId::string(), Params::list())
-%%          -> {ok, Doc}|{error, Error}
-open_doc(#db{server=Server, options=Opts}=Db, DocId, Params) ->
-    DocId1 = couchdb_util:encode_docid(DocId),
-
-    %% is there any accepted content-type passed to the params?
-    {Accept, Params1} = case proplists:get_value(accept, Params) of
-        unefined -> {any, Params};
-        A -> {A, proplists:delete(accept, Params)}
-    end,
-    %% set the headers with the accepted content-type if needed
-    Headers = case {Accept, proplists:get_value("attachments", Params)} of
-        {any, true} ->
-            %% only use the more efficient method when we get the
-            %% attachments so we don't use much bandwidth.
-            [{<<"Accept">>, <<"multipart/related">>}];
-        {Accept, _} when is_binary(Accept) ->
-            %% accepted content-type has been forced
-            [{<<"Accept">>, Accept}];
-        _ ->
-            []
-    end,
-    Url = hackney_url:make_url(couchdb_httpc:server_url(Server), couchdb_httpc:doc_url(Db, DocId1),
-                               Params1),
-    case couchdb_httpc:db_request(get, Url, Headers, <<>>, Opts,
-                                    [200, 201]) of
-        {ok, _, RespHeaders, Ref} ->
-            case hackney_headers:parse(<<"content-type">>, RespHeaders) of
-                {<<"multipart">>, _, _} ->
-                    %% we get a multipart request, start to parse it.
-                    InitialState =  {Ref, fun() ->
-                                    couchdb_httpc:wait_mp_doc(Ref, <<>>)
-                            end},
-                    {ok, {multipart, InitialState}};
-                _ ->
-                    {ok, couchdb_httpc:json_body(Ref)}
-            end;
-        Error ->
-            Error
-    end.
 
 %% @doc stream the multipart response of the doc API. Use this function
 %% when you get `{ok, {multipart, State}}' from the function
@@ -306,77 +248,8 @@ end_doc_stream({Ref, _Cont}) ->
 
 
 
-%% @doc delete a document
-%% @equiv delete_doc(Db, Doc, [])
-delete_doc(Db, Doc) ->
-    delete_doc(Db, Doc, []).
 
-%% @doc delete a document
-%% if you want to make sure the doc it emptied on delete, use the option
-%% {empty_on_delete,  true} or pass a doc with just _id and _rev
-%% members.
-%% @spec delete_doc(Db, Doc, Options) -> {ok,Result}|{error,Error}
-delete_doc(Db, Doc, Options) ->
-     delete_docs(Db, [Doc], Options).
 
-%% @doc delete a list of documents
-%% @equiv delete_docs(Db, Docs, [])
-delete_docs(Db, Docs) ->
-    delete_docs(Db, Docs, []).
-
-%% @doc delete a list of documents
-%% if you want to make sure the doc it emptied on delete, use the option
-%% {empty_on_delete,  true} or pass a doc with just _id and _rev
-%% members.
-%% @spec delete_docs(Db::db(), Docs::list(),Options::list()) -> {ok, Result}|{error, Error}
-delete_docs(Db, Docs, Options) ->
-    Empty = couchdb_util:get_value("empty_on_delete", Options, false),
-
-    {FinalDocs, FinalOptions} = case Empty of
-        true ->
-            Docs1 = lists:map(fun(Doc)->
-                        {[{<<"_id">>, couchdb_doc:get_id(Doc)},
-                         {<<"_rev">>, couchdb_doc:get_rev(Doc)},
-                         {<<"_deleted">>, true}]}
-                 end, Docs),
-             {Docs1, proplists:delete("all_or_nothing", Options)};
-         _ ->
-            Docs1 = lists:map(fun({DocProps})->
-                        {[{<<"_deleted">>, true}|DocProps]}
-                end, Docs),
-            {Docs1, Options}
-    end,
-    save_docs(Db, FinalDocs, FinalOptions).
-
-%% @doc save a list of documents
-%% @equiv save_docs(Db, Docs, [])
-save_docs(Db, Docs) ->
-    save_docs(Db, Docs, []).
-
-%% @doc save a list of documents
-%% @spec save_docs(Db::db(), Docs::list(),Options::list()) -> {ok, Result}|{error, Error}
-save_docs(#db{server=Server, options=Opts}=Db, Docs, Options) ->
-    Docs1 = [maybe_docid(Server, Doc) || Doc <- Docs],
-    Options1 = couchdb_util:parse_options(Options),
-    DocOptions = [
-        {list_to_binary(K), V} || {K, V} <- Options1,
-        (K =:= "all_or_nothing" orelse K =:= "new_edits") andalso is_boolean(V)
-    ],
-    Options2 = [
-        {K, V} || {K, V} <- Options1,
-        K =/= "all_or_nothing" andalso K =/= "new_edits"
-    ],
-    Body = couchdb_ejson:encode({[{<<"docs">>, Docs1}|DocOptions]}),
-    Url = hackney_url:make_url(couchdb_httpc:server_url(Server),
-                               [couchdb_httpc:db_url(Db), <<"_bulk_docs">>],
-                               Options2),
-    Headers = [{<<"Content-Type">>, <<"application/json">>}],
-    case couchdb_httpc:db_request(post, Url, Headers, Body, Opts, [201]) of
-        {ok, _, _, Ref} ->
-            {ok, couchdb_httpc:json_body(Ref)};
-        Error ->
-            Error
-        end.
 
 %% @doc duplicate a document using the doc API
 copy_doc(#db{server=Server}=Db, Doc) ->
@@ -387,7 +260,7 @@ copy_doc(#db{server=Server}=Db, Doc) ->
 %% use the last revision, in other case a new doc is created with the
 %% the current doc revision.
 copy_doc(Db, Doc, Dest) when is_binary(Dest) ->
-    Destination = case open_doc(Db, Dest) of
+    Destination = case couchdb_documents:open(Db, Dest) of
         {ok, DestDoc} ->
             Rev = couchdb_doc:get_rev(DestDoc),
             {Dest, Rev};
