@@ -1,10 +1,21 @@
-# CouchDb
-Erlang / Elixir library for [Apache CouchDB](http://couchdb.apache.org) or [IBM Cloudant](https://cloudant.com). CouchDb provides you a full featured and easy-to-use client to access and manage multiple nodes.
+# CouchDB
+
+[![Hex pm](https://img.shields.io/hexpm/v/couchdb.svg?style=flat-square&labelColor=5c676d&color=714a94)](https://hex.pm/packages/couchdb)
+[![Build Status](https://secure.travis-ci.org/eyedouble/couchdb.svg?branch=master
+"Build Status")](https://secure.travis-ci.org/eyedouble/couchdb)
+[![License](https://img.shields.io/github/license/eyedouble/couchdb?color=007ec6&style=flat-square)](LICENSE)
+
+
+
+**Erlang / Elixir library for [Apache CouchDB](http://couchdb.apache.org) or [IBM Cloudant](https://cloudant.com). CouchDB provides you a full featured and easy-to-use client to access and manage multiple nodes.** 
+
+- [Install from hex.pm](https://hex.pm/packages/couchdb)
+- [Documentation available on hexdoc](https://hexdocs.pm/couchdb)
 
 **THIS IS WORK-PROGRESS FOR NOW (September 2019)**
-A Hex.pm release will be made available when ready.
+A Hex.pm is available but as long as the version contains an appendix do not consider it stable.
 
-__Version:__ 1.5.0-alpha-1
+__Version:__ 2.0.0-alpha-2
 
 
 ## Contribute
@@ -12,19 +23,22 @@ __Version:__ 1.5.0-alpha-1
 For issues, comments or feedback please [create an
 issue](http://github.com/eyedouble/couchdb/issues).
 
-# NOTE
+## Notes
+### Forked from Couchbeam
+**CouchDB** is a a fork of [`couchbeam`](http://github.com/benoitc/couchbeam. Backwards incompatible API changes have been introduced as well as a complete new structure. Therefore the decision was made to release this version under a new name: **CouchDB**.
 
-This is a fork of [`couchbeam`](http://github.com/benoitc/couchbeam) and renames the package to `couchdb`. The aim is to refactor and rework this package to use maps and jsone as a json parser/encoder.
+### Semantic versioning
+To comply with [Semantic Versioning](https://semver.org/) the version number has been bumped to `2.0.0`. 
 
-Furthermore much of the codebase could be simplified and I would like to add proper testing as well as both Erlang and Elixir support.
 
-In the fututure focus might shift to implementation of the latest CouchDb API.
 
 
 
 ---------------------------
 
-Original README follows:
+
+
+# Original README:
 
 # Couchbeam - simple Barrel and Apache CouchDB client library for Erlang applications #
 

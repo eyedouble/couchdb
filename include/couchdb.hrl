@@ -166,7 +166,7 @@
     | { Name :: binary(), {Fun :: fun(), Acc :: any()}, Length :: integer(), Type :: binary(), Encoding :: binary()}.
 
 
--define(USER_AGENT, "couchdb/1.5.0").
+-define(USER_AGENT, "couchdb/2.0.0").
 
 -define(DEPRECATED(Old, New, When),
     couchdb_util:deprecated(Old, New, When)).

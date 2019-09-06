@@ -1,6 +1,8 @@
 {application,couchdb,
-	[{description,"Erlang/Elixir CouchDB client"},
-	{vsn,"1.5.0-alpha1"},
+	[{description,"CouchDB Erlang/Elixir client"},
+	{pkg_name, "couchdb"},    
+	{vsn,"2.0.0-alpha1"},
+	{licenses, ["MIT"]},
 	{modules,[]},
 	{registered,[couchdb_sup]},
 	{applications,[
@@ -16,8 +18,11 @@
 	{included_applications,[]},
 	{env,[]},
 	{mod,{couchdb_app,[]}},
-	{maintainers,["Irsan van Wel (eyedouble)"]},
-	{licenses,["MIT"]},
-	{links,[{"Github","https://github.com/eyedouble/couchdb"}]},
-	{files,["src","include","rebar.config","rebar.lock","README.md",
-		"NEWS.md","LICENSE","NOTICE"]}]}.
+	{links,[
+		{"Github","https://github.com/eyedouble/couchdb"},
+		{"Travis CI","https://travis-ci.org/eyedouble/couchdb"}
+	]},
+	{files,[
+		"src","include","rebar.config","rebar.lock","README.md","LICENSE"
+	]}
+]}.
