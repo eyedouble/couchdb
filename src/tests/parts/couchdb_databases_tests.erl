@@ -7,28 +7,19 @@
 
 
 %
-%   HELPERS
+%   HELPER
 %
-
-clean_dbs() ->
-    Server = couchdb:server_connection(),
-    [ catch couchdb_databases:delete(Server, MockDb) || MockDb <- ?MOCK_DBS ],
-    % timer:sleep(300),
-    ok.
-
-start_couchdb_tests() ->
-    {ok, _} = application:ensure_all_started(couchdb),
-    clean_dbs().
-
 init() ->
-    start_couchdb_tests(),
-    couchdb:server_connection(<<"http://localhost:5984">>).
+    {ok, _} = application:ensure_all_started(couchdb),
+    Server = couchdb_custom:server_record(<<"http://localhost:5984">>),
+    [ catch couchdb_databases:delete(Server, MockDb) || MockDb <- ?MOCK_DBS ],
+    Server.
 
 %
 %   TESTS
 %
 exists_test() ->
-    Server = init(),
+    {ok, Server} = init(),
     Res0 = couchdb_databases:exists(Server, ?MOCK_DBS(1)),
     ?assertEqual(false, Res0),
     couchdb_databases:create(Server, ?MOCK_DBS(1)),
@@ -36,13 +27,16 @@ exists_test() ->
     ?assertEqual(true, Res1).
 
 create_test() -> 
-    Server = init(),
-    ?assertMatch({ok, _}, couchdb_databases:create(Server, ?MOCK_DBS(1))),
-    ?assertEqual({error, db_exists}, couchdb_databases:create(Server, ?MOCK_DBS(1))),
-    ?assertMatch({ok, _}, couchdb_databases:create(Server, ?MOCK_DBS(2))).
+    {ok, Server} = init(),
+    {ok, Database} = couchdb_custom:database_record(Server, ?MOCK_DBS(1)),
+    {ok, Database2} = couchdb_custom:database_record(Server, ?MOCK_DBS(2)),
+    ?assertMatch({ok, _}, couchdb_databases:create(Database)),
+    ?assertEqual({error, db_exists}, couchdb_databases:create(Database)),
+    ?assertMatch({ok, _}, couchdb_databases:create(Database2)).
 
 delete_test() ->
-    Server = init(),
-    {ok, Db} = couchdb_databases:create(Server, ?MOCK_DBS(1)),    
-    Res = couchdb_databases:delete(Server, Db),
+    {ok, Server} = init(),
+    {ok, Database} = couchdb_custom:database_record(Server, ?MOCK_DBS(1)),
+    {ok, Database} = couchdb_databases:create(Database),    
+    Res = couchdb_databases:delete(Server, Database),
     ?assertMatch({ok,#{<<"ok">> := true}}, Res).

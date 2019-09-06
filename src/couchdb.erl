@@ -11,10 +11,8 @@
 -define(TIMEOUT, infinity).
 
 %% API urls
--export([server_connection/0, server_connection/1,
-         server_connection/2, server_connection/4,
+-export([
          get_uuid/1, get_uuids/2,        
-         open_db/2, open_db/3,
          open_or_create_db/2, open_or_create_db/3, open_or_create_db/4,
          design_info/2, view_cleanup/1,
          stream_doc/1, end_doc_stream/1,
@@ -35,85 +33,7 @@
 %% API functions.
 %% --------------------------------------------------------------------
 
-%% @doc Create a server for connectiong to a CouchDB node
-%% @equiv server_connection("127.0.0.1", 5984, "", [], false)
-server_connection() ->
-    server_connection(<<"http://127.0.0.1:5984">>, []).
 
-
-server_connection(URL) when is_list(URL) orelse is_binary(URL) ->
-    server_connection(URL, []).
-
-
-
-%% @doc Create a server for connectiong to a CouchDB node
-%% @equiv server_connection(Host, Port, "", [])
-
-server_connection(URL, Options) when is_list(Options) ->
-    #server{url=hackney_url:fix_path(URL), options=Options};
-server_connection(Host, Port) when is_integer(Port) ->
-    server_connection(Host, Port, "", []).
-
-
-%% @doc Create a server for connectiong to a CouchDB node
-%%
-%%      Connections are made to:
-%%      ```http://Host:PortPrefix'''
-%%
-%%      If ssl is set https is used.
-%%
-%%      For a description of SSL Options, look in the <a href="http://www.erlang.org/doc/apps/ssl/index.html">ssl</a> manpage.
-%%
--spec server_connection(Host::string(), Port::non_neg_integer(), Prefix::string(), OptionsList::list()) ->
-        Server::server().
-%% OptionsList() = [option()]
-%% option() =
-%%          {is_ssl, boolean()}                |
-%%          {ssl_options, [SSLOpt]}            |
-%%          {pool_name, atom()}                |
-%%          {proxy_host, string()}             |
-%%          {proxy_port, integer()}            |
-%%          {proxy_user, string()}             |
-%%          {proxy_password, string()}         |
-%%          {basic_auth, {username(), password()}} |
-%%          {cookie, string()}                 |
-%%          {oauth, oauthOptions()}            |
-%%          {proxyauth, [proxyauthOpt]}
-%%
-%% username() = string()
-%% password() = string()
-%% SSLOpt = term()
-%% oauthOptions() = [oauth()]
-%% oauth() =
-%%          {consumer_key, string()} |
-%%          {token, string()} |
-%%          {token_secret, string()} |
-%%          {consumer_secret, string()} |
-%%          {signature_method, string()}
-%%
-%% proxyOpt = {X-Auth-CouchDB-UserName, username :: string()} |
-%%            {X-Auth-CouchDB-Roles, roles :: string} | list_of_user_roles_separated_by_a_comma
-%%            {X-Auth-CouchDB-Token: token :: string()} | authentication token. Optional, but strongly recommended to force token be required to prevent requests from untrusted sources.
-
-
-
-
-server_connection(Host, Port, Prefix, Options)
-        when is_integer(Port), Port =:= 443 ->
-    BaseUrl = iolist_to_binary(["https://", Host, ":",
-                                integer_to_list(Port)]),
-    Url = hackney_url:make_url(BaseUrl, [Prefix], []),
-    server_connection(Url, Options);
-server_connection(Host, Port, Prefix, Options) ->
-    Scheme = case proplists:get_value(is_ssl, Options) of
-        true -> "https";
-        _ -> "http"
-    end,
-
-    BaseUrl = iolist_to_binary([Scheme, "://", Host, ":",
-                                integer_to_list(Port)]),
-    Url = hackney_url:make_url(BaseUrl, [Prefix], []),
-    server_connection(Url, Options).
 
 
 %% @doc Get one uuid from the server
@@ -157,17 +77,7 @@ view_cleanup(#db{server=Server, name=DbName, options=Opts}) ->
 
 
 
-%% @doc Create a client for connection to a database
-%% @equiv open_db(Server, DbName, [])
-open_db(Server, DbName) ->
-    open_db(Server, DbName, []).
 
-%% @doc Create a client for connection to a database
-%% @spec open_db(Server::server(), DbName::string(), Options::optionList())
-%%              -> {ok, db()}
-open_db(#server{options=Opts}=Server, DbName, Options) ->
-    Options1 = couchdb_util:propmerge1(Options, Opts),
-    {ok, #db{server=Server, name=couchdb_util:dbname(DbName), options=Options1}}.
 
 
 %% @doc Create a client for connecting to a database and create the
@@ -195,7 +105,7 @@ open_or_create_db(#server{url=ServerUrl, options=Opts}=Server, DbName0,
     case couchdb_httpc:db_resp(Resp, [200]) of
         {ok, _Status, _Headers, Ref} ->
             hackney:skip_body(Ref),
-            open_db(Server, DbName, Options);
+            couchdb_custom:database_record(Server, DbName, Options);
         {error, not_found} ->
             couchdb_databases:create(Server, DbName, Options, Params);
         Error ->

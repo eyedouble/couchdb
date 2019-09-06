@@ -23,14 +23,8 @@
 
 
 % -define(TEST_INIT(),
-%     % Start Deps
 %     {ok, _} = application:ensure_all_started(couchdb),
-
-%     % clean_dbs() ->
-%     Server = couchdb:server_connection(),
-%     [ catch couchdb:delete_db(Server, MockDb) || MockDb <- ?MOCK_DBS ],
-%     timer:sleep(300),
-
-%     % init() ->
-%     couchdb:server_connection(<<"http://localhost:5984">>)
+%     Server = couchdb_custom:server_record(<<"http://localhost:5984">>),
+%     [ catch couchdb_databases:delete(Server, MockDb) || MockDb <- ?MOCK_DBS ],
+%     Server
 % ).

@@ -7,22 +7,13 @@
 
 
 %
-%   HELPERS
+%   HELPER
 %
-
-clean_dbs() ->
-    Server = couchdb:server_connection(),
-    [ catch couchdb_databases:delete(Server, MockDb) || MockDb <- ?MOCK_DBS ],
-    % timer:sleep(300),
-    ok.
-
-start_couchdb_tests() ->
-    {ok, _} = application:ensure_all_started(couchdb),
-    clean_dbs().
-
 init() ->
-    start_couchdb_tests(),
-    couchdb:server_connection(<<"http://localhost:5984">>).
+    {ok, _} = application:ensure_all_started(couchdb),
+    Server = couchdb_custom:server_record(<<"http://localhost:5984">>),
+    [ catch couchdb_databases:delete(Server, MockDb) || MockDb <- ?MOCK_DBS ],
+    Server.
 
 %
 %   TESTS
