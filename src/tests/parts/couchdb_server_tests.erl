@@ -37,7 +37,7 @@ info_test() ->
         <<"features">> :=  _, 
         <<"git_sha">> := _,
         <<"uuid">> := _,
-        <<"vendor">> := #{}=_,
+        <<"vendor">> := _,
         <<"version">> := _
     }}, Res).
 
