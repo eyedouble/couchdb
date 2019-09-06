@@ -4,6 +4,9 @@ otp_release:
    - 20.0
    - 20.1
 
+services:
+  - couchdb
+
 before_install:
  - "chmod +x bootstrap_travis.sh"
  - "./bootstrap_travis.sh"
