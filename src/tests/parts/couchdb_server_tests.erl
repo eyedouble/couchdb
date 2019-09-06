@@ -33,9 +33,7 @@ info_test() ->
     Server = init(),
     Res = couchdb_server:info(Server),
     ?assertMatch({ok, #{
-        <<"couchdb">> := <<"Welcome">>, 
-        <<"features">> :=  _, 
-        <<"git_sha">> := _,
+        <<"couchdb">> := <<"Welcome">>,  
         <<"uuid">> := _,
         <<"vendor">> := _,
         <<"version">> := _
