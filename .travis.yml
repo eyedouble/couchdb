@@ -1,9 +1,5 @@
 language: erlang
 otp_release:
-
-   - 18.0
-   - 18.1
-   - 18.2.1
    - 19.3
    - 20.0
    - 20.1
@@ -11,5 +7,5 @@ before_script:
   - "chmod +x gradlew"
   - "./bootstrap_travis.sh"
 script: 
-  "./rebar3 compile"
-  "./rebar3 eunit"
+  - "./rebar3 compile"
+  - "./rebar3 eunit"
