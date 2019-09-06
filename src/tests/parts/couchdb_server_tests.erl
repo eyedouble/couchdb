@@ -37,15 +37,15 @@ info_test() ->
         <<"features">> :=  _, 
         <<"git_sha">> := _,
         <<"uuid">> := _,
-        <<"vendor">> := #{<<"name">> := <<"The Apache Software Foundation">>},
+        <<"vendor">> := #{}=_,
         <<"version">> := _
     }}, Res).
 
 all_dbs_test() -> 
     Server = init(),
     % TODO CREATE DBs FIRST
-    Res = couchdb_server:all_dbs(Server),
-    ?assertMatch({ok, []}, Res).
+    {ok, ListOfDbs} = couchdb_server:all_dbs(Server),
+    ?assert(is_list(ListOfDbs)).
 
 
 replicate_test() ->
