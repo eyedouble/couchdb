@@ -12,6 +12,8 @@
     ,delete/2
     ,bulk_docs_save/2
     ,bulk_docs_save/3
+    ,compact/1
+    ,compact/2
     ,ensure_full_commit/1
     ,ensure_full_commit/2
     ,get_missing_revs/2
@@ -23,9 +25,9 @@
 %% check if the database exists already or not.
 -spec(exists(server(), binary()) -> boolean()).
 exists(#server{url=ServerUrl, options=Opts}, <<DbName/binary>>) ->
-    case couchdb_custom:database_name_is_valid(DbName) of
+    case couchdb:database_name_is_valid(DbName) of
         true -> 
-            Url = hackney_url:make_url(ServerUrl, couchdb_:dbname(DbName), []),
+            Url = hackney_url:make_url(ServerUrl, DbName, []),
             case couchdb_httpc:db_request(head, Url, [], <<>>, Opts, [200]) of
                 {ok, 200, _}->
                     true;
@@ -51,22 +53,7 @@ info(#db{server=Server, name=DbName, options=Opts}) ->
     end.
 
 %% @reference CouchDB Docs 1.3.1/PUT
-%% @doc Create a database and a client for connectiong to it.
-%% @equiv create(Server, DbName, [], [])
-% create(Server, DbName) ->
-%     create(Server, DbName, [], []).
-
-%% @doc Create a database and a client for connectiong to it.
-%% @equiv create(Server, DbName, Options, [])
-% create(Server, DbName, Options) ->
-%     create(Server, DbName, Options, []).
-
-
-
-create(#db{}=Database) -> create(Database, []).
-
-%% DB names must conform to ^[a-z][a-z0-9_$()+/-]*$
-%% @doc Create a database and a client for connectiong to it.
+%% @doc Create a database
 %%
 %%      Connections are made to:
 %%      ```http://Host:PortPrefix/DbName'''
@@ -74,24 +61,9 @@ create(#db{}=Database) -> create(Database, []).
 %% If ssl is set https is used. See server_connections for options.
 %% Params is a list of optionnal query argument you want to pass to the
 %% db. Useful for bigcouch for example.
-%%
-%% @spec create(Server::server(), DbName::string(),
-%%                 Options::optionList(), Params::list()) -> {ok, db()|{error, Error}}
-% create(#server{url=ServerUrl, options=Opts}=Server, DbName0, Options, Params) ->
-%     DbName = couchdb_util:dbname(DbName0),
-%     Options1 = couchdb_util:propmerge1(Options, Opts),
-%     Url = hackney_url:make_url(ServerUrl, DbName, Params),
-%     Resp = couchdb_httpc:db_request(put, Url, [], <<>>, Options1, [201]),
-%     case Resp of
-%         {ok, _Status, _Headers, Ref} ->
-%             hackney:skip_body(Ref),
-%             {ok, #db{server=Server, name=DbName, options=Options1}};
-%         {error, precondition_failed} ->
-%             {error, db_exists};
-%        Error ->
-%           Error
-%     end.
+%% DB names must conform to ^[a-z][a-z0-9_$()+/-]*$
 
+-spec(create(db(), list()) -> {ok, db()} | {error, term()}).
 create(#db{server=#server{url=ServerUrl}, name=DbName, options=Options}=Db, Params) ->    
     Url = hackney_url:make_url(ServerUrl, DbName, Params),
     Resp = couchdb_httpc:db_request(put, Url, [], <<>>, Options, [201]),
@@ -103,21 +75,27 @@ create(#db{server=#server{url=ServerUrl}, name=DbName, options=Options}=Db, Para
             {error, db_exists};
        Error ->
           Error
-    end.
+    end;
+
+%% @reference CouchDB Docs 1.3.1/PUT
+%% @doc Create a database 
+%% @equiv create(Db, [])
+create(#server{}=Server, <<DbName/binary>>) -> 
+    {ok, Db} = couchdb:database_record(Server, DbName),
+    create(Db, []).
+
+%% @reference CouchDB Docs 1.3.1/PUT
+%% @doc Create a database 
+%% @equiv create(Db, [])
+-spec(create(db()) -> {ok, db()} | {error, term()}).
+create(#db{}=Database) -> create(Database, []).
 
 
 %% @reference CouchDB Docs 1.3.1/DELETE
-%% @doc delete database
-%% @equiv delete(Server, DbName)
-delete(#db{server=Server, name=DbName}) ->
-    delete(Server, DbName).
-
-%% @doc delete database
-%% @spec delete(server(), DbName) -> {ok, iolist()|{error, Error}}
-delete(#server{url=_ServerUrl, options=_Opts}=Server, #db{server=_Server1, name=DbName}) ->
-    delete(Server, DbName);
-delete(#server{url=ServerUrl, options=Opts}, DbName) ->
-    Url = hackney_url:make_url(ServerUrl, couchdb_util:dbname(DbName), []),
+%% @doc delete database   
+-spec(delete(db()) -> {ok, db()} | {error, term()}).
+delete(#db{server=#server{url=ServerUrl}, name=DbName, options=Opts}) ->
+    Url = hackney_url:make_url(ServerUrl, DbName, []),
     Resp = couchdb_httpc:request(delete, Url, [], <<>>, Opts),
     case couchdb_httpc:db_resp(Resp, [200]) of
         {ok, _, _, Ref} ->
@@ -126,21 +104,25 @@ delete(#server{url=ServerUrl, options=Opts}, DbName) ->
             Error
     end.
 
+%% @reference CouchDB Docs 1.3.1/DELETE
+%% @equiv delete(Db) 
+-spec(delete(server(), binary()) -> {ok, db()} | {error, term()}).
+delete(#server{url=_ServerUrl, options=_Opts}=Server, <<DbName/binary>>) ->
+        {ok, Db} = couchdb:database_record(Server, DbName),
+        delete(Db).
 
 %
-%
 %   BULK
-%
 %
 
 %% @reference CouchDB Docs 1.3.4
 %% @doc NIY: This method can be called to query several documents in bulk. It is well suited for 
 %% fetching a specific revision of documents, as replicators do for example, or for getting 
 %% revision history.
-bulk_get() -> 
-    niy.
+% bulk_get() -> 
+%     niy.
 
-% NOT TESTED?
+
 %% @reference CouchDB Docs 1.3.5.2
 %% @doc save a list of documents
 %% @equiv save_docs(Db, Docs, [])
@@ -157,7 +139,7 @@ bulk_docs_save(#db{server=Server, options=Opts}=Db, [_Car | _Cdr]=Documents, Opt
     Documents1 = lists:map(fun(Document) -> 
         case maps:is_key(<<"_id">>, Document) of
             true -> Document;
-            false -> maps:put(<<"_id">>, couchdb_custom:generate_unique_id(), Document)
+            false -> maps:put(<<"_id">>, couchdb:generate_unique_id(), Document)
         end
     end, Documents),
 
@@ -169,10 +151,53 @@ bulk_docs_save(#db{server=Server, options=Opts}=Db, [_Car | _Cdr]=Documents, Opt
     
     
     case couchdb_httpc:db_request(post, Url, Headers, Body, Opts, [201]) of
-    {ok, _, _, Ref} ->
-        {ok, couchdb_httpc:json_body(Ref)};
+    {ok, 201, _, Ref} ->    
+        Response = couchdb_httpc:json_body(Ref),       
+        BulkList =  [ maps:merge(Doc0, #{<<"_id">> => Id1, <<"_rev">> => Rev})
+                    || #{<<"_id">> := Id0}=Doc0 <- Documents1,
+                    #{<<"id">> := Id1, <<"rev">> := Rev, <<"ok">> := true}=_Doc1 <- Response,
+                    Id0 =:= Id1],        
+        {ok, BulkList};
     Error ->
         Error
+    end.
+
+% NOT TESTED
+%% @reference CouchDB Docs 1.3.13
+%% @doc Compaction compresses the database file by removing unused
+%% sections created during updates.
+%% See [http://wiki.apache.org/couchdb/Compaction] for more informations
+%% @spec compact(Db::db()) -> ok|{error, term()}
+compact(#db{server=Server, options=Opts}=Db) ->
+    Url = hackney_url:make_url(couchdb_httpc:server_url(Server), [couchdb_httpc:db_url(Db),
+                                                    <<"_compact">>],
+                               []),
+    Headers = [{<<"Content-Type">>, <<"application/json">>}],
+    case couchdb_httpc:db_request(post, Url, Headers, <<>>, Opts, [202]) of
+        {ok, _, _, Ref} ->
+            hackney:skip_body(Ref),
+            ok;
+        Error ->
+            Error
+    end.
+
+% NOT TESTED
+%% @reference CouchDB Docs 1.3.14
+%% @doc Like compact/1 but this compacts the view index from the
+%% current version of the design document.
+%% See [http://wiki.apache.org/couchdb/Compaction#View_compaction] for more informations
+%% @spec compact(Db::db(), ViewName::string()) -> ok|{error, term()}
+compact(#db{server=Server, options=Opts}=Db, DesignName) ->
+    Headers = [{<<"Content-Type">>, <<"application/json">>}],
+    Url = hackney_url:make_url(
+        couchdb_httpc:server_url(Server), [couchdb_httpc:db_url(Db), <<"_compact">>, DesignName], []
+    ),    
+    case couchdb_httpc:db_request(post, Url, Headers, <<>>, Opts, [202]) of
+        {ok, _, _, Ref} ->
+            hackney:skip_body(Ref),
+            ok;
+        Error ->
+            Error
     end.
 
 % NOT TESTED

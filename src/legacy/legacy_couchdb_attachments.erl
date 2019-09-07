@@ -6,7 +6,7 @@
 
 %% @doc This module contains utilities to manage attachments
 
--module(couchdb_attachments).
+-module(legacy_couchdb_attachments).
 
 -include("couchdb.hrl").
 

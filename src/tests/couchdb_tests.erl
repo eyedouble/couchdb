@@ -32,34 +32,6 @@
 % -include_lib("kernel/include/file.hrl").
 
 
-% create_db_test() ->
-%     start_couchdb_tests(),
-%      S = couchdb:server_connection(<<"http://localhost:5984">>),
-%      R = couchdb:create_db(S, <<"couchdb_testdb">>),
-%      ?assert(R =:= {ok,{db,{server,<<"http://localhost:5984">>,[]},
-%         <<"couchdb_testdb">>,[]}}).
-
-
-% % This function does not check if db exists 
-% open_db_test() ->
-%     start_couchdb_tests(),
-%     S = couchdb:server_connection(<<"http://localhost:5984">>),
-%     {ok, Db} = couchdb:open_db(S, <<"fakedb">>),
-%     ?assert(Db =:= {db,{server,<<"http://localhost:5984">>,[]},
-%         <<"fakedb">>,[]}).
-
-% create_doc_test() ->
-%     start_couchdb_tests(),
-%     S = couchdb:server_connection(<<"http://localhost:5984">>),
-%     {ok, Db} = couchdb:open_db(S, <<"ss">>),
-%     R = couchdb:save_doc(Db, #{<<"zzz">> => <<"lalaal">>}),
-%     ?PRINT(R),
-%     ?assert(R =:= ma).
-
-
-
-
-
 
 
 % basic_test() ->

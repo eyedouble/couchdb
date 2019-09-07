@@ -18,7 +18,7 @@
 -export([get_value/2, get_value/3]).
 -export([deprecated/3, shutdown_sync/1]).
 -export([start_app_deps/1, get_app_env/2]).
--export([encode_docid1/1, encode_docid_noop/1]).
+
 -export([force_param/3]).
 -export([proxy_token/2, proxy_header/3]).
 
@@ -27,7 +27,6 @@
     {roles,<<"X-Auth-CouchDB-Roles">>},
     {token,<<"X-Auth-CouchDB-Token">>}]).
 
--define(ENCODE_DOCID_FUNC, encode_docid1).
 
 % dbname(DbName) when is_list(DbName) ->
 %     list_to_binary(DbName);
@@ -36,31 +35,30 @@
 % dbname(DbName) ->
 %     erlang:error({illegal_database_name, DbName}).
 
-encode_att_name(Name) when is_binary(Name) ->
-    encode_att_name(xmerl_ucs:from_utf8(Name));
-encode_att_name(Name) ->
-    Parts = lists:foldl(fun(P, Att) ->
-               [xmerl_ucs:to_utf8(P)|Att]
-       end, [], string:tokens(Name, "/")),
-    lists:flatten(Parts).
 
-encode_docid(DocId) when is_list(DocId) ->
-    encode_docid(list_to_binary(DocId));
-encode_docid(DocId)->
-    ?ENCODE_DOCID_FUNC(DocId).
+%
+%   Encode Attachement Name
+%
+encode_att_name(<<Name/binary>>) -> 
+    case unicode:characters_to_binary(Name) of
+        {error, _, _} -> encode_att_name(nil);
+        {incomplete, _, _} -> encode_att_name(nil);
+        Utf8Bin -> {ok, Utf8Bin}
+    end;
+encode_att_name(_) -> {error, <<"Invalid attachement name">>}.
 
-encode_docid1(DocId) ->
-    case DocId of
-        << "_design/", Rest/binary >> ->
-            Rest1 = hackney_url:urlencode(Rest, [noplus]),
-            <<"_design/", Rest1/binary >>;
-        _ ->
-            hackney_url:urlencode(DocId, [noplus])
-    end.
+%
+%   Encode Document Id
+%
+encode_docid(<< "_design/", DocId/binary >>) -> 
+    DocId1 = hackney_url:urlencode(DocId, [noplus]),
+    <<"_design/", DocId1/binary>>;
+encode_docid(<<DocId/binary>>) -> hackney_url:urlencode(DocId, [noplus]).
 
-encode_docid_noop(DocId) ->
-    DocId.
 
+%
+%   Encode Query proplists
+%
 %% @doc Encode needed value of Query proplists in json
 encode_query([]) ->
     [];

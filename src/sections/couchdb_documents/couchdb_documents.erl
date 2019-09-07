@@ -1,10 +1,12 @@
 -module(couchdb_documents).
 
 -include("couchdb.hrl").
--include("../dev.hrl").
+-include("../../dev.hrl").
 
 -export([
     exists/2
+    ,lookup_rev/2
+    ,lookup_rev/3
     ,get/2
     ,get/3
     ,save/2
@@ -12,9 +14,10 @@
     ,save/4
     ,delete/2
     ,delete/3
-    
 ]).
 
+
+%% @reference CouchDB Docs 1.4.1/HEAD
 %% @doc test if doc with uuid exists in the given db
 %% @spec doc_exists(db(), string()) -> boolean()
 exists(#db{server=Server, options=Opts}=Db, DocId) ->
@@ -25,12 +28,31 @@ exists(#db{server=Server, options=Opts}=Db, DocId) ->
         _Error -> false
     end.
 
-%% NOT TESTED 
+%% @reference CouchDB Docs 1.4.1/HEAD
+%% @doc get the last revision of the document
+lookup_rev(Db, DocId) ->
+    lookup_rev(Db, DocId, []).
+
+lookup_rev(#db{server=Server, options=Opts}=Db, DocId, Params) ->
+    DocId1 = couchdb_util:encode_docid(DocId),
+    Url = hackney_url:make_url(couchdb_httpc:server_url(Server), couchdb_httpc:doc_url(Db, DocId1),
+                               Params),
+    case couchdb_httpc:db_request(head, Url, [], <<>>, Opts, [200]) of
+        {ok, _, Headers} ->
+            HeadersDict = hackney_headers:new(Headers),
+            re:replace(hackney_headers:get_value(<<"etag">>, HeadersDict),
+                <<"\"">>, <<>>, [global, {return, binary}]);
+        Error ->
+            Error
+    end.
+
+%% @reference CouchDB Docs 1.4.1/GET
 %% @doc open a document
 %% @equiv open_doc(Db, DocId, [])
 get(Db, DocId) ->
     get(Db, DocId, []).
 
+%% @reference CouchDB Docs 1.4.1/GET
 %% @doc open a document
 %% Params is a list of query argument. Have a look in CouchDb API
 -spec(get(Db::db(), DocId::binary(), Params::list()) -> {ok, map()} | {error, term()}).
@@ -73,8 +95,7 @@ get(#db{server=Server, options=Opts}=Db, DocId, Params) ->
             Error
     end.
 
-
-%% @reference CouchDB Docs 1.2.8
+%% @reference CouchDB Docs 1.4.1/PUT
 %% @doc save a document
 %% @equiv save(Db, Doc, [])
 save(Db, Doc) ->
@@ -132,7 +153,7 @@ save(Db, Doc, Options) ->
 %% gzipped.
 
 -spec save(Db::db(), doc(), mp_attachments(), Options::list()) -> {ok, doc()} | {error, term()}.
-save(#db{server=Server, options=Opts}=Db, #{}=Doc, Atts, Options) ->
+save(#db{server=Server, options=_Opts}=Db, #{}=Doc, Atts, Options) ->
     % DocId = case couchdb_util:get_value(<<"_id">>, Props) of
     %     undefined ->
     %         [Id] = get_uuid(Server),
@@ -196,11 +217,7 @@ save(#db{server=Server, options=Opts}=Db, #{}=Doc, Atts, Options) ->
         _ -> send_document_multipart(Db, Url, Doc, Atts)
     end.
 
-
-
-%
-%   DELETE
-%
+%% @reference CouchDB Docs 1.4.1/DELETE
 %% @doc Deletes a list of documents
 %% if you want to make sure the doc it emptied on delete, use the option
 %% {empty_on_delete,  true} or pass a doc with just _id and _rev
@@ -228,17 +245,28 @@ delete(#db{}=Db, [#{<<"_id">> := <<_Id/binary>>, <<"_rev">> := <<_Rev/binary>>}=
                 <<"_rev">> => Rev,
                 <<"_deleted">> => true             
             } || #{<<"_id">> := <<Id/binary>>, <<"_rev">> := <<Rev/binary>>}=_Doc <- Documents];
-        false -> [ maps:put(<<"_deleted">>, true, Doc) || #{<<"_id">> := <<_Id/binary>>, <<"_rev">> := <<_Rev/binary>>}=Doc <- Documents]
+        false -> [ maps:put(<<"_deleted">>, true, Doc) || #{<<"_id">> := <<_Id1/binary>>, <<"_rev">> := <<_Rev1/binary>>}=Doc <- Documents]
     end,
     couchdb_databases:bulk_docs_save(Db, FinalDocs, []).
     
+
+
+
+
+%% @reference CouchDB Docs 1.4.1.7/COPY
+%% @doc Copying to an Existing Document
+%%
+%%
+%% Not Implemented Yet. Old Implementation looked quite bad, dropped in favour of other
+%% functionality first.
+
 
 
 %
 %   PRIVATE
 %
 %% @private
-send_document_singlepart(#db{server=Server, options=Opts}=Db, Url, #{}=Doc) ->
+send_document_singlepart(#db{server=_Server, options=Opts}=_Db, Url, #{}=Doc) ->
     JsonDoc = couchdb_ejson:encode(Doc),
     Headers = [{<<"Content-Type">>, <<"application/json">>}],
     case couchdb_httpc:db_request(put, Url, Headers, JsonDoc, Opts, [200, 201, 202]) of
@@ -252,7 +280,7 @@ send_document_singlepart(#db{server=Server, options=Opts}=Db, Url, #{}=Doc) ->
     end.
 
 %% @private
-send_document_multipart(#db{server=Server, options=Opts}=Db, Url, #{}=Doc, Atts) -> 
+send_document_multipart(#db{server=_Server, options=Opts}=_Db, Url, #{}=Doc, Atts) -> 
    Boundary = couchdb_uuids:random(),
 
     %% for now couchdb can't received chunked multipart stream

@@ -11,7 +11,8 @@
 %
 init() ->
     {ok, _} = application:ensure_all_started(couchdb),
-    Server = couchdb_custom:server_record(<<"http://localhost:5984">>),
+    {ok, Server} = couchdb:server_record(<<"http://localhost:5984">>, []),
+    % {ok, Server} = couchdb:server_record(<<"https://localhost:6984">>, [{insecure, true}]),
     [ catch couchdb_databases:delete(Server, MockDb) || MockDb <- ?MOCK_DBS ],
     Server.
 
@@ -58,21 +59,21 @@ replicate_test() ->
 
 
     {ok, DocB1} = couchdb_documents:get(DbB, DocA1Id),
-    DocB1Rev = couchdb_custom:get_document_rev(DocB1),
+    DocB1Rev = couchdb:get_document_rev(DocB1),
     ?assertEqual(DocA1Rev, DocB1Rev),
 
     {ok, DocA1_0} = couchdb_documents:save(DbA, DocA1),
     {ok, DocA1_1} = couchdb_documents:save(DbA, DocA1_0),
 
-    DocA1_0Rev = couchdb_custom:get_document_rev(DocA1_0),
-    DocA1_1Rev = couchdb_custom:get_document_rev(DocA1_1),
+    DocA1_0Rev = couchdb:get_document_rev(DocA1_0),
+    DocA1_1Rev = couchdb:get_document_rev(DocA1_1),
 
     % Test 
     {ok, DocA2_0} = couchdb_documents:save(DbA, DocA2),
     {ok, DocA2_1} = couchdb_documents:save(DbA, DocA2_0),
 
-    DocA2_0Rev = couchdb_custom:get_document_rev(DocA2_0),
-    _DocA2_1Rev = couchdb_custom:get_document_rev(DocA2_1),
+    DocA2_0Rev = couchdb:get_document_rev(DocA2_0),
+    _DocA2_1Rev = couchdb:get_document_rev(DocA2_1),
 
     {ok, MissingObj} = couchdb_databases:get_missing_revs(
         DbB, 
