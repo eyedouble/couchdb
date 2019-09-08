@@ -1,9 +1,4 @@
-%%% -*- erlang -*-
-%%%
-%%% This file is part of couchdb released under the MIT license.
-%%% See the NOTICE for more information.
-
-
+%% @hidden
 %% @doc This module contains utilities to manage attachments
 
 -module(legacy_couchdb_attachments).

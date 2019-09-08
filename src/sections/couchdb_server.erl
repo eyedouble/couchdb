@@ -11,7 +11,7 @@
     ,replicate/4
 ]).
 
-%% @reference CouchDB Docs 1.2.1
+%% %reference CouchDB Docs 1.2.1
 %% @doc Get Information from the server
 %% @spec info(server()) -> {ok, iolist()}
 info(#server{url=Url, options=Opts}) ->
@@ -27,11 +27,11 @@ info(#server{url=Url, options=Opts}) ->
             Error
     end.
 
-%% @reference CouchDB Docs 1.2.2
+%% %reference CouchDB Docs 1.2.2
 %% @doc List of running tasks, including the task type, name, status and process ID. 
-% active_tasks() -> niy.
+active_tasks() -> niy.
 
-%% @reference CouchDB Docs 1.2.3
+%% %reference CouchDB Docs 1.2.3
 %% @doc get list of databases on a CouchDB node
 %% @spec all_dbs(server()) -> {ok, iolist()}
 all_dbs(#server{}=Server) -> all_dbs(Server, []).
@@ -50,26 +50,26 @@ all_dbs(#server{url=ServerUrl, options=Opts}, Options) ->
             Error
     end.
 
-%% @reference CouchDB Docs 1.2.4
+%% %reference CouchDB Docs 1.2.4
 %% @doc Returns information of a list of the specified databases in the CouchDB instance. 
-% dbs_info() -> niy.
+dbs_info() -> niy.
 
-%% @reference CouchDB Docs 1.2.5
+%% %reference CouchDB Docs 1.2.5
 %% @doc Returns the status of the node or cluster, per the cluster setup wizard. 
-% cluster_setup() -> niy.
+cluster_setup() -> niy.
 
-%% @reference CouchDB Docs 1.2.6
+%% %reference CouchDB Docs 1.2.6
 %% @doc Returns a list of all database events in the CouchDB instance. 
-% db_updates() -> niy.
+db_updates() -> niy.
 
-%% @reference CouchDB Docs 1.2.7
+%% %reference CouchDB Docs 1.2.7
 %% @doc Displays the nodes that are part of the cluster as cluster_nodes. 
 %% The field all_nodes displays all nodes this node knows about, including 
 %% the ones that are part of the cluster. The endpoint is useful when setting 
 %% up a cluster, see Node Management 
-% membership() -> niy.
+membership() -> niy.
 
-%% @reference CouchDB Docs 1.2.8
+%% %reference CouchDB Docs 1.2.8
 %% @doc Request, configure, or stop, a replication operation.
 %% It allows to pass for authentication info
 %% ```
@@ -81,8 +81,7 @@ all_dbs(#server{url=ServerUrl, options=Opts}, Options) ->
 %% replicate(Server, RepObj).
 %% '''
 %%
-%% @spec replicate(Server::server(), RepObj::{list()})
-%%          -> {ok, Result}|{error, Error}
+-spec(replicate(Server::server(), RepObj::{list()})-> {ok, term()}|{error, term()}).
 replicate(#server{url=ServerUrl, options=Opts}, RepObj) ->
     Url = hackney_url:make_url(ServerUrl, [<<"_replicate">>], []),
     Headers = [{<<"Content-Type">>, <<"application/json">>}],
@@ -100,8 +99,7 @@ replicate(#server{url=ServerUrl, options=Opts}, RepObj) ->
     end.
 
 %% @doc Handle replication.
-%% @spec replicate(Server::server(), Source::string(), Target::target())
-%%          ->  {ok, Result}|{error, Error}
+-spec(replicate(Server::server(), Source::binary(), Target::term()) ->  {ok, term()}|{error, term()}).
 replicate(Server, Source, Target) ->
     replicate(Server, Source, Target, []).
 

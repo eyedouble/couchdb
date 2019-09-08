@@ -17,9 +17,9 @@
 ]).
 
 
-%% @reference CouchDB Docs 1.4.1/HEAD
+%% %reference CouchDB Docs 1.4.1/HEAD
 %% @doc test if doc with uuid exists in the given db
-%% @spec doc_exists(db(), string()) -> boolean()
+-spec(exists(db(), binary()) -> boolean()).
 exists(#db{server=Server, options=Opts}=Db, DocId) ->
     DocId1 = couchdb_util:encode_docid(DocId),
     Url = hackney_url:make_url(couchdb_httpc:server_url(Server), couchdb_httpc:doc_url(Db, DocId1), []),
@@ -28,7 +28,7 @@ exists(#db{server=Server, options=Opts}=Db, DocId) ->
         _Error -> false
     end.
 
-%% @reference CouchDB Docs 1.4.1/HEAD
+%% %reference CouchDB Docs 1.4.1/HEAD
 %% @doc get the last revision of the document
 lookup_rev(Db, DocId) ->
     lookup_rev(Db, DocId, []).
@@ -46,13 +46,13 @@ lookup_rev(#db{server=Server, options=Opts}=Db, DocId, Params) ->
             Error
     end.
 
-%% @reference CouchDB Docs 1.4.1/GET
+%% %reference CouchDB Docs 1.4.1/GET
 %% @doc open a document
 %% @equiv open_doc(Db, DocId, [])
 get(Db, DocId) ->
     get(Db, DocId, []).
 
-%% @reference CouchDB Docs 1.4.1/GET
+%% %reference CouchDB Docs 1.4.1/GET
 %% @doc open a document
 %% Params is a list of query argument. Have a look in CouchDb API
 -spec(get(Db::db(), DocId::binary(), Params::list()) -> {ok, map()} | {error, term()}).
@@ -95,7 +95,7 @@ get(#db{server=Server, options=Opts}=Db, DocId, Params) ->
             Error
     end.
 
-%% @reference CouchDB Docs 1.4.1/PUT
+%% %reference CouchDB Docs 1.4.1/PUT
 %% @doc save a document
 %% @equiv save(Db, Doc, [])
 save(Db, Doc) ->
@@ -217,7 +217,7 @@ save(#db{server=Server, options=_Opts}=Db, #{}=Doc, Atts, Options) ->
         _ -> send_document_multipart(Db, Url, Doc, Atts)
     end.
 
-%% @reference CouchDB Docs 1.4.1/DELETE
+%% %reference CouchDB Docs 1.4.1/DELETE
 %% @doc Deletes a list of documents
 %% if you want to make sure the doc it emptied on delete, use the option
 %% {empty_on_delete,  true} or pass a doc with just _id and _rev
@@ -253,7 +253,7 @@ delete(#db{}=Db, [#{<<"_id">> := <<_Id/binary>>, <<"_rev">> := <<_Rev/binary>>}=
 
 
 
-%% @reference CouchDB Docs 1.4.1.7/COPY
+%% %reference CouchDB Docs 1.4.1.7/COPY
 %% @doc Copying to an Existing Document
 %%
 %%

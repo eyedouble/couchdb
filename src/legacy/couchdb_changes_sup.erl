@@ -1,8 +1,4 @@
-%%% -*- erlang -*-
-%%%
-%%% This file is part of couchdb released under the MIT license.
-%%% See the NOTICE for more information.
-
+%% @hidden
 -module(couchdb_changes_sup).
 
  -behaviour(supervisor).

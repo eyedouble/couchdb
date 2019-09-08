@@ -1,0 +1,261 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Module couchdb_view</title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
+</head>
+<body bgcolor="white">
+<div class="navbar"><a name="#navbar_top"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<hr>
+
+<h1>Module couchdb_view</h1>
+<ul class="index"><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>
+
+
+<h2><a name="index">Function Index</a></h2>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#all-1">all/1</a></td><td>fetch all docs.</td></tr>
+<tr><td valign="top"><a href="#all-2">all/2</a></td><td>fetch all docs.</td></tr>
+<tr><td valign="top"><a href="#cancel_stream-1">cancel_stream/1</a></td><td></td></tr>
+<tr><td valign="top"><a href="#count-1">count/1</a></td><td>Equivalent to <a href="#count-3"><tt>count(Db, all_docs, [])</tt></a>.
+</td></tr>
+<tr><td valign="top"><a href="#count-2">count/2</a></td><td>Equivalent to <a href="#count-3"><tt>count(Db, ViewName, [])</tt></a>.
+</td></tr>
+<tr><td valign="top"><a href="#count-3">count/3</a></td><td>count number of doc in a view (or all docs).</td></tr>
+<tr><td valign="top"><a href="#fetch-1">fetch/1</a></td><td>Equivalent to <a href="#fetch-3"><tt>fetch(Db, all_docs, [])</tt></a>.
+</td></tr>
+<tr><td valign="top"><a href="#fetch-2">fetch/2</a></td><td>Equivalent to <a href="#fetch-3"><tt>fetch(Db, ViewName, [])</tt></a>.
+</td></tr>
+<tr><td valign="top"><a href="#fetch-3">fetch/3</a></td><td>Collect view results.</td></tr>
+<tr><td valign="top"><a href="#first-1">first/1</a></td><td>Equivalent to <a href="#first-3"><tt>first(Db, all_docs, [])</tt></a>.
+</td></tr>
+<tr><td valign="top"><a href="#first-2">first/2</a></td><td>Equivalent to <a href="#first-3"><tt>first(Db, ViewName, [])</tt></a>.
+</td></tr>
+<tr><td valign="top"><a href="#first-3">first/3</a></td><td>get first result of a view.</td></tr>
+<tr><td valign="top"><a href="#fold-4">fold/4</a></td><td>Equivalent to <a href="#fold-5"><tt>fold(Function, Acc, Db, ViewName, [])</tt></a>.
+</td></tr>
+<tr><td valign="top"><a href="#fold-5">fold/5</a></td><td>call Function(Row, AccIn) on succesive row, starting with
+  AccIn == Acc.</td></tr>
+<tr><td valign="top"><a href="#foreach-3">foreach/3</a></td><td>Equivalent to <a href="#foreach-4"><tt>foreach(Function, Db, ViewName, [])</tt></a>.
+</td></tr>
+<tr><td valign="top"><a href="#foreach-4">foreach/4</a></td><td>call Function(Row) on succesive row.</td></tr>
+<tr><td valign="top"><a href="#parse_view_options-1">parse_view_options/1</a></td><td>parse view options.</td></tr>
+<tr><td valign="top"><a href="#stream-2">stream/2</a></td><td>Equivalent to <a href="#stream-4"><tt>stream(Db, ViewName, Client, [])</tt></a>.
+</td></tr>
+<tr><td valign="top"><a href="#stream-3">stream/3</a></td><td>stream view results to a pid.</td></tr>
+<tr><td valign="top"><a href="#stream_next-1">stream_next/1</a></td><td></td></tr>
+</table>
+
+<h2><a name="functions">Function Details</a></h2>
+
+<h3 class="function"><a name="all-1">all/1</a></h3>
+<div class="spec">
+<p><tt>all(Db::<a href="#type-db">db()</a>) -&gt; {ok, Rows::[<a href="#type-ejson_object">ejson_object()</a>]} | {error, term()}</tt><br></p>
+</div><p>Equivalent to <a href="#fetch-3"><tt>fetch(Db, all_docs, [])</tt></a>.</p>
+<p>fetch all docs</p>
+
+<h3 class="function"><a name="all-2">all/2</a></h3>
+<div class="spec">
+<p><tt>all(Db::<a href="#type-db">db()</a>, Options::<a href="#type-view_options">view_options()</a>) -&gt; {ok, Rows::[<a href="#type-ejson_object">ejson_object()</a>]} | {error, term()}</tt><br></p>
+</div><p>Equivalent to <a href="#fetch-3"><tt>fetch(Db, all_docs, Options)</tt></a>.</p>
+<p>fetch all docs</p>
+
+<h3 class="function"><a name="cancel_stream-1">cancel_stream/1</a></h3>
+<div class="spec">
+<p><tt>cancel_stream(Ref) -&gt; any()</tt></p>
+</div>
+
+<h3 class="function"><a name="count-1">count/1</a></h3>
+<div class="spec">
+<p><tt>count(Db::<a href="#type-db">db()</a>) -&gt; integer() | {error, term()}</tt><br></p>
+</div><p>Equivalent to <a href="#count-3"><tt>count(Db, all_docs, [])</tt></a>.</p>
+
+
+<h3 class="function"><a name="count-2">count/2</a></h3>
+<div class="spec">
+<p><tt>count(Db::<a href="#type-db">db()</a>, ViewName::all_docs | {DesignName::<a href="#type-design_name">design_name()</a>, ViewName::<a href="#type-view_name">view_name()</a>}) -&gt; integer() | {error, term()}</tt><br></p>
+</div><p>Equivalent to <a href="#count-3"><tt>count(Db, ViewName, [])</tt></a>.</p>
+
+
+<h3 class="function"><a name="count-3">count/3</a></h3>
+<div class="spec">
+<p><tt>count(Db::<a href="#type-db">db()</a>, ViewName::all_docs | {DesignName::<a href="#type-design_name">design_name()</a>, ViewName::<a href="#type-view_name">view_name()</a>}, Options::<a href="#type-view_options">view_options()</a>) -&gt; integer() | {error, term()}</tt><br></p>
+</div><p>count number of doc in a view (or all docs)</p>
+
+<h3 class="function"><a name="fetch-1">fetch/1</a></h3>
+<div class="spec">
+<p><tt>fetch(Db::<a href="#type-db">db()</a>) -&gt; {ok, Rows::[<a href="#type-ejson_object">ejson_object()</a>]} | {error, term()}</tt><br></p>
+</div><p>Equivalent to <a href="#fetch-3"><tt>fetch(Db, all_docs, [])</tt></a>.</p>
+
+
+<h3 class="function"><a name="fetch-2">fetch/2</a></h3>
+<div class="spec">
+<p><tt>fetch(Db::<a href="#type-db">db()</a>, ViewName::all_docs | {DesignName::<a href="#type-design_name">design_name()</a>, ViewName::<a href="#type-view_name">view_name()</a>}) -&gt; {ok, Rows::[<a href="#type-ejson_object">ejson_object()</a>]} | {error, term()}</tt><br></p>
+</div><p>Equivalent to <a href="#fetch-3"><tt>fetch(Db, ViewName, [])</tt></a>.</p>
+
+
+<h3 class="function"><a name="fetch-3">fetch/3</a></h3>
+<div class="spec">
+<p><tt>fetch(Db::<a href="#type-db">db()</a>, ViewName::all_docs | {DesignName::<a href="#type-design_name">design_name()</a>, ViewName::<a href="#type-view_name">view_name()</a>}, Options::<a href="#type-view_options">view_options()</a>) -&gt; {ok, Rows::[<a href="#type-ejson_object">ejson_object()</a>]} | {error, term()}</tt><br></p>
+</div><p>Collect view results
+   <p>Db: a db record</p>
+   <p>ViewName: <code>'all_docs'</code> to get all docs or <code>{DesignName,
+   ViewName}</code></p>
+   <pre>Options :: view_options() [{key, binary()} | {start_docid, binary()}
+     | {end_docid, binary()} | {start_key, binary()}
+     | {end_key, binary()} | {limit, integer()}
+     | {stale, stale()}
+     | descending
+     | {skip, integer()}
+     | group | {group_level, integer()}
+     | {inclusive_end, boolean()} | {reduce, boolean()} | reduce | include_docs | conflicts
+     | {keys, list(binary())}</pre>
+  <p>See <a href="couchdb_view.html#stream-4"><code>couchdb_view:stream/4</code></a> for more information about
+  options.</p>
+  <p>Return: {ok, Rows} or {error, Error}</p></p>
+
+<h3 class="function"><a name="first-1">first/1</a></h3>
+<div class="spec">
+<p><tt>first(Db::<a href="#type-db">db()</a>) -&gt; {ok, Row::<a href="#type-ejson_object">ejson_object()</a>} | {error, term()}</tt><br></p>
+</div><p>Equivalent to <a href="#first-3"><tt>first(Db, all_docs, [])</tt></a>.</p>
+
+
+<h3 class="function"><a name="first-2">first/2</a></h3>
+<div class="spec">
+<p><tt>first(Db::<a href="#type-db">db()</a>, ViewName::all_docs | {DesignName::<a href="#type-design_name">design_name()</a>, ViewName::<a href="#type-view_name">view_name()</a>}) -&gt; {ok, Row::<a href="#type-ejson_object">ejson_object()</a>} | {error, term()}</tt><br></p>
+</div><p>Equivalent to <a href="#first-3"><tt>first(Db, ViewName, [])</tt></a>.</p>
+
+
+<h3 class="function"><a name="first-3">first/3</a></h3>
+<div class="spec">
+<p><tt>first(Db::<a href="#type-db">db()</a>, ViewName::all_docs | {DesignName::<a href="#type-design_name">design_name()</a>, ViewName::<a href="#type-view_name">view_name()</a>}, Options::<a href="#type-view_options">view_options()</a>) -&gt; {ok, Rows::<a href="#type-ejson_object">ejson_object()</a>} | {error, term()}</tt><br></p>
+</div><p>get first result of a view
+   <p>Db: a db record</p>
+   <p>ViewName: 'all_docs' to get all docs or {DesignName,
+   ViewName}</p>
+   <pre>Options :: view_options() [{key, binary()} | {start_docid, binary()}
+     | {end_docid, binary()} | {start_key, binary()}
+     | {end_key, binary()} | {limit, integer()}
+     | {stale, stale()}
+     | descending
+     | {skip, integer()}
+     | group | {group_level, integer()}
+     | {inclusive_end, boolean()} | {reduce, boolean()} | reduce | include_docs | conflicts
+     | {keys, list(binary())}</pre>
+  <p>See <a href="couchdb_view.html#stream-4"><code>couchdb_view:stream/4</code></a> for more information about
+  options.</p>
+  <p>Return: {ok, Row} or {error, Error}</p></p>
+
+<h3 class="function"><a name="fold-4">fold/4</a></h3>
+<div class="spec">
+<p><tt>fold(Function::function(), Acc::any(), Db::<a href="#type-db">db()</a>, ViewName::all_docs | {DesignName::<a href="#type-design_name">design_name()</a>, ViewName::<a href="#type-view_name">view_name()</a>}) -&gt; [term()] | {error, term()}</tt><br></p>
+</div><p>Equivalent to <a href="#fold-5"><tt>fold(Function, Acc, Db, ViewName, [])</tt></a>.</p>
+
+
+<h3 class="function"><a name="fold-5">fold/5</a></h3>
+<div class="spec">
+<p><tt>fold(Function::function(), Acc::any(), Db::<a href="#type-db">db()</a>, ViewName::all_docs | {DesignName::<a href="#type-design_name">design_name()</a>, ViewName::<a href="#type-view_name">view_name()</a>}, Options::<a href="#type-view_options">view_options()</a>) -&gt; [term()] | {error, term()}</tt><br></p>
+</div><p>call Function(Row, AccIn) on succesive row, starting with
+  AccIn == Acc. Function/2 must return a new list accumultator or the
+  atom <em>done</em> to stop fetching results. Acc0 is returned if the
+  list is empty. For example:
+  <pre>  couchdb_view:fold(fun(Row, Acc) -&gt; [Row|Acc] end, [], Db, 'all_docs').</pre></p>
+
+<h3 class="function"><a name="foreach-3">foreach/3</a></h3>
+<div class="spec">
+<p><tt>foreach(Function::function(), Db::<a href="#type-db">db()</a>, ViewName::all_docs | {DesignName::<a href="#type-design_name">design_name()</a>, ViewName::<a href="#type-view_name">view_name()</a>}) -&gt; [term()] | {error, term()}</tt><br></p>
+</div><p>Equivalent to <a href="#foreach-4"><tt>foreach(Function, Db, ViewName, [])</tt></a>.</p>
+
+
+<h3 class="function"><a name="foreach-4">foreach/4</a></h3>
+<div class="spec">
+<p><tt>foreach(Function::function(), Db::<a href="#type-db">db()</a>, ViewName::all_docs | {DesignName::<a href="#type-design_name">design_name()</a>, ViewName::<a href="#type-view_name">view_name()</a>}, Options::<a href="#type-view_options">view_options()</a>) -&gt; [term()] | {error, term()}</tt><br></p>
+</div><p>call Function(Row) on succesive row. Example:
+  <pre>  couchdb_view:foreach(fun(Row) -&gt; io:format("got row ~p~n", [Row]) end, Db, 'all_docs').</pre></p>
+
+<h3 class="function"><a name="parse_view_options-1">parse_view_options/1</a></h3>
+<div class="spec">
+<p><tt>parse_view_options(Options::list()) -&gt; <a href="#type-view_query_args">view_query_args()</a></tt><br></p>
+</div><p>parse view options</p>
+
+<h3 class="function"><a name="stream-2">stream/2</a></h3>
+<div class="spec">
+<p><tt>stream(Db::<a href="#type-db">db()</a>, ViewName::all_docs | {DesignName::<a href="#type-design_name">design_name()</a>, ViewName::<a href="#type-view_name">view_name()</a>}) -&gt; {ok, StartRef::term(), ViewPid::pid()} | {error, term()}</tt><br></p>
+</div><p>Equivalent to <a href="#stream-4"><tt>stream(Db, ViewName, Client, [])</tt></a>.</p>
+
+
+<h3 class="function"><a name="stream-3">stream/3</a></h3>
+<div class="spec">
+<p><tt>stream(Db::<a href="#type-db">db()</a>, ViewName::all_docs | {DesignName::<a href="#type-design_name">design_name()</a>, ViewName::<a href="#type-view_name">view_name()</a>}, Options::<a href="#type-view_options">view_options()</a>) -&gt; {ok, StartRef::term()} | {error, term()}</tt><br></p>
+</div><p>stream view results to a pid
+   <p>Db: a db record</p>
+   <p>ViewName: 'all_docs' to get all docs or {DesignName,
+   ViewName}</p>
+   <p>Client: pid where to send view events where events are:
+   <dl>
+       <dt>{row, StartRef, done}</dt>
+           <dd>All view results have been fetched</dd>
+       <dt>{row, StartRef, Row :: ejson_object()}</dt>
+           <dd>A row in the view</dd>
+       <dt>{error, StartRef, Error}</dt>
+           <dd>Got an error, connection is closed when an error
+           happend.</dd>
+   </dl></p>
+   <p><pre>Options :: view_options() [{key, binary()} | {start_docid, binary()}
+     | {end_docid, binary()} | {start_key, binary()}
+     | {end_key, binary()} | {limit, integer()}
+     | {stale, stale()}
+     | descending
+     | {skip, integer()}
+     | group | {group_level, integer()}
+     | {inclusive_end, boolean()} | {reduce, boolean()} | reduce | include_docs | conflicts
+     | {keys, list(binary())}
+     | <code>{stream_to, Pid}</code>: the pid where the changes will be sent,
+       by default the current pid. Used for continuous and longpoll
+       connections</pre>
+ 
+   <ul>
+       <li><code>{key, Key}</code>: key value</li>
+       <li><code>{start_docid, DocId}</code>: document id to start with (to allow pagination
+           for duplicate start keys</li>
+       <li><code>{end_docid, DocId}</code>: last document id to include in the result (to
+           allow pagination for duplicate endkeys)</li>
+       <li><code>{start_key, Key}</code>: start result from key value</li>
+       <li><code>{end_key, Key}</code>: end result from key value</li>
+       <li><code>{limit, Limit}</code>: Limit the number of documents in the result</li>
+       <li><code>{stale, Stale}</code>: If stale=ok is set, CouchDB will not refresh the view
+       even if it is stale, the benefit is a an improved query latency. If
+       stale=update_after is set, CouchDB will update the view after the stale
+       result is returned.</li>
+       <li><code>descending</code>: reverse the result</li>
+       <li><code>{skip, N}</code>: skip n number of documents</li>
+       <li><code>group</code>: the reduce function reduces to a single result
+       row.</li>
+       <li><code>{group_level, Level}</code>: the reduce function reduces to a set
+       of distinct keys.</li>
+       <li><code>{reduce, boolean()}</code>: whether to use the reduce function of the view. It defaults to
+       true, if a reduce function is defined and to false otherwise.</li>
+       <li><code>include_docs</code>: automatically fetch and include the document
+       which emitted each view entry</li>
+       <li><code>{inclusive_end, boolean()}</code>: Controls whether the endkey is included in
+       the result. It defaults to true.</li>
+       <li><code>conflicts</code>: include conflicts</li>
+       <li><code>{keys, [Keys]}</code>: to pass multiple keys to the view query</li>
+   </ul></p>
+ 
+  <p> Return <code>{ok, StartRef, ViewPid}</code> or <code>{error,
+Error}</code>. Ref can be
+  used to disctint all changes from this pid. ViewPid is the pid of
+  the view loop process. Can be used to monitor it or kill it
+  when needed.</p></p>
+
+<h3 class="function"><a name="stream_next-1">stream_next/1</a></h3>
+<div class="spec">
+<p><tt>stream_next(Ref) -&gt; any()</tt></p>
+</div>
+<hr>
+
+<div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<p><i>Generated by EDoc</i></p>
+</body>
+</html>

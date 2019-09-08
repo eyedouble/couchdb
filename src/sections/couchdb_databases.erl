@@ -19,7 +19,7 @@
     ,get_missing_revs/2
 ]).
 
-%% @reference CouchDB Docs 1.3.1/HEAD
+%% %reference CouchDB Docs 1.3.1/HEAD
 %% @doc Returns the HTTP Headers containing a minimal amount of information about the specified 
 %% database. Since the response body is empty, using the HEAD method is a lightweight way to 
 %% check if the database exists already or not.
@@ -37,7 +37,7 @@ exists(#server{url=ServerUrl, options=Opts}, <<DbName/binary>>) ->
         false -> false
     end.
 
-%% @reference CouchDB Docs 1.3.1/GET
+%% %reference CouchDB Docs 1.3.1/GET
 %% @doc get database info
 -spec(info(db()) -> {ok, binary()} | {error, term()}).
 info(#db{server=Server, name=DbName, options=Opts}) ->
@@ -52,7 +52,7 @@ info(#db{server=Server, name=DbName, options=Opts}) ->
           Error
     end.
 
-%% @reference CouchDB Docs 1.3.1/PUT
+%% %reference CouchDB Docs 1.3.1/PUT
 %% @doc Create a database
 %%
 %%      Connections are made to:
@@ -77,21 +77,21 @@ create(#db{server=#server{url=ServerUrl}, name=DbName, options=Options}=Db, Para
           Error
     end;
 
-%% @reference CouchDB Docs 1.3.1/PUT
+%% %reference CouchDB Docs 1.3.1/PUT
 %% @doc Create a database 
 %% @equiv create(Db, [])
 create(#server{}=Server, <<DbName/binary>>) -> 
     {ok, Db} = couchdb:database_record(Server, DbName),
     create(Db, []).
 
-%% @reference CouchDB Docs 1.3.1/PUT
+%% %reference CouchDB Docs 1.3.1/PUT
 %% @doc Create a database 
 %% @equiv create(Db, [])
 -spec(create(db()) -> {ok, db()} | {error, term()}).
 create(#db{}=Database) -> create(Database, []).
 
 
-%% @reference CouchDB Docs 1.3.1/DELETE
+%% %reference CouchDB Docs 1.3.1/DELETE
 %% @doc delete database   
 -spec(delete(db()) -> {ok, db()} | {error, term()}).
 delete(#db{server=#server{url=ServerUrl}, name=DbName, options=Opts}) ->
@@ -104,7 +104,7 @@ delete(#db{server=#server{url=ServerUrl}, name=DbName, options=Opts}) ->
             Error
     end.
 
-%% @reference CouchDB Docs 1.3.1/DELETE
+%% %reference CouchDB Docs 1.3.1/DELETE
 %% @equiv delete(Db) 
 -spec(delete(server(), binary()) -> {ok, db()} | {error, term()}).
 delete(#server{url=_ServerUrl, options=_Opts}=Server, <<DbName/binary>>) ->
@@ -115,15 +115,14 @@ delete(#server{url=_ServerUrl, options=_Opts}=Server, <<DbName/binary>>) ->
 %   BULK
 %
 
-%% @reference CouchDB Docs 1.3.4
+%% %reference CouchDB Docs 1.3.4
 %% @doc NIY: This method can be called to query several documents in bulk. It is well suited for 
 %% fetching a specific revision of documents, as replicators do for example, or for getting 
 %% revision history.
-% bulk_get() -> 
-%     niy.
+bulk_get() -> niy.
 
 
-%% @reference CouchDB Docs 1.3.5.2
+%% %reference CouchDB Docs 1.3.5.2
 %% @doc save a list of documents
 %% @equiv save_docs(Db, Docs, [])
 bulk_docs_save(Db, Docs) ->
@@ -163,7 +162,7 @@ bulk_docs_save(#db{server=Server, options=Opts}=Db, [_Car | _Cdr]=Documents, Opt
     end.
 
 % NOT TESTED
-%% @reference CouchDB Docs 1.3.13
+%% %reference CouchDB Docs 1.3.13
 %% @doc Compaction compresses the database file by removing unused
 %% sections created during updates.
 %% See [http://wiki.apache.org/couchdb/Compaction] for more informations
@@ -182,7 +181,7 @@ compact(#db{server=Server, options=Opts}=Db) ->
     end.
 
 % NOT TESTED
-%% @reference CouchDB Docs 1.3.14
+%% %reference CouchDB Docs 1.3.14
 %% @doc Like compact/1 but this compacts the view index from the
 %% current version of the design document.
 %% See [http://wiki.apache.org/couchdb/Compaction#View_compaction] for more informations
@@ -201,7 +200,7 @@ compact(#db{server=Server, options=Opts}=Db, DesignName) ->
     end.
 
 % NOT TESTED
-%% @reference CouchDB Docs 1.3.15
+%% %reference CouchDB Docs 1.3.15
 %% @doc Commits any recent changes to the specified database to disk. You should call this if you want to ensure that recent changes have been flushed. This function is likely not required, assuming you have the recommended configuration setting of delayed_commits=false, which requires CouchDB to ensure changes are written to disk before a 200 or similar result is returned.
 %% @equiv ensure_full_commit(Db, [])
 ensure_full_commit(Db) ->
@@ -223,7 +222,7 @@ ensure_full_commit(#db{server=Server, options=Opts}=Db, Options) ->
     end.
 
 % NOT TESTED
-%% @reference CouchDB Docs 1.3.20
+%% %reference CouchDB Docs 1.3.20
 %% @doc Given a list of document revisions, returns the document revisions that do not exist in the database.
 -spec get_missing_revs(#db{}, [{binary(), [binary()]}]) -> {ok, [{DocId :: binary(), [MissingRev :: binary()], [PossibleAncestor :: binary()]}]} | {error, term()}.
 get_missing_revs(#db{server=Server, options=Opts}=Db, IdRevs) ->

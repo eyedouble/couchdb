@@ -1,8 +1,4 @@
-%%% -*- erlang -*-
-%%%
-%%% This file is part of couchdb released under the MIT license.
-%%% See the NOTICE for more information.
-
+%% @hidden
 %% @doc gen_changes CouchDB continuous changes consumer behavior
 %% This behaviour allws you to create easily a server that consume
 %% Couchdb continuous changes

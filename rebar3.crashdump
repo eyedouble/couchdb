@@ -1,0 +1,21 @@
+Error: undef
+[{rebar3_hex_utils,hex_home,[],[]},
+ {rebar3_hex_config,path,0,
+                    [{file,"/home/irsan/.cache/rebar3/plugins/rebar3_hex/src/rebar3_hex_config.erl"},
+                     {line,78}]},
+ {rebar3_hex_config,read,0,
+                    [{file,"/home/irsan/.cache/rebar3/plugins/rebar3_hex/src/rebar3_hex_config.erl"},
+                     {line,81}]},
+ {rebar3_hex_config,auth,0,
+                    [{file,"/home/irsan/.cache/rebar3/plugins/rebar3_hex/src/rebar3_hex_config.erl"},
+                     {line,109}]},
+ {rebar3_hex_pkg,publish,6,
+                 [{file,"/home/irsan/.cache/rebar3/plugins/rebar3_hex/src/rebar3_hex_pkg.erl"},
+                  {line,182}]},
+ {rebar3_hex_pkg,do_,2,
+                 [{file,"/home/irsan/.cache/rebar3/plugins/rebar3_hex/src/rebar3_hex_pkg.erl"},
+                  {line,79}]},
+ {lists,foldl,3,[{file,"lists.erl"},{line,1263}]},
+ {rebar_core,do,2,
+             [{file,"/tmp/cirrus-ci-build/src/rebar_core.erl"},{line,154}]}]
+

@@ -22,7 +22,7 @@
 %% --------------------------------------------------------------------
 
 
-%% @reference Custom API
+%% %reference Custom API
 %% @doc Create a server record, it is used to connect to CouchDB;
 %% Server releated functions take this record as an argument.
 %% This record is required to make a database record.
@@ -30,7 +30,7 @@
 -spec(server_record(Url::binary()) -> Server::server()).
 server_record(<<Url/binary>>) -> server_record(Url, []).
 
-%% @reference Custom API
+%% %reference Custom API
 %% @doc Create a server record, it is used to connect to CouchDB;
 %% Server releated functions take this record as an argument.
 %% This record is required to make a database record.
@@ -79,18 +79,18 @@ server_record(<<Url/binary>>=Url, Options) when is_list(Options) ->
     end.
 
 
-%% @reference Custom API
+%% %reference Custom API
 %% @doc Create a database record, it is used to connect to CouchDB;
 %% Database and Document releated functions take this record as an argument.
 %% @equiv database_record/3
 database_record(#server{options=_ServerOptions}=Server, <<DatabaseName/binary>>)  -> database_record(Server, DatabaseName, []).
 
-%% @reference Custom API
+%% %reference Custom API
 %% @doc Create a database record, it is used to connect to CouchDB;
 %% Database and Document releated functions take this record as an argument.
 -spec(database_record(Server::server(), DbName::binary(), OptionsList::list())-> {ok, db()} | {error, term()}).
 database_record(#server{options=ServerOptions}=Server, <<DatabaseName/binary>>, DatabaseOptions) when is_list(DatabaseOptions) ->
-    case 
+    case
         tuplelist_is_compliant(ServerOptions) 
         andalso tuplelist_is_compliant(DatabaseOptions) 
         andalso database_name_is_valid(DatabaseName) of
@@ -100,25 +100,25 @@ database_record(#server{options=ServerOptions}=Server, <<DatabaseName/binary>>, 
             false -> {error, "Options must be a valid tuplelist"} 
     end.
 
-%% @reference Custom API
+%% %reference Custom API
 %% @doc Returns the Id of a Document
 -spec generate_unique_id() -> binary().
 generate_unique_id() ->
     generate_uuid_v4().
 
-%% @reference Custom API
+%% %reference Custom API
 %% @doc Returns the Id of a Document
 -spec get_document_id(map()) -> binary() | atom().
 get_document_id(#{<<"_id">> := <<Id/binary>>}=_Document) -> Id;
 get_document_id(_Other) -> undefined.
 
-%% @reference Custom API
+%% %reference Custom API
 %% @doc Returns the Rev of a Document
 -spec(get_document_rev(map()) -> binary() | atom()).
 get_document_rev(#{<<"_rev">> := <<Rev/binary>>}=_Document) -> Rev;
 get_document_rev(_Other) -> undefined.
 
-%% @reference Custom API
+%% %reference Custom API
 %% @doc Checks if the name of the database is valid as per CouchDB API Docs 1.3.1/PUT
 -spec(database_name_is_valid(binary()) -> boolean()).
 database_name_is_valid(<<DatabaseName/binary>>) ->
@@ -137,7 +137,7 @@ generate_uuid_v4() ->
     quickrand:seed ( ),
     list_to_binary ( uuid:uuid_to_string ( uuid:get_v4_urandom ( ) ) ).
 
-%% @doc Checks if every element in the list is a key/value pair tuple 
+%% Checks if every element in the list is a key/value pair tuple 
 %% and if the key of such a tuple is an `atom` or `bitstring`.
 %% @private
 -spec(tuplelist_is_compliant(list()) -> boolean()).
