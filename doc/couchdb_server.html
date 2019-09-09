@@ -3,45 +3,44 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Module couchdb_server</title>
-<link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
+<link rel="stylesheet" type="text/css" href="_priv/uikit.css" title="EDoc"><script src="_priv/uikit.min.js"></script>
 </head>
-<body bgcolor="white">
-<div class="navbar"><a name="#navbar_top"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<hr>
+<body bgcolor="white"><div class="wrapper"><aside class="uk-light"><ul class="uk-nav uk-nav-default"><li class="uk-nav-header">Modules</li><li><a href="couchdb.html" class="module">couchdb</a></li><li><a href="couchdb_app.html" class="module">couchdb_app</a></li><li><a href="couchdb_attachments.html" class="module">couchdb_attachments</a></li><li><a href="couchdb_common_urls.html" class="module">couchdb_common_urls</a></li><li><a href="couchdb_databases.html" class="module">couchdb_databases</a></li><li><a href="couchdb_design_documents.html" class="module">couchdb_design_documents</a></li><li><a href="couchdb_documents.html" class="module">couchdb_documents</a></li><li><a href="couchdb_server.html" class="module">couchdb_server</a></li></ul></aside><main class="uk-padding-left">
 
-<h1>Module couchdb_server</h1>
+
+<h1 class="uk-heading-small">Module couchdb_server</h1><hr class="">
 <ul class="index"><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>
 
 
-<h2><a name="index">Function Index</a></h2>
-<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#all_dbs-1">all_dbs/1</a></td><td>get list of databases on a CouchDB node.</td></tr>
-<tr><td valign="top"><a href="#all_dbs-2">all_dbs/2</a></td><td>get list of databases on a CouchDB node with optional filter.</td></tr>
-<tr><td valign="top"><a href="#info-1">info/1</a></td><td>Get Information from the server.</td></tr>
-<tr><td valign="top"><a href="#replicate-2">replicate/2</a></td><td>Request, configure, or stop, a replication operation.</td></tr>
-<tr><td valign="top"><a href="#replicate-3">replicate/3</a></td><td>Handle replication.</td></tr>
-<tr><td valign="top"><a href="#replicate-4">replicate/4</a></td><td>handle Replication.</td></tr>
-</table>
+<h2 id="index">Function Index</h2>
+<div class="uk-overflow-auto"><table class="uk-table uk-table-striped"><tr><td valign="top"><a href="#all_dbs-1" uk-scroll="">all_dbs/1</a></td><td>get list of databases on a CouchDB node.</td></tr>
+<tr><td valign="top"><a href="#all_dbs-2" uk-scroll="">all_dbs/2</a></td><td>get list of databases on a CouchDB node with optional filter.</td></tr>
+<tr><td valign="top"><a href="#info-1" uk-scroll="">info/1</a></td><td>Get Information from the server.</td></tr>
+<tr><td valign="top"><a href="#replicate-2" uk-scroll="">replicate/2</a></td><td>Request, configure, or stop, a replication operation.</td></tr>
+<tr><td valign="top"><a href="#replicate-3" uk-scroll="">replicate/3</a></td><td>Handle replication.</td></tr>
+<tr><td valign="top"><a href="#replicate-4" uk-scroll="">replicate/4</a></td><td>handle Replication.</td></tr>
+</table></div>
 
-<h2><a name="functions">Function Details</a></h2>
-
-<h3 class="function"><a name="all_dbs-1">all_dbs/1</a></h3>
+<h2 id="functions">Function Details</h2>
+<div class="uk-card uk-card-default uk-card-body uk-margin">
+<h3 class="uk-card-title"><span id="all_dbs-1">all_dbs/1</span></h3>
 <div class="spec">
-<p><tt>all_dbs(Server::<a href="#type-server">server()</a>) -&gt; {ok, iolist()}</tt><br></p>
+<code><code>all_dbs(Server::<a href="#type-server">server()</a>) -&gt; {ok, iolist()}</code><br></code>
 </div><p>get list of databases on a CouchDB node</p>
-
-<h3 class="function"><a name="all_dbs-2">all_dbs/2</a></h3>
+</div><div class="uk-card uk-card-default uk-card-body uk-margin">
+<h3 class="uk-card-title"><span id="all_dbs-2">all_dbs/2</span></h3>
 <div class="spec">
-<p><tt>all_dbs(Server::<a href="#type-server">server()</a>, Options::<a href="#type-view_options">view_options()</a>) -&gt; {ok, iolist()}</tt><br></p>
+<code><code>all_dbs(Server::<a href="#type-server">server()</a>, Options::<a href="#type-view_options">view_options()</a>) -&gt; {ok, iolist()}</code><br></code>
 </div><p>get list of databases on a CouchDB node with optional filter</p>
-
-<h3 class="function"><a name="info-1">info/1</a></h3>
+</div><div class="uk-card uk-card-default uk-card-body uk-margin">
+<h3 class="uk-card-title"><span id="info-1">info/1</span></h3>
 <div class="spec">
-<p><tt>info(Server::<a href="#type-server">server()</a>) -&gt; {ok, iolist()}</tt><br></p>
+<code><code>info(Server::<a href="#type-server">server()</a>) -&gt; {ok, iolist()}</code><br></code>
 </div><p>Get Information from the server</p>
-
-<h3 class="function"><a name="replicate-2">replicate/2</a></h3>
+</div><div class="uk-card uk-card-default uk-card-body uk-margin">
+<h3 class="uk-card-title"><span id="replicate-2">replicate/2</span></h3>
 <div class="spec">
-<p><tt>replicate(Server::<a href="#type-server">server()</a>, RepObj::{list()}) -&gt; {ok, term()} | {error, term()}</tt><br></p>
+<code><code>replicate(Server::<a href="#type-server">server()</a>, RepObj::{list()}) -&gt; {ok, term()} | {error, term()}</code><br></code>
 </div><p>Request, configure, or stop, a replication operation.
   It allows to pass for authentication info
   <pre>  RepObj = {[
@@ -51,23 +50,22 @@
   ]}
   replicate(Server, RepObj).</pre>
  </p>
-
-<h3 class="function"><a name="replicate-3">replicate/3</a></h3>
+</div><div class="uk-card uk-card-default uk-card-body uk-margin">
+<h3 class="uk-card-title"><span id="replicate-3">replicate/3</span></h3>
 <div class="spec">
-<p><tt>replicate(Server::<a href="#type-server">server()</a>, Source::binary(), Target::term()) -&gt; {ok, term()} | {error, term()}</tt><br></p>
+<code><code>replicate(Server::<a href="#type-server">server()</a>, Source::binary(), Target::term()) -&gt; {ok, term()} | {error, term()}</code><br></code>
 </div><p>Handle replication.</p>
-
-<h3 class="function"><a name="replicate-4">replicate/4</a></h3>
+</div><div class="uk-card uk-card-default uk-card-body uk-margin">
+<h3 class="uk-card-title"><span id="replicate-4">replicate/4</span></h3>
 <div class="spec">
-<p><tt>replicate(Server, Source, Target, Options) -&gt; any()</tt></p>
+<code><code>replicate(Server, Source, Target, Options) -&gt; any()</code></code>
 </div><p>handle Replication. Allows to pass options with source and
   target.  Options is a Json object.
   ex:
   <pre>  Options = [{&lt;&lt;"create_target"&gt;&gt;, true}]}
   couchdb:replicate(S, "testdb", "testdb2", Options).</pre></p>
-<hr>
+</div><hr>
 
-<div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
 <p><i>Generated by EDoc</i></p>
-</body>
+</main></div></body>
 </html>

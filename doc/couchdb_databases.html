@@ -3,72 +3,71 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Module couchdb_databases</title>
-<link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
+<link rel="stylesheet" type="text/css" href="_priv/uikit.css" title="EDoc"><script src="_priv/uikit.min.js"></script>
 </head>
-<body bgcolor="white">
-<div class="navbar"><a name="#navbar_top"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
-<hr>
+<body bgcolor="white"><div class="wrapper"><aside class="uk-light"><ul class="uk-nav uk-nav-default"><li class="uk-nav-header">Modules</li><li><a href="couchdb.html" class="module">couchdb</a></li><li><a href="couchdb_app.html" class="module">couchdb_app</a></li><li><a href="couchdb_attachments.html" class="module">couchdb_attachments</a></li><li><a href="couchdb_common_urls.html" class="module">couchdb_common_urls</a></li><li><a href="couchdb_databases.html" class="module">couchdb_databases</a></li><li><a href="couchdb_design_documents.html" class="module">couchdb_design_documents</a></li><li><a href="couchdb_documents.html" class="module">couchdb_documents</a></li><li><a href="couchdb_server.html" class="module">couchdb_server</a></li></ul></aside><main class="uk-padding-left">
 
-<h1>Module couchdb_databases</h1>
+
+<h1 class="uk-heading-small">Module couchdb_databases</h1><hr class="">
 <ul class="index"><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>
 
 
-<h2><a name="index">Function Index</a></h2>
-<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#bulk_docs_save-2">bulk_docs_save/2</a></td><td>save a list of documents.</td></tr>
-<tr><td valign="top"><a href="#bulk_docs_save-3">bulk_docs_save/3</a></td><td></td></tr>
-<tr><td valign="top"><a href="#compact-1">compact/1</a></td><td>Compaction compresses the database file by removing unused
+<h2 id="index">Function Index</h2>
+<div class="uk-overflow-auto"><table class="uk-table uk-table-striped"><tr><td valign="top"><a href="#bulk_docs_save-2" uk-scroll="">bulk_docs_save/2</a></td><td>save a list of documents.</td></tr>
+<tr><td valign="top"><a href="#bulk_docs_save-3" uk-scroll="">bulk_docs_save/3</a></td><td></td></tr>
+<tr><td valign="top"><a href="#compact-1" uk-scroll="">compact/1</a></td><td>Compaction compresses the database file by removing unused
   sections created during updates.</td></tr>
-<tr><td valign="top"><a href="#compact-2">compact/2</a></td><td>Like compact/1 but this compacts the view index from the
+<tr><td valign="top"><a href="#compact-2" uk-scroll="">compact/2</a></td><td>Like compact/1 but this compacts the view index from the
   current version of the design document.</td></tr>
-<tr><td valign="top"><a href="#create-1">create/1</a></td><td>Create a database.</td></tr>
-<tr><td valign="top"><a href="#create-2">create/2</a></td><td>Create a database.</td></tr>
-<tr><td valign="top"><a href="#delete-1">delete/1</a></td><td>delete database.</td></tr>
-<tr><td valign="top"><a href="#delete-2">delete/2</a></td><td>Equivalent to <a href="#delete-1"><tt>delete(Db)</tt></a>.
+<tr><td valign="top"><a href="#create-1" uk-scroll="">create/1</a></td><td>Create a database.</td></tr>
+<tr><td valign="top"><a href="#create-2" uk-scroll="">create/2</a></td><td>Create a database.</td></tr>
+<tr><td valign="top"><a href="#delete-1" uk-scroll="">delete/1</a></td><td>delete database.</td></tr>
+<tr><td valign="top"><a href="#delete-2" uk-scroll="">delete/2</a></td><td>Equivalent to <a href="#delete-1"><code>delete(Db)</code></a>.
 </td></tr>
-<tr><td valign="top"><a href="#ensure_full_commit-1">ensure_full_commit/1</a></td><td>Commits any recent changes to the specified database to disk.</td></tr>
-<tr><td valign="top"><a href="#ensure_full_commit-2">ensure_full_commit/2</a></td><td>Commits any recent changes to the specified database to disk.</td></tr>
-<tr><td valign="top"><a href="#exists-2">exists/2</a></td><td>Returns the HTTP Headers containing a minimal amount of information about the specified
+<tr><td valign="top"><a href="#ensure_full_commit-1" uk-scroll="">ensure_full_commit/1</a></td><td>Commits any recent changes to the specified database to disk.</td></tr>
+<tr><td valign="top"><a href="#ensure_full_commit-2" uk-scroll="">ensure_full_commit/2</a></td><td>Commits any recent changes to the specified database to disk.</td></tr>
+<tr><td valign="top"><a href="#exists-2" uk-scroll="">exists/2</a></td><td>Returns the HTTP Headers containing a minimal amount of information about the specified
   database.</td></tr>
-<tr><td valign="top"><a href="#get_missing_revs-2">get_missing_revs/2</a></td><td>Given a list of document revisions, returns the document revisions that do not exist in the database.</td></tr>
-<tr><td valign="top"><a href="#info-1">info/1</a></td><td>get database info.</td></tr>
-</table>
+<tr><td valign="top"><a href="#get_missing_revs-2" uk-scroll="">get_missing_revs/2</a></td><td>Given a list of document revisions, returns the document revisions that do not exist in the database.</td></tr>
+<tr><td valign="top"><a href="#info-1" uk-scroll="">info/1</a></td><td>get database info.</td></tr>
+</table></div>
 
-<h2><a name="functions">Function Details</a></h2>
-
-<h3 class="function"><a name="bulk_docs_save-2">bulk_docs_save/2</a></h3>
+<h2 id="functions">Function Details</h2>
+<div class="uk-card uk-card-default uk-card-body uk-margin">
+<h3 class="uk-card-title"><span id="bulk_docs_save-2">bulk_docs_save/2</span></h3>
 <div class="spec">
-<p><tt>bulk_docs_save(Db, Docs) -&gt; any()</tt></p>
-</div><p>Equivalent to <a href="#save_docs-3"><tt>save_docs(Db, Docs, [])</tt></a>.</p>
+<code><code>bulk_docs_save(Db, Docs) -&gt; any()</code></code>
+</div><p>Equivalent to <a href="#save_docs-3"><code>save_docs(Db, Docs, [])</code></a>.</p>
 <p>save a list of documents</p>
-
-<h3 class="function"><a name="bulk_docs_save-3">bulk_docs_save/3</a></h3>
+</div><div class="uk-card uk-card-default uk-card-body uk-margin">
+<h3 class="uk-card-title"><span id="bulk_docs_save-3">bulk_docs_save/3</span></h3>
 <div class="spec">
-<p><tt>bulk_docs_save(Db, Cdr, Options) -&gt; any()</tt></p>
+<code><code>bulk_docs_save(Db, Cdr, Options) -&gt; any()</code></code>
 </div>
-
-<h3 class="function"><a name="compact-1">compact/1</a></h3>
+</div><div class="uk-card uk-card-default uk-card-body uk-margin">
+<h3 class="uk-card-title"><span id="compact-1">compact/1</span></h3>
 <div class="spec">
-<p><tt>compact(Db::<a href="#type-db">db()</a>) -&gt; ok | {error, term()}</tt><br></p>
+<code><code>compact(Db::<a href="#type-db">db()</a>) -&gt; ok | {error, term()}</code><br></code>
 </div><p>Compaction compresses the database file by removing unused
   sections created during updates.
   See <a href="http://wiki.apache.org/couchdb/Compaction" target="_top"><tt>http://wiki.apache.org/couchdb/Compaction</tt></a> for more informations</p>
-
-<h3 class="function"><a name="compact-2">compact/2</a></h3>
+</div><div class="uk-card uk-card-default uk-card-body uk-margin">
+<h3 class="uk-card-title"><span id="compact-2">compact/2</span></h3>
 <div class="spec">
-<p><tt>compact(Db::<a href="#type-db">db()</a>, ViewName::string()) -&gt; ok | {error, term()}</tt><br></p>
+<code><code>compact(Db::<a href="#type-db">db()</a>, ViewName::string()) -&gt; ok | {error, term()}</code><br></code>
 </div><p>Like compact/1 but this compacts the view index from the
   current version of the design document.
   See <a href="http://wiki.apache.org/couchdb/Compaction#View_compaction" target="_top"><tt>http://wiki.apache.org/couchdb/Compaction#View_compaction</tt></a> for more informations</p>
-
-<h3 class="function"><a name="create-1">create/1</a></h3>
+</div><div class="uk-card uk-card-default uk-card-body uk-margin">
+<h3 class="uk-card-title"><span id="create-1">create/1</span></h3>
 <div class="spec">
-<p><tt>create(Db::<a href="#type-db">db()</a>) -&gt; {ok, <a href="#type-db">db()</a>} | {error, term()}</tt><br></p>
-</div><p>Equivalent to <a href="#create-2"><tt>create(Db, [])</tt></a>.</p>
+<code><code>create(Db::<a href="#type-db">db()</a>) -&gt; {ok, <a href="#type-db">db()</a>} | {error, term()}</code><br></code>
+</div><p>Equivalent to <a href="#create-2"><code>create(Db, [])</code></a>.</p>
 <p>Create a database</p>
-
-<h3 class="function"><a name="create-2">create/2</a></h3>
+</div><div class="uk-card uk-card-default uk-card-body uk-margin">
+<h3 class="uk-card-title"><span id="create-2">create/2</span></h3>
 <div class="spec">
-<p><tt>create(Db::<a href="#type-db">db()</a>, Params::list()) -&gt; {ok, <a href="#type-db">db()</a>} | {error, term()}</tt><br></p>
+<code><code>create(Db::<a href="#type-db">db()</a>, Params::list()) -&gt; {ok, <a href="#type-db">db()</a>} | {error, term()}</code><br></code>
 </div><p><p>Create a database</p>
  
        Connections are made to:
@@ -78,48 +77,47 @@
   Params is a list of optionnal query argument you want to pass to the
   db. Useful for bigcouch for example.
   DB names must conform to ^[a-z][a-z0-9_$()+/-]*$</p>
-
-<h3 class="function"><a name="delete-1">delete/1</a></h3>
+</div><div class="uk-card uk-card-default uk-card-body uk-margin">
+<h3 class="uk-card-title"><span id="delete-1">delete/1</span></h3>
 <div class="spec">
-<p><tt>delete(Db::<a href="#type-db">db()</a>) -&gt; {ok, <a href="#type-db">db()</a>} | {error, term()}</tt><br></p>
+<code><code>delete(Db::<a href="#type-db">db()</a>) -&gt; {ok, <a href="#type-db">db()</a>} | {error, term()}</code><br></code>
 </div><p>delete database</p>
-
-<h3 class="function"><a name="delete-2">delete/2</a></h3>
+</div><div class="uk-card uk-card-default uk-card-body uk-margin">
+<h3 class="uk-card-title"><span id="delete-2">delete/2</span></h3>
 <div class="spec">
-<p><tt>delete(Server::<a href="#type-server">server()</a>, X2::binary()) -&gt; {ok, <a href="#type-db">db()</a>} | {error, term()}</tt><br></p>
-</div><p>Equivalent to <a href="#delete-1"><tt>delete(Db)</tt></a>.</p>
+<code><code>delete(Server::<a href="#type-server">server()</a>, X2::binary()) -&gt; {ok, <a href="#type-db">db()</a>} | {error, term()}</code><br></code>
+</div><p>Equivalent to <a href="#delete-1"><code>delete(Db)</code></a>.</p>
 
-
-<h3 class="function"><a name="ensure_full_commit-1">ensure_full_commit/1</a></h3>
+</div><div class="uk-card uk-card-default uk-card-body uk-margin">
+<h3 class="uk-card-title"><span id="ensure_full_commit-1">ensure_full_commit/1</span></h3>
 <div class="spec">
-<p><tt>ensure_full_commit(Db) -&gt; any()</tt></p>
-</div><p>Equivalent to <a href="#ensure_full_commit-2"><tt>ensure_full_commit(Db, [])</tt></a>.</p>
+<code><code>ensure_full_commit(Db) -&gt; any()</code></code>
+</div><p>Equivalent to <a href="#ensure_full_commit-2"><code>ensure_full_commit(Db, [])</code></a>.</p>
 <p>Commits any recent changes to the specified database to disk. You should call this if you want to ensure that recent changes have been flushed. This function is likely not required, assuming you have the recommended configuration setting of delayed_commits=false, which requires CouchDB to ensure changes are written to disk before a 200 or similar result is returned.</p>
-
-<h3 class="function"><a name="ensure_full_commit-2">ensure_full_commit/2</a></h3>
+</div><div class="uk-card uk-card-default uk-card-body uk-margin">
+<h3 class="uk-card-title"><span id="ensure_full_commit-2">ensure_full_commit/2</span></h3>
 <div class="spec">
-<p><tt>ensure_full_commit(Db::<a href="#type-db">db()</a>, Options::list()) -&gt; {ok, InstancestartTime::binary()} | {error, term()}</tt><br></p>
+<code><code>ensure_full_commit(Db::<a href="#type-db">db()</a>, Options::list()) -&gt; {ok, InstancestartTime::binary()} | {error, term()}</code><br></code>
 </div><p>Commits any recent changes to the specified database to disk. You should call this if you want to ensure that recent changes have been flushed. This function is likely not required, assuming you have the recommended configuration setting of delayed_commits=false, which requires CouchDB to ensure changes are written to disk before a 200 or similar result is returned.</p>
-
-<h3 class="function"><a name="exists-2">exists/2</a></h3>
+</div><div class="uk-card uk-card-default uk-card-body uk-margin">
+<h3 class="uk-card-title"><span id="exists-2">exists/2</span></h3>
 <div class="spec">
-<p><tt>exists(Server::<a href="#type-server">server()</a>, X2::binary()) -&gt; boolean()</tt><br></p>
+<code><code>exists(Server::<a href="#type-server">server()</a>, X2::binary()) -&gt; boolean()</code><br></code>
 </div><p>Returns the HTTP Headers containing a minimal amount of information about the specified
   database. Since the response body is empty, using the HEAD method is a lightweight way to
   check if the database exists already or not.</p>
-
-<h3 class="function"><a name="get_missing_revs-2">get_missing_revs/2</a></h3>
+</div><div class="uk-card uk-card-default uk-card-body uk-margin">
+<h3 class="uk-card-title"><span id="get_missing_revs-2">get_missing_revs/2</span></h3>
 <div class="spec">
-<p><tt>get_missing_revs(Db::#db{}, IdRevs::[{binary(), [binary()]}]) -&gt; {ok, [{DocId::binary(), [MissingRev::binary()], [PossibleAncestor::binary()]}]} | {error, term()}</tt><br></p>
+<code><code>get_missing_revs(Db::#db{}, IdRevs::[{binary(), [binary()]}]) -&gt; {ok, [{DocId::binary(), [MissingRev::binary()], [PossibleAncestor::binary()]}]} | {error, term()}</code><br></code>
 </div><p>Given a list of document revisions, returns the document revisions that do not exist in the database.</p>
-
-<h3 class="function"><a name="info-1">info/1</a></h3>
+</div><div class="uk-card uk-card-default uk-card-body uk-margin">
+<h3 class="uk-card-title"><span id="info-1">info/1</span></h3>
 <div class="spec">
-<p><tt>info(Db::<a href="#type-db">db()</a>) -&gt; {ok, binary()} | {error, term()}</tt><br></p>
+<code><code>info(Db::<a href="#type-db">db()</a>) -&gt; {ok, binary()} | {error, term()}</code><br></code>
 </div><p>get database info</p>
-<hr>
+</div><hr>
 
-<div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
 <p><i>Generated by EDoc</i></p>
-</body>
+</main></div></body>
 </html>
