@@ -45,6 +45,7 @@
 -import(edoc_report, [report/2, warning/2]).
 
 %% @headerfile "../include/edoc_doclet.hrl"
+-include("config.hrl").
 -include_lib("edoc/include/edoc_doclet.hrl").
 
 -define(EDOC_APP, edoc).
@@ -135,27 +136,28 @@ gen(Sources, App, Modules, Ctxt) ->
     Env = Ctxt#context.env,
     Options = Ctxt#context.opts,
     Title = title(App, Options),
+    Version = version(App, Options),
     CSS = stylesheet(Options),
+	
     Ets = ets:new(parts, [named_table, set]),
 
     ets:insert(Ets, {offcanvas, []}),
     {DryRunModules, Error} = sources(Sources, Dir, Modules, Env, Options),
 
-    
- 
-    
+         
     % DISABLE NAV FRAME Render
     % modules_frame(Dir, Modules1, Title, CSS),
-    ets:insert(Ets, {offcanvas, navigation(Dir, DryRunModules, Title, CSS)}),
+	OffcanvasPart = navigation(Dir, DryRunModules, Title, Version, CSS),
+    ets:insert(Ets, {offcanvas, OffcanvasPart}),
 
 
 
     {Modules1, Error} = sources(Sources, Dir, Modules, Env, Options),
 
-    overview(Dir, Title, Env, Options),
-    index_file(Dir, Title),
+    % overview(Dir, Title, Env, Options),
+    index_file(Dir, Title, OffcanvasPart),
     edoc_lib:write_info_file(App, Modules1, Dir),
-    copy_stylesheet(Dir, Options),
+
     copy_image(Dir),
     %% handle postponed error during processing of source files
     case Error of
@@ -174,6 +176,13 @@ title(App, Options) ->
 			   true ->
 				io_lib:fwrite("Application: ~ts", [App])
 			end).
+
+version(App, _Options) ->
+	application:load(App),
+	case application:get_key(App, vsn) of		
+		{ok,Vsn} -> Vsn;
+		_other -> "latest"
+	end.
 
 
 %% Processing the individual source files.
@@ -244,30 +253,38 @@ check_name(M, M0, File) ->
 %% Creating an index file, with some frames optional.
 %% TODO: get rid of frames, or change doctype to Frameset
 
-index_file(Dir, Title) ->
-    Frame2 = {frame, [{src,?MODULES_FRAME},
-		      {name,"modulesFrame"},{title,""}],
-	      []},
-    Frame3 = {frame, [{src,?OVERVIEW_SUMMARY},
-		      {name,"overviewFrame"},{title,""}],
-	      []},
-    Frameset = {frameset, [{cols,"20%,80%"}],
-    	[?NL, Frame2, ?NL, ?NL, Frame3, ?NL,
-		    {noframes,
-		     [?NL,
-		      {h2, ["This page uses frames"]},
-		      ?NL,
-		      {p, ["Your browser does not accept frames.",
-			   ?NL, br,
-			   "You should go to the ",
-			   {a, [{href, ?OVERVIEW_SUMMARY}],
-			    ["non-frame version"]},
-			   " instead.", ?NL]},
-		      ?NL]},
-		    ?NL]},
-    XML = xhtml_1(Title, [], Frameset),
+index_file(Dir, Title, OffcanvasPart) ->
+
+	Body = {'div', [{class, "wrapper"}], [
+		{a, [{class, "menu-button"}, {href, "#"}, {'uk-icon', "icon: menu;ratio:1.1"}], []},
+		{aside, [{class, "uk-light"}], OffcanvasPart},
+		{main, [{class, "uk-padding-left"}], 
+			[{template, [], []}]
+		},
+		{script, [
+			{src, ?CUSTOM_JS}], []
+		}		
+	]},
+
+	{ok, File} = file:read_file(?CUSTOM_INDEX_MD),
+	Readme = edoc_markdown:conv(binary_to_list(File)),
+	
+    XML = xhtml_1(Title, [
+		{meta, [
+			{name, "viewport"},
+			{content, "width=device-width, initial-scale=1"}
+		], []},	
+		{link, [
+			{rel, "stylesheet"},
+			{type, "text/css"},
+			{href, ?CUSTOM_CSS},
+			{title, "EDoc"}], []
+		}
+	], Body),
     Text = xmerl:export_simple([XML], xmerl_html, []),
-    edoc_lib:write_file(Text, Dir, ?INDEX_FILE).
+	Text1 = string:replace(Text, "<template></template>", Readme),
+	Bz = list_to_binary(Text1),
+    edoc_lib:write_file(Bz, Dir, ?INDEX_FILE).
 
 modules_frame(Dir, Ms, Title, CSS) ->
     Body = [?NL,
@@ -319,29 +336,41 @@ modules_frame(Dir, Ms, Title, CSS) ->
 %
 
 off_canvas(Content) ->
-    {'div', [
+    [{'div', [
         {id, "navbar"},
         {mode, "push"}
     ], [
         {'div', [
             {class, "uk-offcanvas-bar"},
              {open, "true"}
-        ], [
-            {button, [
+        ],
+			[{button, [
                 {class, "uk-offcanvas-close"},
                 {type, "button"},
                 {mode, "push"},
                 {'uk-close', ""},
                  {id, "baz"}             
-            ], []}
-        ]},
+            ], []}]
+			++ Content			
+        },
         {script, [], ["window.addEventListener('load', function(){UIkit.offcanvas(navbar).show();});"]}
-    ]}.
+    ]}].
 
-navigation(Dir, Ms, Title, CSS) ->
-
+navigation(Dir, Ms, Title, Version, CSS) ->
+	% off_canvas(
+	[
+		{a, [{class, "menu-button"}, {style, "float:right"}, {href, "#"}, {'uk-icon', "icon: close"}], []},
+		% {button, [], []},		
+		{'div', [{class, "main-logo"}], [
+		{h1, [], [Title]}
+		,{span, [{class, "version"}], [Version]}
+	]}] ++
     [{ul, [{class, "uk-nav uk-nav-default"}],
-        [{li, [{class, "uk-nav-header"}], ["Modules"]}]
+        [{li, [{class, "uk-nav-header"}], ["Pages"]}]
+        ++ [{li, [{class, ""}], [
+			{a, [{href, "index.html"}], ["Index"]}
+		]}]
+        ++ [{li, [{class, "uk-nav-header"}], ["Modules"]}]
         ++ [
             {li, [], [{a, [
                 {href, module_ref(M)},          
@@ -350,6 +379,7 @@ navigation(Dir, Ms, Title, CSS) ->
         [atom_to_list(M)]}]}    
     || M <- Ms]
     }].
+% ).
 
     
 
@@ -579,7 +609,7 @@ app_index_file(Paths, Dir, Env, Options) ->
 %    Priv = proplists:get_bool(private, Options),
     CSS = stylesheet(Options),
     Apps1 = [{filename:dirname(A),filename:basename(A)} || A <- Paths],
-    index_file(Dir, Title),
+    index_file(Dir, Title, []),
     application_frame(Dir, Apps1, Title, CSS),
     modules_frame(Dir, [], Title, CSS),
     overview(Dir, Title, Env, Options),

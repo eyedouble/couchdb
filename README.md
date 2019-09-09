@@ -12,7 +12,7 @@
 - [Install from hex.pm](https://hex.pm/packages/couchdb)
 - [Documentation available on hexdoc](https://hexdocs.pm/couchdb)
 
-**THIS IS WORK-PROGRESS FOR NOW (September 2019)**
+**THIS IS WORK-IN-PROGRESS FOR NOW (September 2019)**
 A Hex.pm is available but as long as the version contains an appendix do not consider it stable.
 
 __Version:__ 2.0.0-alpha2

@@ -12404,6 +12404,14 @@ iframe.uk-cover {
 
 
 /* CUSTOM */
+.wrapper > .menu-button{
+  position: absolute;
+  display: block;
+  top: 10px;
+  left: 10px;
+  z-index: 1;
+}
+
 .wrapper{
   display: flex;
   flex: 1 1;
@@ -12418,7 +12426,15 @@ iframe.uk-cover {
   height: 100vh;  
   overflow-x: hidden;
   overflow-y: auto;
+  transition: all ease-in-out 200ms;
+  transform: translate(-300px, 0);
 }
+
+.wrapper.sidenav--open aside{
+  transform: translate(0, 0);
+}
+
+
 .wrapper main{
   display: block;
   position: relative;
@@ -12427,5 +12443,23 @@ iframe.uk-cover {
   overflow-x: hidden;
   overflow-y: auto;
   padding: 40px;
+  margin-left: 0px;
+  transition: all ease-in-out 200ms;
+
+}
+
+.wrapper.sidenav--open main{
+  transform: translate(0, 0);
   margin-left: 300px;
 }
+
+.wrapper.sidenav--open > .menu-button{ 
+  z-index: 0;
+}
+
+.wrapper aside .main-logo{
+  margin: 0 0 2em 0px;
+}
+.wrapper aside .main-logo h1{margin:0}
+
+

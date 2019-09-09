@@ -1,0 +1,3 @@
+-define(CUSTOM_INDEX_MD, "README.md").
+-define(CUSTOM_CSS,  "_priv/uikit.css").
+-define(CUSTOM_JS,  "_priv/uikit.min.js").
