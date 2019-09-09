@@ -256,6 +256,8 @@ check_name(M, M0, File) ->
 index_file(Dir, Title, OffcanvasPart) ->
 
 	Body = {'div', [{class, "wrapper"}], [
+		
+    
 		{a, [{class, "menu-button"}, {href, "#"}, {'uk-icon', "icon: menu;ratio:1.1"}], []},
 		{aside, [{class, "uk-light"}], OffcanvasPart},
 		{main, [{class, "uk-padding-left"}], 
@@ -359,6 +361,7 @@ off_canvas(Content) ->
 navigation(Dir, Ms, Title, Version, CSS) ->
 	% off_canvas(
 	[
+	
 		{a, [{class, "menu-button"}, {style, "float:right"}, {href, "#"}, {'uk-icon', "icon: close"}], []},
 		% {button, [], []},		
 		{'div', [{class, "main-logo"}], [
@@ -378,7 +381,16 @@ navigation(Dir, Ms, Title, Version, CSS) ->
             ],
         [atom_to_list(M)]}]}    
     || M <- Ms]
-    }].
+    }
+% ,
+% 		?NL,
+%     {a, [{href, "http://www.erlang.org/"}],
+% 		  [{img, [{src, "_priv/erlang.svg"}, {align, "right"},
+% 			  {border, 0}, {alt, "erlang logo"}],
+% 		    []}]},
+%             ?NL
+
+	].
 % ).
 
     
