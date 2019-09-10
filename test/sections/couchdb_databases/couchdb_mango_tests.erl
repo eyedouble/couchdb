@@ -78,13 +78,99 @@ find_nested_test() ->
             }
         }
     }),
-    ?PRINT(Doc3),
     {ok, Res1} = couchdb_mango:find(Db, #{
-        <<"selector">> => #{
-            <<"object.object2.colour">> => <<"pink">>
+        <<"selector">> => #{            
+            <<"object">> => #{
+                    <<"object2">> => #{
+                    <<"colour">> => <<"pink">>
+                }
+            }
         }
     }),
+
     ?assertMatch(#{
         <<"bookmark">> := _,
         <<"docs">> := [Doc3],
         <<"warning">> := _}, Res1).
+
+find_nested_shorthand_test() ->
+    Server = init(),
+    {ok, Db} = couchdb_databases:create(Server, ?MOCK_DBS(1)),
+    {ok, #{<<"_id">> := _Id1}=_Doc1} = couchdb_documents:save(Db, ?MOCK_DOCS(1)),
+    {ok, #{<<"_id">> := _Id2}=_Doc2} = couchdb_documents:save(Db, ?MOCK_DOCS(2)),
+    {ok, #{<<"_id">> := _Id3}=Doc3} = couchdb_documents:save(Db, #{
+        <<"_id">> => <<"fakeid1">>,
+        <<"object">> => #{
+            <<"object2">> => #{
+                <<"colour">> => <<"pink">>
+            }
+        }
+    }),
+    {ok, Res1} = couchdb_mango:find(Db, #{
+        <<"selector">> => #{            
+            <<"object.object2.colour">> => <<"pink">>
+        }
+    }),
+
+    ?assertMatch(#{
+        <<"bookmark">> := _,
+        <<"docs">> := [Doc3],
+        <<"warning">> := _}, Res1).
+
+
+index_test() ->
+    Server = init(),
+    {ok, Db} = couchdb_databases:create(Server, ?MOCK_DBS(1)),
+    {ok, Res1} = couchdb_mango:index(Db, #{
+        <<"index">> => #{
+            <<"fields">> => [<<"object.object2.colour">>]
+        },
+        <<"name">> => <<"test-index">>
+    }),
+
+    ?assertMatch(#{
+        <<"id">> := _,
+        <<"name">> := <<"test-index">>,
+        <<"result">> := _}, Res1).
+
+
+index_filter_test() ->
+    Server = init(),
+    {ok, Db} = couchdb_databases:create(Server, ?MOCK_DBS(1)),
+    {ok, Res0} = couchdb_mango:index(Db, #{
+        <<"index">> => #{
+            <<"fields">> => [<<"object.object2.colour">>]
+        },
+        <<"name">> => <<"test-index">>
+    }),
+
+    ?assertMatch(#{
+        <<"id">> := _,
+        <<"name">> := <<"test-index">>,
+        <<"result">> := _}, Res0),
+    
+    {ok, #{<<"_id">> := _Id1}=_Doc1} = couchdb_documents:save(Db, ?MOCK_DOCS(1)),
+    {ok, #{<<"_id">> := _Id2}=_Doc2} = couchdb_documents:save(Db, ?MOCK_DOCS(2)),
+    {ok, #{<<"_id">> := _Id3}=Doc3} = couchdb_documents:save(Db, #{
+        <<"_id">> => <<"fakeid1">>,
+        <<"object">> => #{
+            <<"object2">> => #{
+                <<"colour">> => <<"pink">>
+            }
+        }
+    }),
+    {ok, Res1} = couchdb_mango:find(Db, #{
+        <<"selector">> => #{            
+            <<"object.object2.colour">> => <<"pink">>
+        }
+    }),
+
+    ?assert(is_map_key(<<"warning">>, Res1) =/= true),
+    ?assertMatch(#{
+        <<"bookmark">> := _,
+        <<"docs">> := [Doc3]}, Res1).
+
+
+
+
+

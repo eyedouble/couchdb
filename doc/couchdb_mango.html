@@ -2,33 +2,55 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Module couchdb_app</title>
+<title>Module couchdb_mango</title>
 <meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" type="text/css" href="_priv/uikit.css" title="EDoc">
 </head>
 <body bgcolor="white"><div class="wrapper"><a class="menu-button" href="#" uk-icon="icon: menu;ratio:1.1"></a><aside class="uk-light"><a class="menu-button" style="float:right" href="#" uk-icon="icon: close"></a><div class="main-logo"><h1>CouchDB</h1><span class="version">2.0.0-alpha2</span></div><ul class="uk-nav uk-nav-default"><li class="uk-nav-header">Pages</li><li class=""><a href="index.html">Index</a></li><li class="uk-nav-header">Modules</li><li><a href="couchdb.html" class="module">couchdb</a></li><li><a href="couchdb_app.html" class="module">couchdb_app</a></li><li><a href="couchdb_attachments.html" class="module">couchdb_attachments</a></li><li><a href="couchdb_common_urls.html" class="module">couchdb_common_urls</a></li><li><a href="couchdb_databases.html" class="module">couchdb_databases</a></li><li><a href="couchdb_design_documents.html" class="module">couchdb_design_documents</a></li><li><a href="couchdb_documents.html" class="module">couchdb_documents</a></li><li><a href="couchdb_mango.html" class="module">couchdb_mango</a></li><li><a href="couchdb_server.html" class="module">couchdb_server</a></li></ul></aside><main class="uk-padding-left">
 
 
-<h1 class="uk-heading-small">Module couchdb_app</h1><hr class="">
+<h1 class="uk-heading-small">Module couchdb_mango</h1><hr class="">
 <ul class="index"><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>
 
-<p><b>Behaviours:</b> <a href="application.html"><code>application</code></a>.</p>
 
 <h2 id="index">Function Index</h2>
-<div class="uk-overflow-auto"><table class="uk-table uk-table-striped"><tr><td valign="top"><a href="#start-2" uk-scroll="">start/2</a></td><td></td></tr>
-<tr><td valign="top"><a href="#stop-1" uk-scroll="">stop/1</a></td><td></td></tr>
+<div class="uk-overflow-auto"><table class="uk-table uk-table-striped"><tr><td valign="top"><a href="#find-2" uk-scroll="">find/2</a></td><td>Create a new index on a database.</td></tr>
+<tr><td valign="top"><a href="#index-2" uk-scroll="">index/2</a></td><td>Create a new index on a database.</td></tr>
 </table></div>
 
 <h2 id="functions">Function Details</h2>
 <div class="uk-card uk-card-default uk-card-body uk-margin">
-<h3 class="uk-card-title"><span id="start-2">start/2</span></h3>
+<h3 class="uk-card-title"><span id="find-2">find/2</span></h3>
 <div class="spec">
-<code><code>start(Type, StartArgs) -&gt; any()</code></code>
-</div>
+<code><code>find(Database::<a href="#type-db">db()</a>, Request::map()) -&gt; {ok, map()} | {error, binary()}</code><br></code>
+</div><p><p>Create a new index on a database</p>
+ 
+       <pre>         Request = #{
+               &lt;&lt;"selector"&gt;&gt; =&gt; map(), % required
+               &lt;&lt;"limit"&gt;&gt; =&gt; integer(),
+               &lt;&lt;"skip"&gt;&gt; =&gt; integer(),
+               &lt;&lt;"sort"&gt;&gt; =&gt; map(), % CouchDB Sort Syntax
+               &lt;&lt;"fields"&gt;&gt; =&gt; list(),
+               &lt;&lt;"use_index"&gt;&gt; =&gt; binary() | list(),
+               &lt;&lt;"r"&gt;&gt; =&gt; integer(),
+               &lt;&lt;"bookmark"&gt;&gt; =&gt; binary(),
+               &lt;&lt;"update"&gt;&gt; =&gt; boolean(),
+               &lt;&lt;"stable"&gt;&gt; =&gt; boolean(),
+               &lt;&lt;"stale"&gt;&gt; =&gt; binary(),
+               &lt;&lt;"execution_stats"&gt;&gt; =&gt; boolean(),
+         }</pre></p>
 </div><div class="uk-card uk-card-default uk-card-body uk-margin">
-<h3 class="uk-card-title"><span id="stop-1">stop/1</span></h3>
+<h3 class="uk-card-title"><span id="index-2">index/2</span></h3>
 <div class="spec">
-<code><code>stop(State) -&gt; any()</code></code>
-</div>
+<code><code>index(Database::<a href="#type-db">db()</a>, Request::map()) -&gt; {ok, map()} | {error, binary()}</code><br></code>
+</div><p><p>Create a new index on a database</p>
+ 
+       <pre>         Request = #{
+             &lt;&lt;"index"&gt;&gt; =&gt; map(), % required
+             &lt;&lt;"ddoc"&gt;&gt; =&gt; binary(),
+             &lt;&lt;"name"&gt;&gt; =&gt; binary(),
+             &lt;&lt;"type"&gt;&gt; =&gt; binary(),
+             &lt;&lt;"partial_filter_selector"&gt;&gt; =&gt; map()
+         }</pre></p>
 </div><hr>
 
 <a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a>
