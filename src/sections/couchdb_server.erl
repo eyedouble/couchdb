@@ -1,14 +1,21 @@
+%% @doc The `couchdb_server' module contains functionality listed under CouchDB API
+%% Reference section 1.4.1.
+%%
+%%  The Server module contains mainly maintenace and stats related functionality.
+%%
 -module(couchdb_server).
 
 -include("couchdb.hrl").
 
 -export([
     info/1
+    ,active_tasks/0
     ,all_dbs/1
     ,all_dbs/2
     ,replicate/2
     ,replicate/3
     ,replicate/4
+
 ]).
 
 %% %reference CouchDB Docs 1.2.1

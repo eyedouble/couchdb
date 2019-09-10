@@ -1,3 +1,8 @@
+%% @doc The `couchdb' module contains functionality specic to this package.
+%% It is a series of helper/quality-of-life functions
+%% that do not directly reflect any functionality in the offical CouchDB Documentation.
+%%
+%%
 -module(couchdb).
 -author('Irsan van Wel <vanwel@eyedouble.nl>').
 

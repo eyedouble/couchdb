@@ -1,5 +1,4 @@
 %% encoding: UTF-8
 {application,couchdb}.
-{modules,[couchdb,couchdb_app,couchdb_attachments,couchdb_common_urls,
-          couchdb_databases,couchdb_design_documents,couchdb_documents,
-          couchdb_mango,couchdb_server]}.
+{modules,[couchdb,couchdb_attachments,couchdb_common_urls,couchdb_databases,
+          couchdb_documents,couchdb_mango,couchdb_server]}.

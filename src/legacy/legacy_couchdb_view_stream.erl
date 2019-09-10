@@ -1,5 +1,5 @@
 %% @hidden
--module(couchdb_view_stream).
+-module(legacy_couchdb_view_stream).
 
 -export([start_link/4]).
 

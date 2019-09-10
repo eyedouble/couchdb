@@ -1,5 +1,5 @@
 %% @hidden
--module(couchdb_view_sup).
+-module(legacy_couchdb_view_sup).
 
  -behaviour(supervisor).
 

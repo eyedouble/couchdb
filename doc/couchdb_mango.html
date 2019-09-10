@@ -5,15 +5,24 @@
 <title>Module couchdb_mango</title>
 <meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" type="text/css" href="_priv/uikit.css" title="EDoc">
 </head>
-<body bgcolor="white"><div class="wrapper"><a class="menu-button" href="#" uk-icon="icon: menu;ratio:1.1"></a><aside class="uk-light"><a class="menu-button" style="float:right" href="#" uk-icon="icon: close"></a><div class="main-logo"><h1>CouchDB</h1><span class="version">2.0.0-alpha2</span></div><ul class="uk-nav uk-nav-default"><li class="uk-nav-header">Pages</li><li class=""><a href="index.html">Index</a></li><li class="uk-nav-header">Modules</li><li><a href="couchdb.html" class="module">couchdb</a></li><li><a href="couchdb_app.html" class="module">couchdb_app</a></li><li><a href="couchdb_attachments.html" class="module">couchdb_attachments</a></li><li><a href="couchdb_common_urls.html" class="module">couchdb_common_urls</a></li><li><a href="couchdb_databases.html" class="module">couchdb_databases</a></li><li><a href="couchdb_design_documents.html" class="module">couchdb_design_documents</a></li><li><a href="couchdb_documents.html" class="module">couchdb_documents</a></li><li><a href="couchdb_mango.html" class="module">couchdb_mango</a></li><li><a href="couchdb_server.html" class="module">couchdb_server</a></li></ul></aside><main class="uk-padding-left">
+<body bgcolor="white"><div class="wrapper"><a class="menu-button" href="#" uk-icon="icon: menu;ratio:1.1"></a><aside class="uk-light"><a class="menu-button" style="float:right" href="#" uk-icon="icon: close"></a><div class="main-logo"><h1>CouchDB</h1><span class="version">2.0.0-alpha2</span></div><ul class="uk-nav uk-nav-default"><li class="uk-nav-header">Pages</li><li class=""><a href="index.html">Index</a></li><li class="uk-nav-header">Modules</li><li><a href="couchdb.html" class="module">couchdb</a></li><li><a href="couchdb_attachments.html" class="module">couchdb_attachments</a></li><li><a href="couchdb_common_urls.html" class="module">couchdb_common_urls</a></li><li><a href="couchdb_databases.html" class="module">couchdb_databases</a></li><li><a href="couchdb_documents.html" class="module">couchdb_documents</a></li><li><a href="couchdb_mango.html" class="module">couchdb_mango</a></li><li><a href="couchdb_server.html" class="module">couchdb_server</a></li></ul></aside><main class="uk-padding-left">
 
 
 <h1 class="uk-heading-small">Module couchdb_mango</h1><hr class="">
-<ul class="index"><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>
+<ul class="index"><li><a href="#description">Description</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>The <code>couchdb_mango</code> module contains functionality listed under CouchDB API
+  Reference section 1.3.6.
 
 
+<h2><a name="description">Description</a></h2>The <code>couchdb_mango</code> module contains functionality listed under CouchDB API
+  Reference section 1.3.6.
+  The general API exposes a set of actions that are similar to what MongoDB exposes
+  (although not all of MongoDB's API is supported). These are meant to be loosely
+  and obviously inspired by MongoDB but without too much attention to maintaining
+  the exact behavior.
+ 
 <h2 id="index">Function Index</h2>
 <div class="uk-overflow-auto"><table class="uk-table uk-table-striped"><tr><td valign="top"><a href="#find-2" uk-scroll="">find/2</a></td><td>Create a new index on a database.</td></tr>
+<tr><td valign="top"><a href="#get_indexes-1" uk-scroll="">get_indexes/1</a></td><td>Get a list of all indexes in the database.</td></tr>
 <tr><td valign="top"><a href="#index-2" uk-scroll="">index/2</a></td><td>Create a new index on a database.</td></tr>
 </table></div>
 
@@ -38,6 +47,11 @@
                &lt;&lt;"stale"&gt;&gt; =&gt; binary(),
                &lt;&lt;"execution_stats"&gt;&gt; =&gt; boolean(),
          }</pre></p>
+</div><div class="uk-card uk-card-default uk-card-body uk-margin">
+<h3 class="uk-card-title"><span id="get_indexes-1">get_indexes/1</span></h3>
+<div class="spec">
+<code><code>get_indexes(Database::<a href="#type-db">db()</a>) -&gt; {ok, list()} | {error, binary()}</code><br></code>
+</div><p>Get a list of all indexes in the database.</p>
 </div><div class="uk-card uk-card-default uk-card-body uk-margin">
 <h3 class="uk-card-title"><span id="index-2">index/2</span></h3>
 <div class="spec">

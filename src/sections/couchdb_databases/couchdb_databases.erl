@@ -1,3 +1,10 @@
+%% @doc The `couchdb_mango' module contains functionality listed under CouchDB API
+%% Reference section 1.3.6.
+%%
+%% Now let’s do something a little more useful: create databases. For the strict, CouchDB 
+%% is a database management system (DMS). That means it can hold multiple databases. A 
+%% database is a bucket that holds "related data".
+%%
 -module(couchdb_databases).
 
 -include("couchdb.hrl").

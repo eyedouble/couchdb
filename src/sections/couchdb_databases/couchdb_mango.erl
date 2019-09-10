@@ -1,3 +1,10 @@
+%% @doc The `couchdb_mango' module contains functionality listed under CouchDB API
+%% Reference section 1.3.6.
+%% The general API exposes a set of actions that are similar to what MongoDB exposes 
+%% (although not all of MongoDB's API is supported). These are meant to be loosely 
+%% and obviously inspired by MongoDB but without too much attention to maintaining 
+%% the exact behavior.
+%%
 -module(couchdb_mango).
 
 -include("couchdb.hrl").
@@ -6,6 +13,7 @@
 -export([
     find/2
     ,index/2
+    ,get_indexes/1
 ]).
 
 
@@ -71,7 +79,7 @@ index(#db{server=#server{url=ServerUrl}, name=DbName, options=Opts}, Req) ->
 
 %% @doc Get a list of all indexes in the database.
 -spec(get_indexes(Database::db()) -> {ok, list()} | {error, binary()}).
-get_indexes(Db) -> nyi.
+get_indexes(_Db) -> nyi.
 
 
 %
@@ -83,7 +91,7 @@ check_find_request_compliance(#{<<"selector">> := _Selector}=Req) ->
         <<"selector">> => fun(X) -> is_map(X) end,
         <<"limit">> => fun(X) -> is_integer(X) end,
         <<"skip">> => fun(X) -> is_integer(X) end,
-        <<"sort">> => fun(X) -> sortfunc, true end,
+        <<"sort">> => fun(_X) -> sortfunc, true end,
         <<"fields">> => fun(X) -> is_list(X) end,
         <<"use_index">> => fun(X) -> is_binary(X) orelse is_list(X) end,
         <<"r">> => fun(X) -> is_integer(X) end,
@@ -110,7 +118,7 @@ check_index_request_compliance(_) -> false.
 
 %% @private
 check_request_compliance(RequestDefinition, Request) ->
-     maps:fold(fun(Key, Value, Acc)->
+    maps:fold(fun(Key, Value, Acc)->
         case Acc of 
             true ->
                 case maps:get(Key, RequestDefinition) of

@@ -5,13 +5,22 @@
 <title>Module couchdb_documents</title>
 <meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" type="text/css" href="_priv/uikit.css" title="EDoc">
 </head>
-<body bgcolor="white"><div class="wrapper"><a class="menu-button" href="#" uk-icon="icon: menu;ratio:1.1"></a><aside class="uk-light"><a class="menu-button" style="float:right" href="#" uk-icon="icon: close"></a><div class="main-logo"><h1>CouchDB</h1><span class="version">2.0.0-alpha2</span></div><ul class="uk-nav uk-nav-default"><li class="uk-nav-header">Pages</li><li class=""><a href="index.html">Index</a></li><li class="uk-nav-header">Modules</li><li><a href="couchdb.html" class="module">couchdb</a></li><li><a href="couchdb_app.html" class="module">couchdb_app</a></li><li><a href="couchdb_attachments.html" class="module">couchdb_attachments</a></li><li><a href="couchdb_common_urls.html" class="module">couchdb_common_urls</a></li><li><a href="couchdb_databases.html" class="module">couchdb_databases</a></li><li><a href="couchdb_design_documents.html" class="module">couchdb_design_documents</a></li><li><a href="couchdb_documents.html" class="module">couchdb_documents</a></li><li><a href="couchdb_mango.html" class="module">couchdb_mango</a></li><li><a href="couchdb_server.html" class="module">couchdb_server</a></li></ul></aside><main class="uk-padding-left">
+<body bgcolor="white"><div class="wrapper"><a class="menu-button" href="#" uk-icon="icon: menu;ratio:1.1"></a><aside class="uk-light"><a class="menu-button" style="float:right" href="#" uk-icon="icon: close"></a><div class="main-logo"><h1>CouchDB</h1><span class="version">2.0.0-alpha2</span></div><ul class="uk-nav uk-nav-default"><li class="uk-nav-header">Pages</li><li class=""><a href="index.html">Index</a></li><li class="uk-nav-header">Modules</li><li><a href="couchdb.html" class="module">couchdb</a></li><li><a href="couchdb_attachments.html" class="module">couchdb_attachments</a></li><li><a href="couchdb_common_urls.html" class="module">couchdb_common_urls</a></li><li><a href="couchdb_databases.html" class="module">couchdb_databases</a></li><li><a href="couchdb_documents.html" class="module">couchdb_documents</a></li><li><a href="couchdb_mango.html" class="module">couchdb_mango</a></li><li><a href="couchdb_server.html" class="module">couchdb_server</a></li></ul></aside><main class="uk-padding-left">
 
 
 <h1 class="uk-heading-small">Module couchdb_documents</h1><hr class="">
-<ul class="index"><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>
+<ul class="index"><li><a href="#description">Description</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>The <code>couchdb_documents</code> module contains functionality listed under CouchDB API  
+Reference section 1.4.1.
 
 
+<h2><a name="description">Description</a></h2><p>The <code>couchdb_documents</code> module contains functionality listed under CouchDB API  
+Reference section 1.4.1.</p>
+ 
+  Documents are CouchDB’s central data structure. The idea behind a document is,
+  unsurprisingly, that of a real-world document – a sheet of paper such as an invoice,
+  a recipe, or a business card. We already learned that CouchDB uses the JSON format
+  to store documents.
+ 
 <h2 id="index">Function Index</h2>
 <div class="uk-overflow-auto"><table class="uk-table uk-table-striped"><tr><td valign="top"><a href="#delete-2" uk-scroll="">delete/2</a></td><td>Deletes a list of documents
   if you want to make sure the doc it emptied on delete, use the option
@@ -22,9 +31,9 @@
   {empty_on_delete,  true} or pass a doc with just _id and _rev
   members.</td></tr>
 <tr><td valign="top"><a href="#exists-2" uk-scroll="">exists/2</a></td><td>test if doc with uuid exists in the given db.</td></tr>
-<tr><td valign="top"><a href="#get-2" uk-scroll="">get/2</a></td><td>open a document.</td></tr>
-<tr><td valign="top"><a href="#get-3" uk-scroll="">get/3</a></td><td>open a document
-  Params is a list of query argument.</td></tr>
+<tr><td valign="top"><a href="#get-2" uk-scroll="">get/2</a></td><td>Get a document.</td></tr>
+<tr><td valign="top"><a href="#get-3" uk-scroll="">get/3</a></td><td>Get a document  
+Params is a list of query arguments.See CouchDB API Reference 1.4.1.</td></tr>
 <tr><td valign="top"><a href="#lookup_rev-2" uk-scroll="">lookup_rev/2</a></td><td>get the last revision of the document.</td></tr>
 <tr><td valign="top"><a href="#lookup_rev-3" uk-scroll="">lookup_rev/3</a></td><td></td></tr>
 <tr><td valign="top"><a href="#save-2" uk-scroll="">save/2</a></td><td>save a document.</td></tr>
@@ -61,13 +70,17 @@ A document is a Json object like this one:.</td></tr>
 <div class="spec">
 <code><code>get(Db, DocId) -&gt; any()</code></code>
 </div><p>Equivalent to <a href="#open_doc-3"><code>open_doc(Db, DocId, [])</code></a>.</p>
-<p>open a document</p>
+<p>Get a document</p>
 </div><div class="uk-card uk-card-default uk-card-body uk-margin">
 <h3 class="uk-card-title"><span id="get-3">get/3</span></h3>
 <div class="spec">
 <code><code>get(Db::<a href="#type-db">db()</a>, DocId::binary(), Params::list()) -&gt; {ok, map()} | {error, term()}</code><br></code>
-</div><p>open a document
-  Params is a list of query argument. Have a look in CouchDb API</p>
+</div><p><p>Get a document  
+Params is a list of query arguments.See CouchDB API Reference 1.4.1</p>
+ 
+  Note: The attachment option is still here but should be
+  considered not supported as use of the <code>couchdb_attachments</code> module is
+  favoured.</p>
 </div><div class="uk-card uk-card-default uk-card-body uk-margin">
 <h3 class="uk-card-title"><span id="lookup_rev-2">lookup_rev/2</span></h3>
 <div class="spec">

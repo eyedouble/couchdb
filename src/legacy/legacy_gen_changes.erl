@@ -3,7 +3,7 @@
 %% This behaviour allws you to create easily a server that consume
 %% Couchdb continuous changes
 
--module(gen_changes).
+-module(legacy_gen_changes).
 
 -include("couchdb.hrl").
 

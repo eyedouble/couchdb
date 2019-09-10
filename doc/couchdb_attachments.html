@@ -5,18 +5,30 @@
 <title>Module couchdb_attachments</title>
 <meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" type="text/css" href="_priv/uikit.css" title="EDoc">
 </head>
-<body bgcolor="white"><div class="wrapper"><a class="menu-button" href="#" uk-icon="icon: menu;ratio:1.1"></a><aside class="uk-light"><a class="menu-button" style="float:right" href="#" uk-icon="icon: close"></a><div class="main-logo"><h1>CouchDB</h1><span class="version">2.0.0-alpha2</span></div><ul class="uk-nav uk-nav-default"><li class="uk-nav-header">Pages</li><li class=""><a href="index.html">Index</a></li><li class="uk-nav-header">Modules</li><li><a href="couchdb.html" class="module">couchdb</a></li><li><a href="couchdb_app.html" class="module">couchdb_app</a></li><li><a href="couchdb_attachments.html" class="module">couchdb_attachments</a></li><li><a href="couchdb_common_urls.html" class="module">couchdb_common_urls</a></li><li><a href="couchdb_databases.html" class="module">couchdb_databases</a></li><li><a href="couchdb_design_documents.html" class="module">couchdb_design_documents</a></li><li><a href="couchdb_documents.html" class="module">couchdb_documents</a></li><li><a href="couchdb_mango.html" class="module">couchdb_mango</a></li><li><a href="couchdb_server.html" class="module">couchdb_server</a></li></ul></aside><main class="uk-padding-left">
+<body bgcolor="white"><div class="wrapper"><a class="menu-button" href="#" uk-icon="icon: menu;ratio:1.1"></a><aside class="uk-light"><a class="menu-button" style="float:right" href="#" uk-icon="icon: close"></a><div class="main-logo"><h1>CouchDB</h1><span class="version">2.0.0-alpha2</span></div><ul class="uk-nav uk-nav-default"><li class="uk-nav-header">Pages</li><li class=""><a href="index.html">Index</a></li><li class="uk-nav-header">Modules</li><li><a href="couchdb.html" class="module">couchdb</a></li><li><a href="couchdb_attachments.html" class="module">couchdb_attachments</a></li><li><a href="couchdb_common_urls.html" class="module">couchdb_common_urls</a></li><li><a href="couchdb_databases.html" class="module">couchdb_databases</a></li><li><a href="couchdb_documents.html" class="module">couchdb_documents</a></li><li><a href="couchdb_mango.html" class="module">couchdb_mango</a></li><li><a href="couchdb_server.html" class="module">couchdb_server</a></li></ul></aside><main class="uk-padding-left">
 
 
 <h1 class="uk-heading-small">Module couchdb_attachments</h1><hr class="">
-<ul class="index"><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>
+<ul class="index"><li><a href="#description">Description</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>The <code>couchdb_attachments</code> module contains functionality listed under CouchDB API  
+Reference section 1.4.2.
 
 
+<h2><a name="description">Description</a></h2><p>The <code>couchdb_attachments</code> module contains functionality listed under CouchDB API  
+Reference section 1.4.2.  
+CouchDB documents can have attachments just like an email message can have attachments.  
+An attachment is identified by a name and includes its MIME type (or Content-Type) and the  
+number of bytes the attachment contains. Attachments can be any data. It is easiest to think  
+about attachments as files attached to a document. These files can be text, images, Word  
+documents, music, or movie files.</p>
+ 
+ 
 <h2 id="index">Function Index</h2>
 <div class="uk-overflow-auto"><table class="uk-table uk-table-striped"><tr><td valign="top"><a href="#delete-3" uk-scroll="">delete/3</a></td><td>delete a document attachment.</td></tr>
 <tr><td valign="top"><a href="#delete-4" uk-scroll="">delete/4</a></td><td>delete a document attachment.</td></tr>
-<tr><td valign="top"><a href="#fetch-3" uk-scroll="">fetch/3</a></td><td>fetch a document attachment.</td></tr>
-<tr><td valign="top"><a href="#fetch-4" uk-scroll="">fetch/4</a></td><td></td></tr>
+<tr><td valign="top"><a href="#get-3" uk-scroll="">get/3</a></td><td>Get a document attachment.</td></tr>
+<tr><td valign="top"><a href="#get-4" uk-scroll="">get/4</a></td><td>Get a document attachment.</td></tr>
+<tr><td valign="top"><a href="#get_stream-3" uk-scroll="">get_stream/3</a></td><td>Get a document attachment streaming.</td></tr>
+<tr><td valign="top"><a href="#get_stream-4" uk-scroll="">get_stream/4</a></td><td>Get a document attachment streaming.</td></tr>
 <tr><td valign="top"><a href="#put-4" uk-scroll="">put/4</a></td><td>put an attachment.</td></tr>
 <tr><td valign="top"><a href="#put-5" uk-scroll="">put/5</a></td><td>put an attachment.</td></tr>
 <tr><td valign="top"><a href="#send-2" uk-scroll="">send/2</a></td><td>send an attachment chunk
@@ -34,19 +46,42 @@
 </div><div class="uk-card uk-card-default uk-card-body uk-margin">
 <h3 class="uk-card-title"><span id="delete-4">delete/4</span></h3>
 <div class="spec">
-<code><code>delete(Db, DocOrDocId, Name, Options) -&gt; any()</code></code>
+<code><code>delete(Db::<a href="#type-db">db()</a>, Document::map(), Name::binary(), Options::list()) -&gt; {ok, term()}</code><br></code>
 </div><p>delete a document attachment</p>
 </div><div class="uk-card uk-card-default uk-card-body uk-margin">
-<h3 class="uk-card-title"><span id="fetch-3">fetch/3</span></h3>
+<h3 class="uk-card-title"><span id="get-3">get/3</span></h3>
 <div class="spec">
-<code><code>fetch(Db, DocId, Name) -&gt; any()</code></code>
-</div><p>Equivalent to <a href="#fetch-4"><code>fetch(Db, DocId, Name, [])</code></a>.</p>
-<p>fetch a document attachment</p>
+<code><code>get(Db::<a href="#type-db">db()</a>, Doc::map(), Name::binary()) -&gt; {ok, binary()} | {ok, map()} | {error, term()}</code><br></code>
+</div><p>Equivalent to <a href="#get-4"><code>get(Db, DocId, Name, [])</code></a>.</p>
+<p>Get a document attachment</p>
 </div><div class="uk-card uk-card-default uk-card-body uk-margin">
-<h3 class="uk-card-title"><span id="fetch-4">fetch/4</span></h3>
+<h3 class="uk-card-title"><span id="get-4">get/4</span></h3>
 <div class="spec">
-<code><code>fetch(Db::<a href="#type-db">db()</a>, DocId::string(), Name::string(), Options0::list()) -&gt; {ok, binary()} | {ok, atom()} | {error, term()}</code><br></code>
-</div>
+<code><code>get(Db::<a href="#type-db">db()</a>, Doc::map(), X3::binary(), Options::list()) -&gt; {ok, binary()} | {ok, map()} | {error, term()}</code><br></code>
+</div><p><p>Get a document attachment</p>
+ 
+  <pre>  Option = #{&lt;&lt;"range"&gt;&gt; =&gt; &lt;&lt;"0-19"&gt;&gt;};</pre>
+ 
+   Option above will allow you to only fetch the first 19 bytes of
+   the attachment.
+ </p>
+</div><div class="uk-card uk-card-default uk-card-body uk-margin">
+<h3 class="uk-card-title"><span id="get_stream-3">get_stream/3</span></h3>
+<div class="spec">
+<code><code>get_stream(Db::<a href="#type-db">db()</a>, Doc::map(), Name::binary()) -&gt; {ok, binary()} | {ok, map()} | {error, term()}</code><br></code>
+</div><p>Equivalent to <a href="#get_stream-4"><code>get_stream(Db, DocId, Name, [])</code></a>.</p>
+<p>Get a document attachment streaming</p>
+</div><div class="uk-card uk-card-default uk-card-body uk-margin">
+<h3 class="uk-card-title"><span id="get_stream-4">get_stream/4</span></h3>
+<div class="spec">
+<code><code>get_stream(Db::<a href="#type-db">db()</a>, Doc::string(), X3::string(), Options::list()) -&gt; {ok, binary()} | {ok, reference()} | {error, term()}</code><br></code>
+</div><p><p>Get a document attachment streaming</p>
+ 
+  <pre>  Option = #{&lt;&lt;"range"&gt;&gt; =&gt; &lt;&lt;"0-19"&gt;&gt;};</pre>
+ 
+   Option above will allow you to only fetch the first 19 bytes of
+   the attachment.
+ </p>
 </div><div class="uk-card uk-card-default uk-card-body uk-margin">
 <h3 class="uk-card-title"><span id="put-4">put/4</span></h3>
 <div class="spec">
@@ -72,11 +107,12 @@
 <div class="spec">
 <code><code>send(Ref, Msg) -&gt; any()</code></code>
 </div><p>send an attachment chunk
-  Msg could be Data, eof to stop sending.</p>
+  Msg could be Data, eof to stop sending.
+  Not tested</p>
 </div><div class="uk-card uk-card-default uk-card-body uk-margin">
 <h3 class="uk-card-title"><span id="stream-1">stream/1</span></h3>
 <div class="spec">
-<code><code>stream(Ref::atom()) -&gt; {ok, binary()} | done | {error, term()}</code><br></code>
+<code><code>stream(Ref::reference()) -&gt; {ok, binary()} | done | {error, term()}</code><br></code>
 </div><p>fetch an attachment chunk.
   Use this function when you pass the <code>stream</code> option to the
   <code>couchdb:fetch/4</code> function.
@@ -89,7 +125,8 @@
            <dt>{error, term()}</dt>
                <dd>n error occurred</dd>
        </dl>
- </p>
+ 
+  Not tested</p>
 </div><hr>
 
 <a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a>

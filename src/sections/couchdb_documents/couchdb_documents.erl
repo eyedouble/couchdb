@@ -1,3 +1,11 @@
+%% @doc The `couchdb_documents' module contains functionality listed under CouchDB API
+%% Reference section 1.4.1.
+%%
+%% Documents are CouchDB’s central data structure. The idea behind a document is, 
+%% unsurprisingly, that of a real-world document – a sheet of paper such as an invoice, 
+%% a recipe, or a business card. We already learned that CouchDB uses the JSON format 
+%% to store documents.
+%%
 -module(couchdb_documents).
 
 -include("couchdb.hrl").
@@ -47,14 +55,18 @@ lookup_rev(#db{server=Server, options=Opts}=Db, DocId, Params) ->
     end.
 
 %% %reference CouchDB Docs 1.4.1/GET
-%% @doc open a document
+%% @doc Get a document
 %% @equiv open_doc(Db, DocId, [])
 get(Db, DocId) ->
     get(Db, DocId, []).
 
 %% %reference CouchDB Docs 1.4.1/GET
-%% @doc open a document
-%% Params is a list of query argument. Have a look in CouchDb API
+%% @doc Get a document
+%% Params is a list of query arguments.See CouchDB API Reference 1.4.1
+%%
+%% Note: The attachment option is still here but should be
+%% considered not supported as use of the `couchdb_attachments' module is
+%% favoured.
 -spec(get(Db::db(), DocId::binary(), Params::list()) -> {ok, map()} | {error, term()}).
 get(#db{server=Server, options=Opts}=Db, DocId, Params) ->
     DocId1 = couchdb_util:encode_docid(DocId),
@@ -259,6 +271,8 @@ delete(#db{}=Db, [#{<<"_id">> := <<_Id/binary>>, <<"_rev">> := <<_Rev/binary>>}=
 %%
 %% Not Implemented Yet. Old Implementation looked quite bad, dropped in favour of other
 %% functionality first.
+
+
 
 
 
