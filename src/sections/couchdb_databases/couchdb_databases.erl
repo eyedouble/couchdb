@@ -1,7 +1,7 @@
 -module(couchdb_databases).
 
 -include("couchdb.hrl").
--include("../dev.hrl").
+-include("../../dev.hrl").
 
 -export([
     exists/2

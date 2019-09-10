@@ -2,8 +2,8 @@
 
 -include_lib("eunit/include/eunit.hrl").
 
--include ( "../src/dev.hrl" ).
--include("../test_helper.hrl").
+-include ("../src/dev.hrl" ).
+-include("../../test_helper.hrl").
 
 
 %
