@@ -1,10 +1,8 @@
 dist: bionic
 addons:
   apt:
-    sources:
-      - couchdb
     packages:
-    - couchdb
+      - couchdb
 
 language: erlang
 otp_release:
@@ -17,9 +15,6 @@ otp_release:
   - 20.1
   - 20.0
   - 19.3
-
-services:
-  - couchdb
 
 
 before_install:
