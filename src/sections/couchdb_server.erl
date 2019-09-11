@@ -95,7 +95,7 @@ replicate(#server{url=ServerUrl, options=Opts}, RepObj) ->
     Url = hackney_url:make_url(ServerUrl, [<<"_replicate">>], []),
     Headers = [{<<"Content-Type">>, <<"application/json">>}],
     Payload = couchdb_ejson:encode(RepObj),
-    Options = [{pool, default}] ++ Opts,
+    Options = [{pool, replication_pool}] ++ Opts,
     % {ok, StatusCode, RespHeaders, ClientRef} = hackney:request(post, Url, Headers, Payload, Options).
     Response = case hackney:request(post, Url , Headers, Payload, Options) of
         {ok, Status, _, Ref} when Status =:= 200 orelse Status =:= 201 ->
