@@ -2,7 +2,7 @@ dist: bionic
 addons:
   apt:
     sources:
-      - https://apache.bintray.com/couchdb-deb
+      - couchdb
     packages:
     - couchdb
 
@@ -20,6 +20,7 @@ otp_release:
 
 services:
   - couchdb
+
 
 before_install:
  - "chmod +x bootstrap_travis.sh"
