@@ -90,7 +90,7 @@ membership() -> niy.
 %%
 -spec(replicate(Server::server(), RepObj::{list()})-> {ok, term()}|{error, term()}).
 replicate(#server{url=ServerUrl, options=Opts}, RepObj) ->
-    ok = hackney_pool:start_pool(replication_pool, [{timeout, 15000}, {max_connections, 100}]),         
+    ok = hackney_pool:start_pool(replication_pool, [{timeout, 150000}, {max_connections, 100}]),         
 
     Url = hackney_url:make_url(ServerUrl, [<<"_replicate">>], []),
     Headers = [{<<"Content-Type">>, <<"application/json">>}],
