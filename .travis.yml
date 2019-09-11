@@ -21,7 +21,7 @@ before_install:
   - "./bootstrap_travis.sh"
 
 install:
-  - curl -X PUT -d '0.0.0.0' http://localhost:5984/_node/nonode@nohost/_config/httpd/bind_address
+  - curl -X PUT -d '"0.0.0.0"' http://localhost:5984/_node/nonode@nohost/_config/httpd/bind_address
   - "./rebar3 compile"
   
 script:  
