@@ -13,7 +13,7 @@ otp_release:
 
 
 services:
-  - couchdb
+  - couchdb: '2.3.0'
 
 before_install:
  - "chmod +x bootstrap_travis.sh"
