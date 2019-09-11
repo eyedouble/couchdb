@@ -1,7 +1,7 @@
 {application,couchdb,
 	[{description,"CouchDB Erlang/Elixir client"},
 	{pkg_name, "couchdb"},    
-	{vsn,"2.0.0-beta1"},
+	{vsn,"2.0.0-beta2"},
 	{licenses, ["MIT"]},
 	{modules,[]},
 	{registered,[couchdb_sup]},
