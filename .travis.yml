@@ -1,6 +1,8 @@
 dist: bionic
 addons:
   apt:
+    sources:
+      - "sourceline": "ppa:couchdb/stable"
     packages:
       - couchdb
 
@@ -15,6 +17,9 @@ otp_release:
   - 20.1
   - 20.0
   - 19.3
+
+services:
+  - couchdb
 
 
 before_install:
