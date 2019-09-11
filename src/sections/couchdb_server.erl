@@ -133,7 +133,7 @@ replicate(Server, #db{name=Source}, #db{name=Target}, Options) ->
     replicate(Server, Source, Target, Options);
 replicate(Server, Source, Target, Options) ->
     RepProp = [
-        {<<"source">>, couchdb_util:to_binary(Source)},
-        {<<"target">>, couchdb_util:to_binary(Target)} | Options
+        {<<"source">>, <<"http://localhost:5984/", Source/binary>>},
+        {<<"target">>, <<"http://localhost:5984/", Target/binary>>} | Options
     ],
     replicate(Server, {RepProp}).
