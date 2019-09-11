@@ -1,11 +1,4 @@
 dist: bionic
-addons:
-  apt:
-    sources:
-      - "sourceline": "ppa:couchdb/stable"
-    packages:
-      - couchdb
-
 language: erlang
 otp_release:
   - 22.0
@@ -19,17 +12,17 @@ otp_release:
   - 19.3
 
 services:
-  - couchdb
-
+  - docker
 
 before_install:
- - "chmod +x bootstrap_travis.sh"
- - "./bootstrap_travis.sh"
+  - docker pull couchdb:2.3.0
+  - docker run -d -p 127.0.0.1:5984:5984 -t couchdb:2.3.0
+  - "chmod +x bootstrap_travis.sh"
+  - "./bootstrap_travis.sh"
 
 install:
   - "./rebar3 compile"
 
-# before_script:
   
 script:  
   - "./rebar3 eunit"
