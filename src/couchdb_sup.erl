@@ -17,14 +17,15 @@ init([]) ->
              {couchdb_uuids, start_link, []},
              permanent,2000,worker, [couchdb_uuids]},
 
-    %% view stream supervisor
-    ViewSup = {couchdb_view_sup,
-               {couchdb_view_sup, start_link, []},
-               permanent, 2000, supervisor, [couchdb_view_sup]},
+    % %% view stream supervisor
+    % ViewSup = {couchdb_view_sup,
+    %            {couchdb_view_sup, start_link, []},
+    %            permanent, 2000, supervisor, [couchdb_view_sup]},
 
-    %% changes stream supervisor
-    ChangesSup = {couchdb_changes_sup,
-                  {couchdb_changes_sup, start_link, []},
-                  permanent, 2000, supervisor, [couchdb_changes_sup]},
+    % %% changes stream supervisor
+    % ChangesSup = {couchdb_changes_sup,
+    %               {couchdb_changes_sup, start_link, []},
+    %               permanent, 2000, supervisor, [couchdb_changes_sup]},
 
-    {ok, {{one_for_one, 10, 3600}, [Uuids, ViewSup, ChangesSup]}}.
+    % {ok, {{one_for_one, 10, 3600}, [Uuids, ViewSup, ChangesSup]}}.
+    {ok, {{one_for_one, 10, 3600}, [Uuids]}}.
