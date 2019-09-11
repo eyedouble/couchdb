@@ -1,4 +1,11 @@
 dist: bionic
+addons:
+  apt:
+    sources:
+      - https://apache.bintray.com/couchdb-deb
+    packages:
+    - couchdb
+
 language: erlang
 otp_release:
   - 22.0
@@ -11,9 +18,8 @@ otp_release:
   - 20.0
   - 19.3
 
-
 services:
-  - couchdb: '2.3.0'
+  - couchdb
 
 before_install:
  - "chmod +x bootstrap_travis.sh"
