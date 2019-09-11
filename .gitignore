@@ -10,4 +10,4 @@ ebin/*.beam
 rel
 .concrete/DEV_MODE
 .rebar
-.lock
+*.lock
