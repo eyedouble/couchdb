@@ -91,12 +91,12 @@ membership() -> niy.
 -spec(replicate(Server::server(), RepObj::{list()})-> {ok, term()}|{error, term()}).
 replicate(#server{url=ServerUrl, options=Opts}, RepObj) ->
     
-    ok = hackney_pool:start_pool(replication_pool, [{timeout, 550000}, {connect_timeout, 15000}, {checkout_timeout, 15000}, {recv_timeout, 15000}, {max_connections, 100}]),         
+    ok = hackney_pool:start_pool(replication_pool, [{timeout, 550000}, {connect_timeout, 30000}, {checkout_timeout, 30000}, {recv_timeout, 30000}, {max_connections, 100}]),         
 
     Url = hackney_url:make_url(ServerUrl, [<<"_replicate">>], []),
     Headers = [{<<"Content-Type">>, <<"application/json">>}],
     Payload = couchdb_ejson:encode(RepObj),
-    Options = [{pool, replication_pool}, {connect_timeout, 15000}, {checkout_timeout, 15000}, {recv_timeout, 15000}] ++ Opts,
+    Options = [{pool, replication_pool}, {connect_timeout, 30000}, {checkout_timeout, 30000}, {recv_timeout, 30000}] ++ Opts,
     % {ok, StatusCode, RespHeaders, ClientRef} = hackney:request(post, Url, Headers, Payload, Options).
     Response = case hackney:request(post, Url , Headers, Payload, Options) of
         {ok, Status, _, Ref} when Status =:= 200 orelse Status =:= 201 ->

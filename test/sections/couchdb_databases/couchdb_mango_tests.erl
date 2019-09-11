@@ -165,7 +165,7 @@ index_filter_test() ->
         }
     }),
 
-    ?assert(is_map_key(<<"warning">>, Res1) =/= true),
+    ?assertNotMatch(#{<<"warning">> := _}, Res1),
     ?assertMatch(#{
         <<"bookmark">> := _,
         <<"docs">> := [Doc3]}, Res1).

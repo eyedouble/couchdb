@@ -42,7 +42,7 @@ all_dbs_test() ->
 % It returns a closure to run with timeout data, replication takes at
 % 3-4 seconds to complete
 replicate_test_() ->
-    {timeout, 10, fun() -> 
+    {timeout, 30, fun() -> 
         Server = init(),
         {ok, DbA} = couchdb_databases:create(Server, ?MOCK_DBS(1)),
         {ok, DbB} = couchdb_databases:create(Server, ?MOCK_DBS(2)),
