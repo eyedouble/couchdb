@@ -97,7 +97,7 @@ replicate(#server{url=ServerUrl, options=Opts}, RepObj) ->
     Payload = couchdb_ejson:encode(RepObj),
     Options = [{pool, default}] ++ Opts,
     % {ok, StatusCode, RespHeaders, ClientRef} = hackney:request(post, Url, Headers, Payload, Options).
-    Response = case couchdb_httpc:request(post, Url, Headers, Payload, Options) of
+    Response = case hackney:request(post, Url , Headers, Payload, Options) of
         {ok, Status, _, Ref} when Status =:= 200 orelse Status =:= 201 ->
             Res = couchdb_httpc:json_body(Ref),
             {ok, Res};
@@ -106,7 +106,7 @@ replicate(#server{url=ServerUrl, options=Opts}, RepObj) ->
             {error, {bad_response, {Status, Headers, Body}}};
         Error -> Error
     end,
-    
+
     hackney_pool:stop_pool(replication_pool),
     Response.
 

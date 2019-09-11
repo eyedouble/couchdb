@@ -15,9 +15,7 @@
 -include("couchdb.hrl").
 
 request(Method, Url, Headers, Body, Options) ->
-    {FinalHeaders, FinalOpts} = make_headers(Method, Url, Headers,
-                                             Options),
-
+    {FinalHeaders, FinalOpts} = make_headers(Method, Url, Headers, Options),
     hackney:request(Method, Url , FinalHeaders, Body, FinalOpts).
 
 db_request(Method, Url, Headers, Body, Options) ->
