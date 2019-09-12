@@ -5,7 +5,7 @@
 <title>Module couchdb_databases</title>
 <meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" type="text/css" href="_priv/uikit.css" title="EDoc">
 </head>
-<body bgcolor="white"><div class="wrapper"><a class="menu-button" href="#" uk-icon="icon: menu;ratio:1.1"></a><aside class="uk-light"><a class="menu-button" style="float:right" href="#" uk-icon="icon: close"></a><div class="main-logo"><h1>CouchDB</h1><span class="version">2.0.0-beta7</span></div><ul class="uk-nav uk-nav-default"><li class="uk-nav-header">Pages</li><li class=""><a href="index.html">Index</a></li><li class="uk-nav-header">Modules</li><li><a href="couchdb.html" class="module">couchdb</a></li><li><a href="couchdb_attachments.html" class="module">couchdb_attachments</a></li><li><a href="couchdb_databases.html" class="module">couchdb_databases</a></li><li><a href="couchdb_documents.html" class="module">couchdb_documents</a></li><li><a href="couchdb_mango.html" class="module">couchdb_mango</a></li><li><a href="couchdb_server.html" class="module">couchdb_server</a></li><li><a href="couchdb_uuids.html" class="module">couchdb_uuids</a></li></ul></aside><main class="uk-padding-left">
+<body bgcolor="white"><div class="wrapper"><a class="menu-button" href="#" uk-icon="icon: menu;ratio:1.1"></a><aside class="uk-light"><a class="menu-button" style="float:right" href="#" uk-icon="icon: close"></a><div class="main-logo"><h1>CouchDB</h1><span class="version">2.0.0-beta8</span></div><ul class="uk-nav uk-nav-default"><li class="uk-nav-header">Pages</li><li class=""><a href="index.html">Index</a></li><li class="uk-nav-header">Modules</li><li><a href="couchdb.html" class="module">couchdb</a></li><li><a href="couchdb_attachments.html" class="module">couchdb_attachments</a></li><li><a href="couchdb_databases.html" class="module">couchdb_databases</a></li><li><a href="couchdb_documents.html" class="module">couchdb_documents</a></li><li><a href="couchdb_mango.html" class="module">couchdb_mango</a></li><li><a href="couchdb_server.html" class="module">couchdb_server</a></li><li><a href="couchdb_uuids.html" class="module">couchdb_uuids</a></li></ul></aside><main class="uk-padding-left">
 
 
 <h1 class="uk-heading-small">Module couchdb_databases</h1><hr class="">
@@ -34,6 +34,7 @@ Reference section 1.3.6.</p>
 </td></tr>
 <tr><td valign="top"><a href="#ensure_full_commit-1" uk-scroll="">ensure_full_commit/1</a></td><td>Commits any recent changes to the specified database to disk.</td></tr>
 <tr><td valign="top"><a href="#ensure_full_commit-2" uk-scroll="">ensure_full_commit/2</a></td><td>Commits any recent changes to the specified database to disk.</td></tr>
+<tr><td valign="top"><a href="#exists-1" uk-scroll="">exists/1</a></td><td>Returns true if database exists, false if not.</td></tr>
 <tr><td valign="top"><a href="#exists-2" uk-scroll="">exists/2</a></td><td>Returns true if database exists, false if not.</td></tr>
 <tr><td valign="top"><a href="#get_missing_revs-2" uk-scroll="">get_missing_revs/2</a></td><td>Given a list of document revisions, returns the document revisions that do not exist in the database.</td></tr>
 <tr><td valign="top"><a href="#info-1" uk-scroll="">info/1</a></td><td>get database info.</td></tr>
@@ -106,6 +107,14 @@ Reference section 1.3.6.</p>
 <div class="spec">
 <code><code>ensure_full_commit(Db::<a href="#type-db">db()</a>, Options::list()) -&gt; {ok, InstancestartTime::binary()} | {error, term()}</code><br></code>
 </div><p>Commits any recent changes to the specified database to disk. You should call this if you want to ensure that recent changes have been flushed. This function is likely not required, assuming you have the recommended configuration setting of delayed_commits=false, which requires CouchDB to ensure changes are written to disk before a 200 or similar result is returned.</p>
+</div><div class="uk-card uk-card-default uk-card-body uk-margin">
+<h3 class="uk-card-title"><span id="exists-1">exists/1</span></h3>
+<div class="spec">
+<code><code>exists(Database::<a href="#type-db">db()</a>) -&gt; boolean()</code><br></code>
+</div><p>Equivalent to <a href="#exists-2"><code>exists(Server, DatabaseName)</code></a>.</p>
+<p><p>Returns true if database exists, false if not</p>
+ 
+  Uses HTTP Headers containing a minimal amount of information about the specified db</p>
 </div><div class="uk-card uk-card-default uk-card-body uk-margin">
 <h3 class="uk-card-title"><span id="exists-2">exists/2</span></h3>
 <div class="spec">

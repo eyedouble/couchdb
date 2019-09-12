@@ -24,7 +24,11 @@ exists_test() ->
     ?assertEqual(false, Res0),
     couchdb_databases:create(Server, ?MOCK_DBS(1)),
     Res1 = couchdb_databases:exists(Server, ?MOCK_DBS(1)),
-    ?assertEqual(true, Res1).
+    ?assertEqual(true, Res1),
+    {ok, Database} = couchdb:database_record(Server, ?MOCK_DBS(1)),
+    Res2 = couchdb_databases:exists(Database),
+    ?assertEqual(true, Res2).
+    
 
 create_test() -> 
     Server = init(),

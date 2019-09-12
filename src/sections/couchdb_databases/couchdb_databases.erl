@@ -11,7 +11,8 @@
 -include("../../dev.hrl").
 
 -export([
-    exists/2
+    exists/1
+    ,exists/2
     ,info/1
     ,create/1
     ,create/2
