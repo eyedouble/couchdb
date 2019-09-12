@@ -138,9 +138,7 @@ database_name_is_valid(_) -> false.
 %   PRIVATE
 %
 %% @private
-generate_uuid_v4() ->
-    quickrand:seed ( ),
-    list_to_binary ( uuid:uuid_to_string ( uuid:get_v4_urandom ( ) ) ).
+generate_uuid_v4() -> couchdb_uuids:new().
 
 %% Checks if every element in the list is a key/value pair tuple 
 %% and if the key of such a tuple is an `atom` or `bitstring`.

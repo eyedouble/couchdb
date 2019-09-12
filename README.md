@@ -15,7 +15,7 @@
 **THIS IS WORK-IN-PROGRESS FOR NOW (September 2019)**
 A Hex.pm is available but as long as the version contains an appendix do not consider it stable.
 
-__Version:__ 2.0.0-beta4
+__Version:__ 2.0.0-beta6
 
 
 ## Contribute
@@ -32,7 +32,8 @@ To comply with [Semantic Versioning](https://semver.org/) the version number has
 
 
 
-
+### New uuid implementation
+In Beta6 the original Apache CouchDB uuid implementation was added. 
 
 ---------------------------
 

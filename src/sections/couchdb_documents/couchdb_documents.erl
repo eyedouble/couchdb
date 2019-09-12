@@ -177,9 +177,7 @@ save(#db{server=Server, options=_Opts}=Db, #{}=Doc, Atts, Options) ->
     % PREPARE DOC ID 
     DocId = case maps:get(<<"_id">>, Doc, nil) of        
         Id when is_binary(Id) -> couchdb_util:encode_docid(Id);        
-        nil ->
-            quickrand:seed ( ),
-            list_to_binary ( uuid:uuid_to_string ( uuid:get_v4_urandom ( ) ) )
+        nil -> couchdb_uuids:new()
     end,
     
     Url = hackney_url:make_url(couchdb_httpc:server_url(Server), couchdb_httpc:doc_url(Db, DocId), Options),

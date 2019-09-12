@@ -1,0 +1,58 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Module couchdb_uuids</title>
+<meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" type="text/css" href="_priv/uikit.css" title="EDoc">
+</head>
+<body bgcolor="white"><div class="wrapper"><a class="menu-button" href="#" uk-icon="icon: menu;ratio:1.1"></a><aside class="uk-light"><a class="menu-button" style="float:right" href="#" uk-icon="icon: close"></a><div class="main-logo"><h1>CouchDB</h1><span class="version">2.0.0-beta6</span></div><ul class="uk-nav uk-nav-default"><li class="uk-nav-header">Pages</li><li class=""><a href="index.html">Index</a></li><li class="uk-nav-header">Modules</li><li><a href="couchdb.html" class="module">couchdb</a></li><li><a href="couchdb_attachments.html" class="module">couchdb_attachments</a></li><li><a href="couchdb_databases.html" class="module">couchdb_databases</a></li><li><a href="couchdb_documents.html" class="module">couchdb_documents</a></li><li><a href="couchdb_mango.html" class="module">couchdb_mango</a></li><li><a href="couchdb_server.html" class="module">couchdb_server</a></li><li><a href="couchdb_uuids.html" class="module">couchdb_uuids</a></li></ul></aside><main class="uk-padding-left">
+
+
+<h1 class="uk-heading-small">Module couchdb_uuids</h1><hr class="">
+<ul class="index"><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>
+
+<p><b>Behaviours:</b> <a href="gen_server.html"><code>gen_server</code></a>.</p>
+
+<h2 id="index">Function Index</h2>
+<div class="uk-overflow-auto"><table class="uk-table uk-table-striped"><tr><td valign="top"><a href="#new-0" uk-scroll="">new/0</a></td><td>Generate a new uuid.</td></tr>
+<tr><td valign="top"><a href="#set_algorithm-1" uk-scroll="">set_algorithm/1</a></td><td>Set the algorithm used for uuid genration.</td></tr>
+</table></div>
+
+<h2 id="functions">Function Details</h2>
+<div class="uk-card uk-card-default uk-card-body uk-margin">
+<h3 class="uk-card-title"><span id="new-0">new/0</span></h3>
+<div class="spec">
+<code><code>new() -&gt; binary()</code><br></code>
+</div><p><p>Generate a new uuid</p>
+ 
+  At start time, default the algorithm will be set to <code>random</code>
+  should you require a different algorithm use the function
+  <code>set_algorithm/1</code> first.</p>
+</div><div class="uk-card uk-card-default uk-card-body uk-margin">
+<h3 class="uk-card-title"><span id="set_algorithm-1">set_algorithm/1</span></h3>
+<div class="spec">
+<code><code>set_algorithm(Algorithm::term()) -&gt; {ok, term() | {error, term()}}</code><br></code>
+</div><p><p>Set the algorithm used for uuid genration</p>
+ 
+  <p>Available algorithms:</p>
+ 
+  <p>random: 128 bits of random awesome.</p>
+ 
+  <p>sequential: Monotonically increasing ids with random increments. The first 26 hex characters are random, the last 6 increment in random amounts until an overflow occurs. On overflow, the random prefix is regenerated and the process starts over.</p>
+ 
+  <p>utc_random: The time since Jan 1, 1970 UTC, in microseconds. The first 14 characters are the time in hex. The last 18 are random.</p>
+ 
+  <p>utc_id: The time since Jan 1, 1970 UTC, in microseconds, plus the utc_id_suffix string. The first 14 characters are the time in hex. The uuids/utc_id_suffix string value is appended to these.</p>
+ 
+  Usage:
+   <pre>       set_algorithm(random).
+       set_algorithm(utc_random).
+       set_algorithm(sequential).
+       set_algorithm({utc_id, &lt;&lt;"suffix"&gt;&gt;).</pre></p>
+</div><hr>
+
+<a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a>
+
+<p><i>Made with EDoc-S</i></p>
+<script src="_priv/uikit.min.js"></script></main></div></body>
+</html>
