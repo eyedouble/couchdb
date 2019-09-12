@@ -5,7 +5,7 @@
 <title>Module couchdb_documents</title>
 <meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" type="text/css" href="_priv/uikit.css" title="EDoc">
 </head>
-<body bgcolor="white"><div class="wrapper"><a class="menu-button" href="#" uk-icon="icon: menu;ratio:1.1"></a><aside class="uk-light"><a class="menu-button" style="float:right" href="#" uk-icon="icon: close"></a><div class="main-logo"><h1>CouchDB</h1><span class="version">2.0.0-beta6</span></div><ul class="uk-nav uk-nav-default"><li class="uk-nav-header">Pages</li><li class=""><a href="index.html">Index</a></li><li class="uk-nav-header">Modules</li><li><a href="couchdb.html" class="module">couchdb</a></li><li><a href="couchdb_attachments.html" class="module">couchdb_attachments</a></li><li><a href="couchdb_databases.html" class="module">couchdb_databases</a></li><li><a href="couchdb_documents.html" class="module">couchdb_documents</a></li><li><a href="couchdb_mango.html" class="module">couchdb_mango</a></li><li><a href="couchdb_server.html" class="module">couchdb_server</a></li><li><a href="couchdb_uuids.html" class="module">couchdb_uuids</a></li></ul></aside><main class="uk-padding-left">
+<body bgcolor="white"><div class="wrapper"><a class="menu-button" href="#" uk-icon="icon: menu;ratio:1.1"></a><aside class="uk-light"><a class="menu-button" style="float:right" href="#" uk-icon="icon: close"></a><div class="main-logo"><h1>CouchDB</h1><span class="version">2.0.0-beta7</span></div><ul class="uk-nav uk-nav-default"><li class="uk-nav-header">Pages</li><li class=""><a href="index.html">Index</a></li><li class="uk-nav-header">Modules</li><li><a href="couchdb.html" class="module">couchdb</a></li><li><a href="couchdb_attachments.html" class="module">couchdb_attachments</a></li><li><a href="couchdb_databases.html" class="module">couchdb_databases</a></li><li><a href="couchdb_documents.html" class="module">couchdb_documents</a></li><li><a href="couchdb_mango.html" class="module">couchdb_mango</a></li><li><a href="couchdb_server.html" class="module">couchdb_server</a></li><li><a href="couchdb_uuids.html" class="module">couchdb_uuids</a></li></ul></aside><main class="uk-padding-left">
 
 
 <h1 class="uk-heading-small">Module couchdb_documents</h1><hr class="">
@@ -30,7 +30,7 @@ Reference section 1.4.1.</p>
   if you want to make sure the doc it emptied on delete, use the option
   {empty_on_delete,  true} or pass a doc with just _id and _rev
   members.</td></tr>
-<tr><td valign="top"><a href="#exists-2" uk-scroll="">exists/2</a></td><td>test if doc with uuid exists in the given db.</td></tr>
+<tr><td valign="top"><a href="#exists-2" uk-scroll="">exists/2</a></td><td>Determine if Document exists.</td></tr>
 <tr><td valign="top"><a href="#get-2" uk-scroll="">get/2</a></td><td>Get a document.</td></tr>
 <tr><td valign="top"><a href="#get-3" uk-scroll="">get/3</a></td><td>Get a document  
 Params is a list of query arguments.See CouchDB API Reference 1.4.1.</td></tr>
@@ -64,17 +64,19 @@ A document is a Json object like this one:.</td></tr>
 <h3 class="uk-card-title"><span id="exists-2">exists/2</span></h3>
 <div class="spec">
 <code><code>exists(Db::<a href="#type-db">db()</a>, DocId::binary()) -&gt; boolean()</code><br></code>
-</div><p>test if doc with uuid exists in the given db</p>
+</div><p><p>Determine if Document exists</p>
+ 
+  test if doc with uuid exists in the given db</p>
 </div><div class="uk-card uk-card-default uk-card-body uk-margin">
 <h3 class="uk-card-title"><span id="get-2">get/2</span></h3>
 <div class="spec">
-<code><code>get(Db, DocId) -&gt; any()</code></code>
-</div><p>Equivalent to <a href="#open_doc-3"><code>open_doc(Db, DocId, [])</code></a>.</p>
+<code><code>get(Database::<a href="#type-db">db()</a>, DocId::binary()) -&gt; {ok, map()} | {error, term()}</code><br></code>
+</div><p>Equivalent to <a href="#get-3"><code>get(Db, DocId, [])</code></a>.</p>
 <p>Get a document</p>
 </div><div class="uk-card uk-card-default uk-card-body uk-margin">
 <h3 class="uk-card-title"><span id="get-3">get/3</span></h3>
 <div class="spec">
-<code><code>get(Db::<a href="#type-db">db()</a>, DocId::binary(), Params::list()) -&gt; {ok, map()} | {error, term()}</code><br></code>
+<code><code>get(Database::<a href="#type-db">db()</a>, DocId::binary(), Params::list()) -&gt; {ok, map()} | {error, term()}</code><br></code>
 </div><p><p>Get a document  
 Params is a list of query arguments.See CouchDB API Reference 1.4.1</p>
  

@@ -5,7 +5,7 @@
 <title>Module couchdb_databases</title>
 <meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" type="text/css" href="_priv/uikit.css" title="EDoc">
 </head>
-<body bgcolor="white"><div class="wrapper"><a class="menu-button" href="#" uk-icon="icon: menu;ratio:1.1"></a><aside class="uk-light"><a class="menu-button" style="float:right" href="#" uk-icon="icon: close"></a><div class="main-logo"><h1>CouchDB</h1><span class="version">2.0.0-beta6</span></div><ul class="uk-nav uk-nav-default"><li class="uk-nav-header">Pages</li><li class=""><a href="index.html">Index</a></li><li class="uk-nav-header">Modules</li><li><a href="couchdb.html" class="module">couchdb</a></li><li><a href="couchdb_attachments.html" class="module">couchdb_attachments</a></li><li><a href="couchdb_databases.html" class="module">couchdb_databases</a></li><li><a href="couchdb_documents.html" class="module">couchdb_documents</a></li><li><a href="couchdb_mango.html" class="module">couchdb_mango</a></li><li><a href="couchdb_server.html" class="module">couchdb_server</a></li><li><a href="couchdb_uuids.html" class="module">couchdb_uuids</a></li></ul></aside><main class="uk-padding-left">
+<body bgcolor="white"><div class="wrapper"><a class="menu-button" href="#" uk-icon="icon: menu;ratio:1.1"></a><aside class="uk-light"><a class="menu-button" style="float:right" href="#" uk-icon="icon: close"></a><div class="main-logo"><h1>CouchDB</h1><span class="version">2.0.0-beta7</span></div><ul class="uk-nav uk-nav-default"><li class="uk-nav-header">Pages</li><li class=""><a href="index.html">Index</a></li><li class="uk-nav-header">Modules</li><li><a href="couchdb.html" class="module">couchdb</a></li><li><a href="couchdb_attachments.html" class="module">couchdb_attachments</a></li><li><a href="couchdb_databases.html" class="module">couchdb_databases</a></li><li><a href="couchdb_documents.html" class="module">couchdb_documents</a></li><li><a href="couchdb_mango.html" class="module">couchdb_mango</a></li><li><a href="couchdb_server.html" class="module">couchdb_server</a></li><li><a href="couchdb_uuids.html" class="module">couchdb_uuids</a></li></ul></aside><main class="uk-padding-left">
 
 
 <h1 class="uk-heading-small">Module couchdb_databases</h1><hr class="">
@@ -34,8 +34,7 @@ Reference section 1.3.6.</p>
 </td></tr>
 <tr><td valign="top"><a href="#ensure_full_commit-1" uk-scroll="">ensure_full_commit/1</a></td><td>Commits any recent changes to the specified database to disk.</td></tr>
 <tr><td valign="top"><a href="#ensure_full_commit-2" uk-scroll="">ensure_full_commit/2</a></td><td>Commits any recent changes to the specified database to disk.</td></tr>
-<tr><td valign="top"><a href="#exists-2" uk-scroll="">exists/2</a></td><td>Returns the HTTP Headers containing a minimal amount of information about the specified
-  database.</td></tr>
+<tr><td valign="top"><a href="#exists-2" uk-scroll="">exists/2</a></td><td>Returns true if database exists, false if not.</td></tr>
 <tr><td valign="top"><a href="#get_missing_revs-2" uk-scroll="">get_missing_revs/2</a></td><td>Given a list of document revisions, returns the document revisions that do not exist in the database.</td></tr>
 <tr><td valign="top"><a href="#info-1" uk-scroll="">info/1</a></td><td>get database info.</td></tr>
 </table></div>
@@ -69,13 +68,13 @@ Reference section 1.3.6.</p>
 </div><div class="uk-card uk-card-default uk-card-body uk-margin">
 <h3 class="uk-card-title"><span id="create-1">create/1</span></h3>
 <div class="spec">
-<code><code>create(Db::<a href="#type-db">db()</a>) -&gt; {ok, <a href="#type-db">db()</a>} | {error, term()}</code><br></code>
+<code><code>create(Database::<a href="#type-db">db()</a>) -&gt; {ok, <a href="#type-db">db()</a>} | {error, term()}</code><br></code>
 </div><p>Equivalent to <a href="#create-2"><code>create(Db, [])</code></a>.</p>
 <p>Create a database</p>
 </div><div class="uk-card uk-card-default uk-card-body uk-margin">
 <h3 class="uk-card-title"><span id="create-2">create/2</span></h3>
 <div class="spec">
-<code><code>create(Db::<a href="#type-db">db()</a>, Params::list()) -&gt; {ok, <a href="#type-db">db()</a>} | {error, term()}</code><br></code>
+<code><code>create(Database::<a href="#type-db">db()</a>, Params::list()) -&gt; {ok, <a href="#type-db">db()</a>} | {error, term()}</code><br></code>
 </div><p><p>Create a database</p>
  
        Connections are made to:
@@ -88,12 +87,12 @@ Reference section 1.3.6.</p>
 </div><div class="uk-card uk-card-default uk-card-body uk-margin">
 <h3 class="uk-card-title"><span id="delete-1">delete/1</span></h3>
 <div class="spec">
-<code><code>delete(Db::<a href="#type-db">db()</a>) -&gt; {ok, <a href="#type-db">db()</a>} | {error, term()}</code><br></code>
+<code><code>delete(Database::<a href="#type-db">db()</a>) -&gt; {ok, <a href="#type-db">db()</a>} | {error, term()}</code><br></code>
 </div><p>delete database</p>
 </div><div class="uk-card uk-card-default uk-card-body uk-margin">
 <h3 class="uk-card-title"><span id="delete-2">delete/2</span></h3>
 <div class="spec">
-<code><code>delete(Server::<a href="#type-server">server()</a>, X2::binary()) -&gt; {ok, <a href="#type-db">db()</a>} | {error, term()}</code><br></code>
+<code><code>delete(Server::<a href="#type-server">server()</a>, DbName::binary()) -&gt; {ok, <a href="#type-db">db()</a>} | {error, term()}</code><br></code>
 </div><p>Equivalent to <a href="#delete-1"><code>delete(Db)</code></a>.</p>
 
 </div><div class="uk-card uk-card-default uk-card-body uk-margin">
@@ -110,10 +109,8 @@ Reference section 1.3.6.</p>
 </div><div class="uk-card uk-card-default uk-card-body uk-margin">
 <h3 class="uk-card-title"><span id="exists-2">exists/2</span></h3>
 <div class="spec">
-<code><code>exists(Server::<a href="#type-server">server()</a>, X2::binary()) -&gt; boolean()</code><br></code>
-</div><p>Returns the HTTP Headers containing a minimal amount of information about the specified
-  database. Since the response body is empty, using the HEAD method is a lightweight way to
-  check if the database exists already or not.</p>
+<code><code>exists(Server::<a href="#type-server">server()</a>, Name::binary()) -&gt; boolean()</code><br></code>
+</div><p>Returns true if database exists, false if not</p>
 </div><div class="uk-card uk-card-default uk-card-body uk-margin">
 <h3 class="uk-card-title"><span id="get_missing_revs-2">get_missing_revs/2</span></h3>
 <div class="spec">
@@ -122,7 +119,7 @@ Reference section 1.3.6.</p>
 </div><div class="uk-card uk-card-default uk-card-body uk-margin">
 <h3 class="uk-card-title"><span id="info-1">info/1</span></h3>
 <div class="spec">
-<code><code>info(Db::<a href="#type-db">db()</a>) -&gt; {ok, binary()} | {error, term()}</code><br></code>
+<code><code>info(Database::<a href="#type-db">db()</a>) -&gt; {ok, binary()} | {error, term()}</code><br></code>
 </div><p>get database info</p>
 </div><hr>
 

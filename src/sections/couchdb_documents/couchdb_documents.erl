@@ -26,7 +26,9 @@
 
 
 %% %reference CouchDB Docs 1.4.1/HEAD
-%% @doc test if doc with uuid exists in the given db
+%% @doc Determine if Document exists
+%%
+%% test if doc with uuid exists in the given db
 -spec(exists(db(), binary()) -> boolean()).
 exists(#db{server=Server, options=Opts}=Db, DocId) ->
     DocId1 = couchdb_util:encode_docid(DocId),
@@ -56,7 +58,8 @@ lookup_rev(#db{server=Server, options=Opts}=Db, DocId, Params) ->
 
 %% %reference CouchDB Docs 1.4.1/GET
 %% @doc Get a document
-%% @equiv open_doc(Db, DocId, [])
+%% @equiv get(Db, DocId, [])
+-spec(get(Database::db(), DocId::binary()) -> {ok, map()} | {error, term()}).
 get(Db, DocId) ->
     get(Db, DocId, []).
 
@@ -67,7 +70,7 @@ get(Db, DocId) ->
 %% Note: The attachment option is still here but should be
 %% considered not supported as use of the `couchdb_attachments' module is
 %% favoured.
--spec(get(Db::db(), DocId::binary(), Params::list()) -> {ok, map()} | {error, term()}).
+-spec(get(Database::db(), DocId::binary(), Params::list()) -> {ok, map()} | {error, term()}).
 get(#db{server=Server, options=Opts}=Db, DocId, Params) ->
     DocId1 = couchdb_util:encode_docid(DocId),
 

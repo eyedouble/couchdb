@@ -26,11 +26,20 @@
     ,get_missing_revs/2
 ]).
 
+%% @doc Returns true if database exists, false if not
+%%
+%% Uses HTTP Headers containing a minimal amount of information about the specified db
+%% @equiv exists(Server, DatabaseName)
+-spec(exists(Database::db()) -> boolean()).
+exists(#db{server=#server{}=Server, name=DbName}) -> exists(Server, DbName).
+
 %% %reference CouchDB Docs 1.3.1/HEAD
-%% @doc Returns the HTTP Headers containing a minimal amount of information about the specified 
+%% @doc Returns true if database exists, false if not
+
+%% Returns the HTTP Headers containing a minimal amount of information about the specified 
 %% database. Since the response body is empty, using the HEAD method is a lightweight way to 
 %% check if the database exists already or not.
--spec(exists(server(), binary()) -> boolean()).
+-spec(exists(Server::server(), Name::binary()) -> boolean()).
 exists(#server{url=ServerUrl, options=Opts}, <<DbName/binary>>) ->
     case couchdb:database_name_is_valid(DbName) of
         true -> 
@@ -46,7 +55,7 @@ exists(#server{url=ServerUrl, options=Opts}, <<DbName/binary>>) ->
 
 %% %reference CouchDB Docs 1.3.1/GET
 %% @doc get database info
--spec(info(db()) -> {ok, binary()} | {error, term()}).
+-spec(info(Database::db()) -> {ok, binary()} | {error, term()}).
 info(#db{server=Server, name=DbName, options=Opts}) ->
     Url = hackney_url:make_url(couchdb_httpc:server_url(Server), DbName, []),
     case couchdb_httpc:db_request(get, Url, [], <<>>, Opts, [200]) of
@@ -70,7 +79,7 @@ info(#db{server=Server, name=DbName, options=Opts}) ->
 %% db. Useful for bigcouch for example.
 %% DB names must conform to ^[a-z][a-z0-9_$()+/-]*$
 
--spec(create(db(), list()) -> {ok, db()} | {error, term()}).
+-spec(create(Database::db(), Params::list()) -> {ok, db()} | {error, term()}).
 create(#db{server=#server{url=ServerUrl}, name=DbName, options=Options}=Db, Params) ->    
     Url = hackney_url:make_url(ServerUrl, DbName, Params),
     Resp = couchdb_httpc:db_request(put, Url, [], <<>>, Options, [201]),
@@ -94,13 +103,13 @@ create(#server{}=Server, <<DbName/binary>>) ->
 %% %reference CouchDB Docs 1.3.1/PUT
 %% @doc Create a database 
 %% @equiv create(Db, [])
--spec(create(db()) -> {ok, db()} | {error, term()}).
+-spec(create(Database::db()) -> {ok, db()} | {error, term()}).
 create(#db{}=Database) -> create(Database, []).
 
 
 %% %reference CouchDB Docs 1.3.1/DELETE
 %% @doc delete database   
--spec(delete(db()) -> {ok, db()} | {error, term()}).
+-spec(delete(Database::db()) -> {ok, db()} | {error, term()}).
 delete(#db{server=#server{url=ServerUrl}, name=DbName, options=Opts}) ->
     Url = hackney_url:make_url(ServerUrl, DbName, []),
     Resp = couchdb_httpc:request(delete, Url, [], <<>>, Opts),
@@ -113,7 +122,7 @@ delete(#db{server=#server{url=ServerUrl}, name=DbName, options=Opts}) ->
 
 %% %reference CouchDB Docs 1.3.1/DELETE
 %% @equiv delete(Db) 
--spec(delete(server(), binary()) -> {ok, db()} | {error, term()}).
+-spec(delete(Server::server(), DbName::binary()) -> {ok, db()} | {error, term()}).
 delete(#server{url=_ServerUrl, options=_Opts}=Server, <<DbName/binary>>) ->
         {ok, Db} = couchdb:database_record(Server, DbName),
         delete(Db).
