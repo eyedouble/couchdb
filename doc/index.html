@@ -3,7 +3,7 @@
 <head>
 <title>CouchDB</title>
 <meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" type="text/css" href="_priv/uikit.css" title="EDoc"></head>
-<div class="wrapper"><a class="menu-button" href="#" uk-icon="icon: menu;ratio:1.1"></a><aside class="uk-light"><a class="menu-button" style="float:right" href="#" uk-icon="icon: close"></a><div class="main-logo"><h1>CouchDB</h1><span class="version">2.0.0-beta8</span></div><ul class="uk-nav uk-nav-default"><li class="uk-nav-header">Pages</li><li class=""><a href="index.html">Index</a></li><li class="uk-nav-header">Modules</li><li><a href="couchdb.html" class="module">couchdb</a></li><li><a href="couchdb_attachments.html" class="module">couchdb_attachments</a></li><li><a href="couchdb_databases.html" class="module">couchdb_databases</a></li><li><a href="couchdb_documents.html" class="module">couchdb_documents</a></li><li><a href="couchdb_mango.html" class="module">couchdb_mango</a></li><li><a href="couchdb_server.html" class="module">couchdb_server</a></li><li><a href="couchdb_uuids.html" class="module">couchdb_uuids</a></li></ul></aside><main class="uk-padding-left"><h1>CouchDB</h1>
+<div class="wrapper"><a class="menu-button" href="#" uk-icon="icon: menu;ratio:1.1"></a><aside class="uk-light"><a class="menu-button" style="float:right" href="#" uk-icon="icon: close"></a><div class="main-logo"><h1>CouchDB</h1><span class="version">2.0.0-beta9</span></div><ul class="uk-nav uk-nav-default"><li class="uk-nav-header">Pages</li><li class=""><a href="index.html">Index</a></li><li class="uk-nav-header">Modules</li><li><a href="couchdb.html" class="module">couchdb</a></li><li><a href="couchdb_attachments.html" class="module">couchdb_attachments</a></li><li><a href="couchdb_databases.html" class="module">couchdb_databases</a></li><li><a href="couchdb_documents.html" class="module">couchdb_documents</a></li><li><a href="couchdb_mango.html" class="module">couchdb_mango</a></li><li><a href="couchdb_server.html" class="module">couchdb_server</a></li><li><a href="couchdb_uuids.html" class="module">couchdb_uuids</a></li></ul></aside><main class="uk-padding-left"><h1>CouchDB</h1>
 
 
 <p><a href="https://hex.pm/packages/couchdb"><img src="https://img.shields.io/hexpm/v/couchdb.svg?style=flat-square&labelColor=5c676d&color=714a94" alt="Hex pm" title="" /></a>
@@ -15,10 +15,33 @@
 
 <ul>
 <li><a href="https://hex.pm/packages/couchdb">Install from hex.pm</a></li>
-<li><a href="https://hexdocs.pm/couchdb">Documentation available on hexdoc</a>
-<p>A Hex.pm is available but as long as the version contains an appendix do not consider it stable.</p><p>**THIS IS WORK-IN-PROGRESS FOR NOW (September 2019)**</p></li>
+<li><p><a href="https://hexdocs.pm/couchdb">Documentation available on hexdoc</a></p></li>
 </ul>
-<p><strong>Version:</strong> 2.0.0-beta8</p>
+<hr />
+<h2>Usage</h2>
+
+
+<p>Most of the Erlang/Elixir CouchDB API takes Database or Server record as an argument. This record contains information about the 
+server's FQDN, the database name, etc. Parts of the API dealing with 'the server' will take a <code>server record</code>, while functions 
+performing actions on databases and documents take a <code>database record</code>. Consider:</p>
+
+<p><pre><code> erlang
+{ok, Server} = couchdb:server_record(&lt;<"http://localhost:5984"&gt;>, []).
+</code></pre></p>
+
+<p><pre><code> elixir
+{:ok, server} = :couchdb.server_record("http://localhost:5984", [])
+</code></pre></p>
+
+<p>After a server or database record has been created one can now make the first actual call:</p>
+
+<p><pre><code> erlang
+{ok, Info} = couchdb_server:info(Server).
+</code></pre></p>
+
+<p><pre><code> elixir
+{:ok, info} = :couchdb_server.info(server)
+</code></pre></p>
 
 <h2>Contribute</h2>
 
@@ -99,7 +122,7 @@ To generate doc, run 'make doc'.</p>
 
 <p>Or add it to your rebar config</p>
 
-<p><pre>```
+<p><pre>``
    erlang
 {deps, [</pre></p>
 <pre><code>....
@@ -107,24 +130,24 @@ To generate doc, run 'make doc'.</p>
 </code></pre>
 
 <p>]}.
-<pre>```</pre></p>
+<pre>``</pre></p>
 
 <p>Note to compile with jiffy you need to define in the erlang options the
 variable <code>WITH_JIFFY</code>.</p>
 
 <p>if you use rebar, add to your <code>rebar.config</code>:</p>
 
-<p><pre><code>`
+<p><pre><code>
    erlang
 {erl<em>opts, [{d, 'WITH</em>JIFFY'}]}.
-</code></pre>`</p>
+</code></pre></p>
 
 <p>or use the <code>rebar</code> command with the <code>-D</code> options:</p>
 
-<p><pre><code>`
+<p><pre><code>
    sh
 rebar compile -DWITH_JIFFY
-</code></pre>`</p>
+</code></pre></p>
 
 <h2>Basic Usage</h2>
 
@@ -139,16 +162,16 @@ for you.</p>
 
 <p>To start in the console run:</p>
 
-<p><pre><code>`
+<p><pre><code>
    sh
 $ erl -pa ebin
 1> couchbeam:start().
 ok
-</code></pre>`</p>
+</code></pre></p>
 
 <p>It will start hackney and all of the application it depends on:</p>
 
-<p><pre><code>`
+<p><pre><code>
    erlang
 application:start(crypto),
 application:start(asn1),
@@ -156,7 +179,7 @@ application:start(public_key),
 application:start(ssl),
 application:start(hackney),
 application:start(couchbeam).
-</code></pre>`</p>
+</code></pre></p>
 
 <p>Or add couchbeam to the applications property of your .app in a release</p>
 
@@ -165,38 +188,38 @@ application:start(couchbeam).
 
 <p>To create a connection to a server machine:</p>
 
-<p><pre><code>`
+<p><pre><code>
    erlang
 Url = "http://localhost:5984",
 Options = [],
 S = couchbeam:server_connection(Url, Options).
-</code></pre>`</p>
+</code></pre></p>
 
 <p>Test the connection with <code>couchbeam:server_info/1</code> :</p>
 
-<p><pre><code>`
+<p><pre><code>
    erlang
 {ok, <em>Version} = couchbeam:server</em>info(S).
-</code></pre>`</p>
+</code></pre></p>
 
 <h3>Open or Create a database</h3>
 
 
 <p>All document operations are done in databases. To open a database simply do:</p>
 
-<p><pre><code>`
+<p><pre><code>
    erlang
 Options = [],
 {ok, Db} = couchbeam:open_db(Server, "testdb", Options).
-</code></pre>`</p>
+</code></pre></p>
 
 <p>To create a new one:</p>
 
-<p><pre><code>`
+<p><pre><code>
    erlang
 Options = [],
 {ok, Db} = couchbeam:create_db(Server, "testdb", Options).
-</code></pre>`</p>
+</code></pre></p>
 
 <p>You can also use the shorcut <code>couchbeam:open<em>or</em>create_db/3</code>. that
 will create a database if it does not exist.</p>
@@ -206,20 +229,20 @@ will create a database if it does not exist.</p>
 
 <p>Make a new document:</p>
 
-<p><pre><code>`
+<p><pre><code>
    erlang
 Doc = {[
 {&lt;&lt;"_id">>, &lt;&lt;"test">>},
 {&lt;&lt;"content">>, &lt;&lt;"some text">>}
 ]}.
-</code></pre>`</p>
+</code></pre></p>
 
 <p>And save it to the database:</p>
 
-<p><pre><code>`
+<p><pre><code>
    erlang
 {ok, Doc1} = couchbeam:save_doc(Db, Doc).
-</code></pre>`</p>
+</code></pre></p>
 
 <p>The <code>couchbeam:save_doc/2</code> return a new document with updated
 revision and if you do not specify the _id, a unique document id.</p>
@@ -231,19 +254,19 @@ revision and if you do not specify the _id, a unique document id.</p>
 
 <p>To retrieve a document do:</p>
 
-<p><pre><code>`
+<p><pre><code>
    erlang
 {ok, Doc2} = couchbeam:open_doc(Db, "test").
-</code></pre>`</p>
+</code></pre></p>
 
 <p>If you want a specific revision:</p>
 
-<p><pre><code>`
+<p><pre><code>
    erlang
 Rev = couchbeam<em>doc:get</em>rev(Doc1),
 Options = [{rev, Rev}],
 {ok, Doc3} = couchbeam:open_doc(Db, "test", Options).
-</code></pre>`</p>
+</code></pre></p>
 
 <p>Here we get the revision from the document we previously stored. Any
 options from the Apache CouchDB and RCOUCH API can be used.</p>
@@ -254,15 +277,15 @@ options from the Apache CouchDB and RCOUCH API can be used.</p>
 <p>To get all documents you have first to create an object
 that will keep all informations.</p>
 
-<p><pre><code>`
+<p><pre><code>
    erlang
 Options = [include<em>docs],
 {ok, AllDocs} = couchbeam</em>view:all(Db, Options).
-</code></pre>`</p>
+</code></pre></p>
 
 <p>Ex of results:</p>
 
-<p><pre>```
+<p><pre>``
    erlang
 {ok,[{[{&lt;&lt;"id">>,&lt;&lt;"7a0ce91d0d0c5e5b51e904d1ee3266a3">>},</pre></p>
 <pre><code>      {&lt;&lt;"key"&gt;&gt;,&lt;&lt;"7a0ce91d0d0c5e5b51e904d1ee3266a3"&gt;&gt;},
@@ -274,7 +297,7 @@ Options = [include<em>docs],
     ]}.
 </code></pre>
 
-<p><pre>```</pre></p>
+<p><pre>``</pre></p>
 
 <p>All functions to manipulate these results are in the <code>couchbeam_view</code> module.</p>
 
@@ -284,13 +307,13 @@ Options = [include<em>docs],
 <p>Views are workin like all_docs. You have to create a View object before
 doing anything.</p>
 
-<p><pre><code>`
+<p><pre><code>
    erlang
 Options = [],
 DesignName = "designname",
 ViewName = "viewname",
 {ok, ViewResults} = couchbeam_view:fetch(Db, {DesignName, ViewName}, Options).
-</code></pre>`</p>
+</code></pre></p>
 
 <p>Like the <code>all_docs</code> function, use the functions
 from <code>couchbeam_view</code> module to manipulate results. You can pass
@@ -298,7 +321,7 @@ any querying options from the <a href="http://docs.rcouch.org/en/latest/api/ddoc
 
 <p>Design doc are created like any documents:</p>
 
-<p><pre>```
+<p><pre>``
    erlang
 DesignDoc = {[</pre></p>
 <pre><code>    {&lt;&lt;"_id"&gt;&gt;, &lt;&lt;"_design/couchbeam"&gt;&gt;},
@@ -318,7 +341,7 @@ DesignDoc = {[</pre></p>
 </code></pre>
 
 <p>{ok, DesignDoc1} = couchbeam:save_doc(Db, DesignDoc).
-<pre>```</pre></p>
+<pre>``</pre></p>
 
 <p>You can also use <a href="http://github.com/couchapp/couchapp">couchapp</a> to manage them
 more easily.</p>
@@ -329,7 +352,7 @@ more easily.</p>
 <p>While you can get results using <code>couchbeam_views:fetch/2</code>, you can also retrieve
 all rows in a streaming fashion:</p>
 
-<p><pre>```
+<p><pre>``
    erlang
 ViewFun = fun(Ref, F) -></pre></p>
 <pre><code>receive
@@ -350,17 +373,17 @@ end
 ViewFun(StreamRef, ViewFun),
 {ok, StreamRef2} = couchbeam<em>view:stream(Db, 'all</em>docs', [include_docs]),
 ViewFun(StreamRef2, ViewFun).
-<pre>```</pre></p>
+<pre>``</pre></p>
 
 <p>You can of course do the same with a view:</p>
 
-<p><pre><code>`
+<p><pre><code>
    erlang
 DesignNam = "designname",
 ViewName = "viewname",
 {ok, StreamRef3} = couchbeam<em>view:stream(Db, {DesignNam, ViewName}, [include</em>docs]),
 ViewFun(StreamRef3, ViewFun).
-</code></pre>`</p>
+</code></pre></p>
 
 <h3>Put, Fetch and Delete documents attachments</h3>
 
@@ -369,35 +392,35 @@ ViewFun(StreamRef3, ViewFun).
 
 <p>To send an attachment:</p>
 
-<p><pre><code>`
+<p><pre><code>
    erlang
 DocID = "test",
 AttName = "test.txt",
 Att = "some content I want to attach",
 Options = []
 {ok, <em>Result} = couchbeam:put</em>attachment(Db, DocId, AttName, Att, Options).
-</code></pre>`</p>
+</code></pre></p>
 
 <p>All attachments are streamed to servers. <code>Att</code> could be also be an iolist
 or functions, see <code>couchbeam:put_attachment/5</code> for more information.</p>
 
 <p>To fetch an attachment:</p>
 
-<p><pre><code>`
+<p><pre><code>
    erlang
 {ok Att1} = couchbeam:fetch_attachment(Db, DocId, AttName).
-</code></pre>`</p>
+</code></pre></p>
 
 <p>You can use <code>couchbeam:stream<em>fetch</em>attachment/6</code> for the stream
 fetch.</p>
 
 <p>To delete an attachment:</p>
 
-<p><pre><code>`
+<p><pre><code>
    erlang
 {ok, Doc4} = couchbeam:open<em>doc(Db, DocID),
 ok = couchbeam:delete</em>attachment(Db, Doc4, AttName).
-</code></pre>`</p>
+</code></pre></p>
 
 <h3>Changes</h3>
 
@@ -407,17 +430,17 @@ the database. With couchbeam you can get changes using <code>couchbeam<em>change
 This function returns all changes immediately. But you can also retrieve
 all changes rows using longpolling :</p>
 
-<p><pre><code>`
+<p><pre><code>
    erlang
 Options = [],
 {ok, LastSeq, Rows} = couchbeam<em>changes:follow</em>once(Db, Options).
-</code></pre>`</p>
+</code></pre></p>
 
 <p>Options can be any Changes query parameters. See the <a href="http://docs.rcouch.org/en/latest/api/database/changes.html">change API</a> for more informations.</p>
 
 <p>You can also get <a href="http://docs.rcouch.org/en/latest/api/database/changes.html#continuous">continuous</a>:</p>
 
-<p><pre>```
+<p><pre>``
    erlang
 ChangesFun = fun(StreamRef, F) -></pre></p>
 <pre><code>receive
@@ -436,7 +459,7 @@ end
 Options = [continuous, heartbeat],
 {ok, StreamRef} = couchbeam_changes:follow(Db, Options),
 ChangesFun(StreamRef, ChangesFun).
-<pre>```</pre></p>
+<pre>``</pre></p>
 
 
 <blockquote>
@@ -457,14 +480,14 @@ server or in <code>couchbeam:create_db/3</code>, <code>couchbeam:open_db/3</code
 
 <p>To set basic_auth on a server:</p>
 
-<p><pre><code>`
+<p><pre><code>
    erlang
 UserName = "guest",
 Password = "test",
 Url = "http://localhost:5984",
 Options = [{basic<em>auth, {UserName, Password}}],
 S1 = couchbeam:server</em>connection(Url, Options).
-</code></pre>`</p>
+</code></pre></p>
 
 <p>Couchbeam support SSL, OAuth, Basic Authentication, and Proxy. You can
 also set a cookie. For more informations about the options have a look

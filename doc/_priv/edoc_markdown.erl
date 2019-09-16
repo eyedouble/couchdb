@@ -24,6 +24,7 @@
 -define(NBSP, 160).
 -define(AMP, $&, $a, $m, $p, $;).
 -define(COPY, $&, $c, $o, $p, $y, $;).
+-define(PRINT(Var), io:format("DEBUG: ~p:~p - ~p~n~n ~p~n~n", [?MODULE, ?LINE, ??Var, Var])).
 
 %%% the lexer first lexes the input
 %%% make_lines does 2 passes:
@@ -1215,6 +1216,9 @@ htmlchars1([$_, $_ | T], A)          -> {T2, NewA} = strong(T, $_),
 htmlchars1([$\\, $_ | T], A)         -> htmlchars1(T, [$_ | A]);
 htmlchars1([$_ | T], A)              -> {T2, NewA} = emphasis(T, $_),
                                         htmlchars1(T2, [NewA | A]);
+
+htmlchars1([$`, $`, $` | T], A)          -> {T2, NewA} = trplcode(T),
+                                        htmlchars1(T2, [NewA | A]);
 %% handle backtick escaping
 htmlchars1([$\\, $` | T], A)         -> htmlchars1(T, [$` | A]);
 htmlchars1([$`, $` | T], A)          -> {T2, NewA} = dblcode(T),
@@ -1235,6 +1239,10 @@ strong(List, Delim)      -> interpolate2(List, Delim, "strong", "", []).
 superstrong(List, Delim) -> interpolate3(List, Delim, "strong", "em", "", []).
 dblcode(List)            -> {T, Tag} = interpolate2(List, $`, "code", "" ,[]),
                             {T, "<pre>" ++ Tag ++ "</pre>"}.
+trplcode(List) ->
+    {T, Tag} = interpolate2(List, $`, "code", "" ,[]), 
+    {"", "<pre>" ++ Tag ++ "</pre>"}.
+
 code(List)               -> interpolateX(List, $`, "code", "", []).
 
 %% pain in the arse - sometimes the closing tag should be preceded by

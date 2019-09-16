@@ -236,7 +236,6 @@ save(#db{server=Server, options=_Opts}=Db, #{}=Doc, Atts, Options) ->
 %% {empty_on_delete,  true} or pass a doc with just _id and _rev
 %% members.
 delete(#db{}=Db, #{<<"_id">> := <<_Id/binary>>, <<"_rev">> := <<_Rev/binary>>}=Document) ->
-    ?PRINT(Document),
     delete(Db, [Document], []);
 delete(#db{}=Db, [#{<<"_id">> := <<_Id/binary>>, <<"_rev">> := <<_Rev/binary>>}=_Car | _Cdr]=Documents) ->
     delete(Db, Documents, []).
