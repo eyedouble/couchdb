@@ -41,7 +41,6 @@ decode(D) ->
     end.
 
 
-pre_encode([Car|Cdr]) -> [pre_encode(Car)] ++ pre_encode(Cdr);
 pre_encode(X) when is_map(X) ->    
     maps:map(fun(_Key, Value) ->        
         pre_encode(Value)    
@@ -72,7 +71,7 @@ pre_encode(#{} = Data) -> Data;
 % Irsan added: List of maps
 pre_encode([#{}, _] = Data) -> Data. 
 
-post_decode([Car|Cdr]) -> [post_decode(Car)] ++ post_decode(Cdr);
+
 post_decode(X) when is_map(X) ->    
     maps:map(fun(_Key, Value) ->
         post_decode(Value)    
