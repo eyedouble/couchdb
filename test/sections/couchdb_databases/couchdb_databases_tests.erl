@@ -46,6 +46,21 @@ delete_test() ->
     ?assertMatch({ok,#{<<"ok">> := true}}, Res).
 
 
+all_docs_test() -> 
+    Server = init(),
+    {ok, Db} = couchdb_databases:create(Server, ?MOCK_DBS(1)),
+    Doc0 = ?MOCK_DOCS(1),
+    Doc1 = maps:put(<<"_id">>, <<"randomid">>, Doc0),
+    couchdb_documents:save(Db, Doc1), 
+    Doc2 = maps:put(<<"_id">>, <<"randomid2">>, Doc0),
+    couchdb_documents:save(Db, Doc2), 
+   
+
+    AllDocs0 = couchdb_databases:all_docs(Db, #{}),
+    ?assertMatch({ok,#{<<"total_rows">> := 2}}, AllDocs0),
+
+    AllDocs1 = couchdb_databases:all_docs(Db, #{"include_docs" => true}),
+    ?assertMatch({ok, #{<<"rows">> := [#{<<"doc">> := _}|_]}}, AllDocs1).
 %
 %   Bulk Docs
 %

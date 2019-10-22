@@ -18,6 +18,8 @@
     ,create/2
     ,delete/1
     ,delete/2
+    ,all_docs/1
+    ,all_docs/2
     ,bulk_docs_save/2
     ,bulk_docs_save/3
     ,compact/1
@@ -127,6 +129,43 @@ delete(#db{server=#server{url=ServerUrl}, name=DbName, options=Opts}) ->
 delete(#server{url=_ServerUrl, options=_Opts}=Server, <<DbName/binary>>) ->
         {ok, Db} = couchdb:database_record(Server, DbName),
         delete(Db).
+
+
+
+
+%% %reference CouchDB Docs 1.3.1/DELETE
+%% @equiv all_docs(Db, #{}) 
+-spec(all_docs(Database::db()) -> {ok, binary()} | {error, term()}).
+all_docs(#db{server=Server, name=_DbName, options=_DbOpts}=Db) -> all_docs(Db, #{}).
+
+%% %reference CouchDB Docs 1.3.2/GET
+%% @doc All Docs
+%% 
+%% Options:
+%% - include_docs (true|false)
+%%
+-spec(all_docs(Database::db(), Options::map()) -> {ok, binary()} | {error, term()}).
+all_docs(#db{server=Server, name=_DbName, options=DbOpts}=Db, #{}=Options) ->
+    QueryParams = case Options of
+        #{"include_docs" := true} -> <<"include_docs=true">>;
+        _ -> []
+    end,
+    Url = hackney_url:make_url(
+        couchdb_httpc:server_url(Server),
+        [couchdb_httpc:db_url(Db), <<"_all_docs">>],
+        QueryParams
+    ),
+    case couchdb_httpc:db_request(get, Url, [], <<>>, DbOpts, [200]) of
+        {ok, _Status, _Headers, Ref} ->
+            Docs = couchdb_httpc:json_body(Ref),
+            {ok, Docs};
+        {error, not_found} ->
+            {error, db_not_found};
+       Error ->
+          Error
+    end.
+
+
 
 %
 %   BULK
