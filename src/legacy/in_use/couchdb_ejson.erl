@@ -5,7 +5,7 @@
 -export([post_decode/1]).
 
 -include("couchdb.hrl").
-
+-include("./../../dev.hrl").
 
 -ifndef('WITH_JIFFY').
 % -define(JSON_ENCODE(D), jsx:encode(pre_encode(D))).
@@ -40,6 +40,12 @@ decode(D) ->
             throw({invalid_json, badarg})
     end.
 
+
+pre_encode([Car|Cdr]) -> [pre_encode(Car)] ++ pre_encode(Cdr);
+pre_encode(X) when is_map(X) ->    
+    maps:map(fun(_Key, Value) ->        
+        pre_encode(Value)    
+    end, X);
 pre_encode({[]}) ->
     [{}];
 pre_encode({PropList}) ->
@@ -54,6 +60,8 @@ pre_encode(false) ->
     false;
 pre_encode(null) ->
     null;
+pre_encode(nil) ->
+    null;
 pre_encode(Atom) when is_atom(Atom) ->
     erlang:atom_to_binary(Atom, utf8);
 pre_encode(Term) when is_integer(Term); is_float(Term); is_binary(Term) ->
@@ -64,6 +72,11 @@ pre_encode(#{} = Data) -> Data;
 % Irsan added: List of maps
 pre_encode([#{}, _] = Data) -> Data. 
 
+post_decode([Car|Cdr]) -> [post_decode(Car)] ++ post_decode(Cdr);
+post_decode(X) when is_map(X) ->    
+    maps:map(fun(_Key, Value) ->
+        post_decode(Value)    
+    end, X);
 post_decode({[{}]}) ->
     {[]};
 post_decode([{}]) ->
@@ -74,5 +87,7 @@ post_decode(List) when is_list(List) ->
     [ post_decode(Term) || Term <- List];
 post_decode({Term}) ->
     post_decode(Term);
+post_decode(null) ->
+    nil;
 post_decode(Term) ->
     Term.
