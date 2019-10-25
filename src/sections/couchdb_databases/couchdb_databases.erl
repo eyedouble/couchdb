@@ -147,7 +147,7 @@ all_docs(#db{server=Server, name=_DbName, options=_DbOpts}=Db) -> all_docs(Db, #
 -spec(all_docs(Database::db(), Options::map()) -> {ok, binary()} | {error, term()}).
 all_docs(#db{server=Server, name=_DbName, options=DbOpts}=Db, #{}=Options) ->
     QueryParams = case Options of
-        #{"include_docs" := true} -> <<"include_docs=true">>;
+        #{<<"include_docs">> := true} -> <<"include_docs=true">>;
         _ -> []
     end,
     Url = hackney_url:make_url(
