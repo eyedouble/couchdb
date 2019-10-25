@@ -59,7 +59,7 @@ all_docs_test() ->
     AllDocs0 = couchdb_databases:all_docs(Db, #{}),
     ?assertMatch({ok,#{<<"total_rows">> := 2}}, AllDocs0),
 
-    AllDocs1 = couchdb_databases:all_docs(Db, #{"include_docs" => true}),
+    AllDocs1 = couchdb_databases:all_docs(Db, #{<<"include_docs">> => true}),
     ?assertMatch({ok, #{<<"rows">> := [#{<<"doc">> := _}|_]}}, AllDocs1).
 %
 %   Bulk Docs
