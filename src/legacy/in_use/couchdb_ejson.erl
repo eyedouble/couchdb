@@ -14,6 +14,8 @@
 -define(JSON_ENCODE(D), jsone:encode(pre_encode(D))).
 -define(JSON_DECODE(D), post_decode(jsone:decode(D))).
 
+
+
 -else.
 -define(JSON_ENCODE(D), jiffy:encode(D, [uescape])).
 -define(JSON_DECODE(D), jiffy:decode(D)).
@@ -63,6 +65,8 @@ pre_encode(nil) ->
     null;
 pre_encode(Atom) when is_atom(Atom) ->
     erlang:atom_to_binary(Atom, utf8);
+pre_encode(<<Any/binary>>) ->
+    unicode:characters_to_binary(Any, latin1, utf8);
 pre_encode(Term) when is_integer(Term); is_float(Term); is_binary(Term) ->
     Term;
 
