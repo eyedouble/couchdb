@@ -13,12 +13,20 @@ null_to_nil_test() ->
     D = couchdb_ejson:encode(#{<<"test">> => nil}),
     ?assertEqual(<<"{\"test\":null}">>, D).
 
-
 special_char1_test() ->
-    D = couchdb_ejson:encode(#{<<"zz">> => <<"ÜSCHER">>}),
-    ?assertEqual(<<"{\"zz\":\"\\u00dcSCHER\"}">>, D).
+    D = couchdb_ejson:encode(#{<<"unicode">> => <<"Noé Böllinger"/utf8>>}),
+    ?assertEqual(<<"{\"unicode\":\"Noé Böllinger\"}"/utf8>>, D).
 
 special_char2_test() ->
-    D = couchdb_ejson:encode(#{<<"zz">> => <<"ÜSCHER">>}),
-    D1 = couchdb_ejson:decode(D),
-    ?assertEqual(#{<<"zz">> => <<"ÜSCHER"/utf8>>}, D1).
+    D = couchdb_ejson:encode(#{<<"unicode">> => <<"Noé Böllinger"/utf8>>}),
+    D1 = couchdb_ejson:decode(D),    
+    ?assertEqual(#{<<"unicode">> => <<"Noé Böllinger"/utf8>>}, D1).
+
+special_char3_test() ->
+    D = couchdb_ejson:encode(#{<<"unicode">> => <<"Noé"/utf8>>}),
+    ?assertEqual(<<"{\"unicode\":\"Noé\"}"/utf8>>, D).
+
+special_char4_test() ->
+    D = couchdb_ejson:encode(#{<<"unicode">> => <<"Noé"/utf8>>}),
+    D1 = couchdb_ejson:decode(D),    
+    ?assertEqual(#{<<"unicode">> => <<"Noé"/utf8>>}, D1).

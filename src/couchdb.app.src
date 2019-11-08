@@ -1,7 +1,7 @@
 {application,couchdb,
 	[{description,"CouchDB Erlang/Elixir client"},
 	{pkg_name, "couchdb"},    
-	{vsn,"2.0.6-beta"},
+	{vsn,"2.1.0-beta"},
 	{licenses, ["MIT"]},
 	{modules,[]},
 	{registered,[couchdb_sup]},
@@ -13,6 +13,7 @@
 		public_key,
 		ssl,
 		idna,
+		jiffy,
 		hackney
 	]},
 	{included_applications,[]},
