@@ -101,7 +101,8 @@ database_record(#server{options=ServerOptions}=Server, <<DatabaseName/binary>>, 
         andalso database_name_is_valid(DatabaseName) of
             true -> 
                 Options = ServerOptions ++ DatabaseOptions,
-                {ok, #db{server=Server, name=DatabaseName, options=Options}};
+                DatabaseNameURLEnc = uri_string:quote(DatabaseName), %URL Encode the DB name binary
+                {ok, #db{server=Server, name=DatabaseNameURLEnc, options=Options}};
             false -> {error, "Options must be a valid tuplelist"} 
     end.
 
